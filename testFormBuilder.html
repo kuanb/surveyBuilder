@@ -1,0 +1,100 @@
+<HTML>
+<HEAD>
+<TITLE>Dynamically build FT survey</TITLE>
+
+<SCRIPT language="javascript">
+
+function addQues(type) {
+ 
+    //Create an input type dynamically.
+    var element = document.createElement("input");
+ 
+    //Assign different attributes to the element.
+    element.setAttribute("type", type);
+    element.setAttribute("value", type);
+    element.setAttribute("name", type);
+ 
+ 
+    var foo = document.getElementById("fooBar");
+ 
+    //Append the element in page (in span).
+    foo.appendChild(element);
+ 
+}
+
+function addChap(name) {
+ 
+    //Create an input type dynamically.
+    var element = document.createElement("li");
+	element.innerHTML = name;
+
+    var foo = document.getElementById("currentChapList");
+ 
+    //Append the element in page (in span).
+    foo.appendChild(element);
+ 
+}
+
+function delChap() {
+
+    var foo = document.getElementById("currentChapList");
+	var allChildNodes = foo.childNodes;
+	var lastElem = allChildNodes.length - 2;
+    //Append the element in page (in span).
+    foo.pop(lastElem);
+ 
+}
+
+</SCRIPT>
+</HEAD>
+
+<BODY>
+
+<b>Current Chapter Index</b>
+<br>
+<ol id="currentChapList">
+<li>Value1</li>
+</ol>
+<INPUT type="text" style="width:400px" value="Enter Chapter Name" id="newChapName"/><br>
+<input type="button" value="Add Chapter" onclick="addChap(newChapName.value)"/>
+<input type="button" value="Delete Last Chapter" onclick="delChap()"/>
+
+<FORM>
+<H2>Dynamically add element in form.</H2>
+Select the element and hit Add to add it in form.
+<BR/><br>
+
+<b>New Question</b>
+<br>
+
+Chapter:
+<SELECT name="chapOptions">
+	<OPTION>None</OPTION>
+</SELECT>
+
+Question:
+<INPUT type="text" style="width:400px" value="Enter Question"/>
+<br>
+<br>
+
+<SELECT name="element">
+	<OPTION value="text">Checkbox</OPTION>
+	<OPTION value="text">Multiple Choice</OPTION>
+    <OPTION value="text">Open Text</OPTION>
+    <OPTION value="number">Open Number</OPTION>
+    <OPTION value="text">Ordered List</OPTION>
+    <OPTION value="image">Picture</OPTION>
+    <OPTION value="text">True or False</OPTION>
+</SELECT>
+
+<INPUT type="button" value="Add Answer Option" onclick="addQues(document.forms[0].element.value)"/>
+ 
+<span id="fooBar"><br><br></span>
+<span id="fooBar2"><br><br></span>
+ 
+</FORM>
+
+<INPUT type="button" value="Add New Chapter" onclick="addNewLine"/>
+
+</BODY>
+</HTML>
