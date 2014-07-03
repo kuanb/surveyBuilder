@@ -4,18 +4,37 @@
 
 <script language="javascript">
 
-var question = {
-    ansNum: 0,
-    quesText: "question itself",
-    addAns: function (ansText) {
-        question["ans" + this.ansNum] = ansText;
-        this.ansNum += 1;
+var chapter = {
+    quesNum: 0,
+    addQues: function(quesTextInput) {   
+
+        toPlace = document.createElement("dt");
+        addAnsButton = "<input type='text' id='ansInput'><button type='button' style='width:100px' onclick=''>Add an Answer</button>";
+        toPlace.innerHTML = quesTextInput + '<br>' + addAnsButton;
+        starterSpan = document.getElementById("starterSpan");
+        starterSpan.appendChild(toPlace);
+        
+        this["question" + this.quesNum] = {
+            ansNum: 0,
+            quesText: quesTextInput,
+            addAns: function (ansText) {
+                this["ans" + this.ansNum] = ansText;
+                this.ansNum += 1;
+            }
+        };
+        this.quesNum += 1;
     }
 };
 
 </script>
 
 <body>
+
+<br>
+<input type="text" id="chapInput"><button type="button" style="width:100px" onclick="">Add a Chapter</button><br>
+<input type="text" id="quesInput"><button type="button" style="width:100px" onclick="chapter.addQues(document.getElementById('quesInput').value)">Add a Question</button><br>
+
+<dl id="starterSpan"></dl>
 
 </body>
 </html>
