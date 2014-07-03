@@ -51,33 +51,22 @@ function updateSelect() {
 }
 
 function addAns() { 
- 
+
     //Create an input type dynamically.
     var element = document.createElement("input");
- 
     var foo = document.getElementById("lastAns");
- 
-    //Append the element in page (in span).
+
     foo.appendChild(element);
  
 }
 
-function addQues() { 
- 
-    //Create an input type dynamically.
-    var element = document.createElement("input");
- 
-    //Assign different attributes to the element.
-    element.setAttribute("type", type);
-    element.setAttribute("value", type);
-    element.setAttribute("name", type);
- 
- 
-    var foo = document.getElementById("fooBar");
+function addQues() {
+    var allQues = document.getElementById("questionSubSect");
+    var newQues = document.createElement("div");
+    newQues.innerHTML = allQues.innerHTML;
  
     //Append the element in page (in span).
-    foo.appendChild(element);
- 
+    allQues.appendChild(newQues);
 }
 
 </script>
@@ -109,6 +98,7 @@ Chapter Select:
 <select id="chapOptions"></select>
 <br>
 
+<div id="questionSubSect">
 <br>
 Question ID:
 <input type="text" style="width:400px" value="Enter Question"/>
@@ -137,15 +127,17 @@ Other open answer option:
 </select>
 <br>
 
-<br>
-<span id="lastAns"></span>
-<br>
+<ol id="lastAns"></ol>
 <input type="button" value="Add Answer Option" onclick="addAns()"/>
- 
- 
-</form>
+<br>
+
+<br>
+</div>
+<span id="lastQues"></span> 
 
 <input type="button" value="Add New Question" onclick="addQues()"/>
+
+</form>
 
 </body>
 </html>
