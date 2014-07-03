@@ -1,0 +1,98 @@
+<html>
+<head>
+<title>Dynamically build FT survey</title>
+
+<script language="javascript">
+
+var question = {
+    addQues: function () {
+        ;
+    }
+};
+
+function addChap(name) {
+
+    var element = document.createElement("li");
+	element.innerHTML = name;
+
+    var foo = document.getElementById("currentChapList");
+ 
+    //Append the element in page (in span).
+    foo.appendChild(element);
+
+    // Update drop down select lists
+    updateSelect();
+}
+
+</script>
+</head>
+
+<body>
+
+<b>Current Chapter Index</b>
+<br>
+<ol id="currentChapList">
+</ol>
+<input type="text" style="width:400px" value="Enter Chapter Name" id="newChapName"/><br>
+<input type="button" value="Add Chapter" onclick="addChap(newChapName.value)"/>
+<input type="button" value="Delete Last Chapter" onclick="delChap()"/>
+<br>
+
+<br>
+<b>Dynamically add element in form.</b>
+<br>
+Select the element and hit Add to add it in form.
+<br>
+
+<br>
+<b>Chapter Builder</b>
+<br>
+
+<form>
+Chapter Select:
+<select id="chapOptions"></select>
+<br>
+
+<div id="questionSubSect">
+<br>
+Question ID:
+<input type="text" style="width:400px" value="Enter Question"/>
+<br>
+
+Question:
+<input type="text" style="width:400px" value="Enter Question"/>
+<br>
+
+Question Type:
+<select name="element">
+    <option value="text">Checkbox</option>
+    <option value="text">Multiple Choice</option>
+    <option value="text">Open Text</option>
+    <option value="number">Open Number</option>
+    <option value="text">Ordered List</option>
+    <option value="image">Picture</option>
+    <option value="text">True or False</option>
+</select>
+<br>
+
+Other open answer option:
+<select name="element">
+    <option value="text">False</option>
+    <option value="text">True</option>
+</select>
+<br>
+
+<ol id="lastAns"></ol>
+<input type="button" value="Add Answer Option" onclick="addAns()"/>
+<br>
+
+<br>
+</div>
+<span id="lastQues"></span> 
+
+<input type="button" value="Add New Question" onclick="addQues()"/>
+
+</form>
+
+</body>
+</html>
