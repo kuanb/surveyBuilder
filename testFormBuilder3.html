@@ -6,22 +6,28 @@
 
 var chapter = {
     quesNum: 0,
-    addQues: function(quesTextInput) {   
-
-        toPlace = document.createElement("dt");
-        addAnsButton = "<input type='text' id='ansInput'><button type='button' style='width:100px' onclick=''>Add an Answer</button>";
-        toPlace.innerHTML = quesTextInput + '<br>' + addAnsButton;
-        starterSpan = document.getElementById("starterSpan");
-        starterSpan.appendChild(toPlace);
+    addQues: function(quesTextInput) {  
         
-        this["question" + this.quesNum] = {
+        thisQues = "question" + this.quesNum;
+        this[thisQues] = {
             ansNum: 0,
             quesText: quesTextInput,
             addAns: function (ansText) {
+                console.log(ansText);
                 this["ans" + this.ansNum] = ansText;
+
                 this.ansNum += 1;
             }
         };
+
+        var toPlace = document.createElement("dt");
+        toPlace.id = "quesID" + this.quesNum;
+        var ansBoxID = "ansBox" + this.quesNum;
+        addAnsButton = "<input type='text' id='" + ansBoxID + "'><button type='button' style='width:100px' onclick='chapter." + thisQues + ".addAns(document.getElementById(" + '"' + ansBoxID + '"' + ").value" + ")'>Add an Answer</button>";
+        toPlace.innerHTML = quesTextInput + '<br>' + addAnsButton + '<br>';
+        var starterSpan = document.getElementById("starterSpan");
+        starterSpan.appendChild(toPlace);
+
         this.quesNum += 1;
     }
 };
@@ -30,10 +36,13 @@ var chapter = {
 
 <body>
 
+<h2>Add Components</h2>
+
 <br>
 <input type="text" id="chapInput"><button type="button" style="width:100px" onclick="">Add a Chapter</button><br>
 <input type="text" id="quesInput"><button type="button" style="width:100px" onclick="chapter.addQues(document.getElementById('quesInput').value)">Add a Question</button><br>
 
+<h2>Survey Structure</h2>
 <dl id="starterSpan"></dl>
 
 </body>
