@@ -16,17 +16,23 @@ var chapter = {
                 console.log(ansText);
                 this["ans" + this.ansNum] = ansText;
 
+                var toAnsPlace = document.createElement("dd");
+                toAnsPlace.id = "ansID" + this.ansNum;
+
+                var currentQuesBullet = document.getElementById("quesID" + this.quesNum);
+                currentQuesBullet.appendChild();
+
                 this.ansNum += 1;
             }
         };
 
-        var toPlace = document.createElement("dt");
-        toPlace.id = "quesID" + this.quesNum;
+        var tqQuesPlace = document.createElement("dt");
+        tqQuesPlace.id = "quesID" + this.quesNum;
         var ansBoxID = "ansBox" + this.quesNum;
         addAnsButton = "<input type='text' id='" + ansBoxID + "'><button type='button' style='width:100px' onclick='chapter." + thisQues + ".addAns(document.getElementById(" + '"' + ansBoxID + '"' + ").value" + ")'>Add an Answer</button>";
-        toPlace.innerHTML = quesTextInput + '<br>' + addAnsButton + '<br>';
+        tqQuesPlace.innerHTML = quesTextInput + '<br>' + addAnsButton + '<br>';
         var starterSpan = document.getElementById("starterSpan");
-        starterSpan.appendChild(toPlace);
+        starterSpan.appendChild(tqQuesPlace);
 
         this.quesNum += 1;
     }
