@@ -4,6 +4,8 @@
 
 <script language="javascript">
 
+var chapCount = 0;
+
 var chapter = {
     quesNum: 0,
     addQues: function(quesTextInput) {  
@@ -12,7 +14,7 @@ var chapter = {
         this[thisQues] = {
             ansNum: 0,
             quesText: quesTextInput,
-            addAns: function (ansText) {
+            addAns: function(ansText) {
                 console.log(ansText);
                 this["ans" + this.ansNum] = ansText;
 
@@ -23,20 +25,38 @@ var chapter = {
                 currentQuesBullet.appendChild();
 
                 this.ansNum += 1;
+            },
+            deleteAns: function(quesToDel, quesIDnum) {
+                // first remove from object
+                console.log("Removing " + quesIDnum);
+                delete chapter[quesToDel];
+
+                // next remove from dom
+                starterSpan.removeChild(quesIDnum);
+
             }
         };
 
         var tqQuesPlace = document.createElement("dt");
         tqQuesPlace.id = "quesID" + this.quesNum;
-        var ansBoxID = "ansBox" + this.quesNum;
-        addAnsButton = "<input type='text' id='" + ansBoxID + "'><button type='button' style='width:100px' onclick='chapter." + thisQues + ".addAns(document.getElementById(" + '"' + ansBoxID + '"' + ").value" + ")'>Add an Answer</button>";
-        tqQuesPlace.innerHTML = quesTextInput + '<br>' + addAnsButton + '<br>';
+
+        var ansBoxID = "ansBox" + this.quesNum; 
+
+        // vars to get around issue of truncation due to multiple quotation marks
+        var ansBoxIDClick = "chapter." + thisQues + ".addAns(document.getElementById('" + ansBoxID + "').value)";
+        var thisQuesClick = "chapter." + thisQues + ".deleteAns('" + thisQues + "'," + tqQuesPlace.id + ")";
+
+        var addAnsButton = "<input type='text' id='" + ansBoxID + "'> <button type='button' style='width:100px' onclick=" + ansBoxIDClick + ">Add an Answer</button>";
+        var addDelButton = "<button type='button' style='width:100px' onclick=" + thisQuesClick + ">Delete Answer</button>";
+
+        tqQuesPlace.innerHTML = quesTextInput + '<br>' + addAnsButton + addDelButton + '<br><br>';
         var starterSpan = document.getElementById("starterSpan");
         starterSpan.appendChild(tqQuesPlace);
 
         this.quesNum += 1;
     }
 };
+
 
 </script>
 
