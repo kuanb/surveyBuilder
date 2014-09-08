@@ -8,8 +8,10 @@ var chapCount = 0;
 
 var chapter = {
     quesNum: 0,
-    addQues: function(quesTextInput) {  
-        
+    addQues: function(quesTextInput) {
+
+        // Reset question input text box
+        document.getElementById('quesInput').value = "";
         thisQues = "question" + this.quesNum;
         this[thisQues] = {
             ansNum: 0,
@@ -28,7 +30,7 @@ var chapter = {
             },
             deleteAns: function(quesToDel, quesIDnum) {
                 // first remove from object
-                console.log("Removing " + quesIDnum);
+                console.log("Removing question" + quesIDnum);
                 delete chapter[quesToDel];
 
                 // next remove from dom
