@@ -6,12 +6,26 @@
 
 var chapCount = 0;
 
+var createChap = function () {
+    df;
+}
+
 var chapter = {
     quesNum: 0,
+    deleteQues: function(quesToDel, quesIDnum) {
+        // First remove from object
+        console.log("Removing question" + quesIDnum);
+        delete chapter[quesToDel];
+
+        // Next remove from dom
+        starterSpan_chap1.removeChild(quesIDnum);
+    },
     addQues: function(quesTextInput) {
 
         // Reset question input text box
         document.getElementById('quesInput').value = "";
+
+        // Establishing ques definiton
         thisQues = "question" + this.quesNum;
         this[thisQues] = {
             ansNum: 0,
@@ -27,15 +41,6 @@ var chapter = {
                 currentQuesBullet.appendChild();
 
                 this.ansNum += 1;
-            },
-            deleteAns: function(quesToDel, quesIDnum) {
-                // first remove from object
-                console.log("Removing question" + quesIDnum);
-                delete chapter[quesToDel];
-
-                // next remove from dom
-                starterSpan.removeChild(quesIDnum);
-
             }
         };
 
@@ -46,14 +51,14 @@ var chapter = {
 
         // vars to get around issue of truncation due to multiple quotation marks
         var ansBoxIDClick = "chapter." + thisQues + ".addAns(document.getElementById('" + ansBoxID + "').value)";
-        var thisQuesClick = "chapter." + thisQues + ".deleteAns('" + thisQues + "'," + tqQuesPlace.id + ")";
+        var thisQuesClick = "chapter" + ".deleteQues('" + thisQues + "'," + tqQuesPlace.id + ")";
 
         var addAnsButton = "<input type='text' id='" + ansBoxID + "'> <button type='button' style='width:100px' onclick=" + ansBoxIDClick + ">Add an Answer</button>";
         var addDelButton = "<button type='button' style='width:100px' onclick=" + thisQuesClick + ">Delete Answer</button>";
 
         tqQuesPlace.innerHTML = quesTextInput + '<br>' + addAnsButton + addDelButton + '<br><br>';
-        var starterSpan = document.getElementById("starterSpan");
-        starterSpan.appendChild(tqQuesPlace);
+        var ss = document.getElementById("starterSpan_chap1");
+        ss.appendChild(tqQuesPlace);
 
         this.quesNum += 1;
     }
@@ -64,14 +69,12 @@ var chapter = {
 
 <body>
 
-<h2>Add Components</h2>
-
-<br>
+<h2>Add Chapters</h2>
 <input type="text" id="chapInput"><button type="button" style="width:100px" onclick="">Add a Chapter</button><br>
 <input type="text" id="quesInput"><button type="button" style="width:100px" onclick="chapter.addQues(document.getElementById('quesInput').value)">Add a Question</button><br>
 
 <h2>Survey Structure</h2>
-<dl id="starterSpan"></dl>
+<dl id="starterSpan_chap1"></dl>
 
 </body>
 </html>
