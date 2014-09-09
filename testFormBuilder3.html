@@ -13,21 +13,31 @@ var createChap = function(chapTextInput) {
     document.getElementById('chapInput').value = ""
 
     chapName = "chap" + chapCount;
-    chapterArray[chapName] = new chapterObj
+    chapterArray[chapName] = new chapterObj(chapCount)
 
-    var addQuesButton = "<input type='text' id='quesInput'><button type='button' style='width:100px' onclick='" + cq + ".addQues(document.getElementById(" + '"quesInput"' + ").value)'>Add a Question</button><br>";
+    // adding a new question
+    var addQuesButton = "<input type='text' id='quesInput" + chapCount + "'><button type='button' style='width:100px' onclick='" + chapterArray[chapName] + ".addQues(document.getElementById(" + '"quesInput"' + ").value)'>Add a Question</button>";
 
     var chapPlace = document.createElement("dt");
     chapPlace.id = "chapID" + chapCount;
-    chapPlace.innerHTML = "Chapter " + chapCount + ": " + chapTextInput + "<br>" + addQuesButton;
+
+    // adding a delete chapter button to each question that gets populated in the DOM
+    var addDelChapButton = "<button type='button' style='width:100px' onclick=delChap('" + chapName + "','" + chapPlace.id + "')>Delete Ques.</button>";
+
+    chapPlace.innerHTML = "Chapter: " + chapTextInput + "<br>" + addQuesButton + addDelChapButton;
 
     var ssTemp = document.getElementById("starterSpan");
     ssTemp.appendChild(chapPlace);
 
     chapCount += 1;
-}
+};
 
-var chapterObj = function() {
+var delChap = function(chapNameToDel, cPlaceID) {
+    delete chapterArray[chapNameToDel];
+    document.getElementById(cPlaceID).remove()
+};
+
+var chapterObj = function(cCount) {
     this.quesNum = 0;
     this.addQues = function(quesTextInput) {
 
@@ -74,10 +84,10 @@ var chapterObj = function() {
     this.deleteQues = function(quesToDel, quesIDnum) {
         console.log(this.quesNum);
         // First remove from object
-        delete chapter[quesToDel];
+        delete this[quesToDel];
 
         // Next remove from dom
-        starterSpan_chap1.removeChild(quesIDnum);
+        starterSpa.removeChild(quesIDnum);
     }
 };
 
