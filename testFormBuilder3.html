@@ -15,14 +15,14 @@ var createChap = function(chapTextInput) {
     chapName = "chap" + chapCount;
     chapterArray[chapName] = new chapterObj(chapCount)
 
-    // adding a new question
-    var addQuesButton = "<input type='text' id='quesInput_frCh" + chapCount + "'><button type='button' style='width:100px' onclick='" + chapterArray[chapName] + ".addQues(document.getElementById(" + '"quesInput_frCh"' + chapCount + ").value)'>Add a Question</button>";
-
     var chapPlace = document.createElement("dt");
     chapPlace.id = "chapID" + chapCount;
 
+    // adding a new question
+    var addQuesButton = "<input type='text' id='quesInput_frCh" + chapCount + "'><button type='button' style='width:100px' onclick='chapterArray[" + '"' + chapName + '"' + "].addQues(document.getElementById(" + '"quesInput_frCh' + chapCount + '"' + ").value," + '"quesInput_frCh' + chapCount + '"' + ")'>Add a Question</button>";
+
     // adding a delete chapter button to each question that gets populated in the DOM
-    var addDelChapButton = "<button type='button' style='width:100px' onclick=delChap('" + chapName + "','" + chapPlace.id + "')>Delete Ques.</button>";
+    var addDelChapButton = "<button type='button' style='width:100px' onclick=delChap('" + chapName + "','" + chapPlace.id + "')>Delete Chapter</button>";
 
     chapPlace.innerHTML = "Chapter: " + chapTextInput + "<br>" + addQuesButton + addDelChapButton;
 
@@ -42,11 +42,10 @@ var chapterObj = function(cCount) {
     chapName = "chap" + cCount;
     this.quesNum = 0;
 
-    this.addQues = function(quesTextInput) {
-        console.log("ees");
+    this.addQues = function(quesTextInput, cPlaceID) {
 
         // Reset question input text box
-        document.getElementById('quesInput').value = "";
+        document.getElementById(cPlaceID).value = "";
 
         // Establishing ques definiton
         thisQues = "question" + this.quesNum;
@@ -77,7 +76,7 @@ var chapterObj = function(cCount) {
         var thisQuesClick = this + ".deleteQues('" + thisQues + "'," + tqQuesPlace.id + ")";
 
         var addAnsButton = "<input type='text' id='" + ansBoxID + "'> <button type='button' style='width:100px' onclick=" + ansBoxIDClick + ">Add an Answer</button>";
-        var addDelButton = "<button type='button' style='width:100px' onclick=" + thisQuesClick + ">Delete Answer</button>";
+        var addDelButton = "<button type='button' style='width:100px' onclick=" + thisQuesClick + ">Delete Ques.</button>";
 
         tqQuesPlace.innerHTML = quesTextInput + '<br>' + addAnsButton + addDelButton + '<br><br>';
         var ssTemp = document.getElementById("chapID0");
