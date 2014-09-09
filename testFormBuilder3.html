@@ -16,7 +16,7 @@ var createChap = function(chapTextInput) {
     chapterArray[chapName] = new chapterObj(chapCount)
 
     // adding a new question
-    var addQuesButton = "<input type='text' id='quesInput" + chapCount + "'><button type='button' style='width:100px' onclick='" + chapterArray[chapName] + ".addQues(document.getElementById(" + '"quesInput"' + ").value)'>Add a Question</button>";
+    var addQuesButton = "<input type='text' id='quesInput_frCh" + chapCount + "'><button type='button' style='width:100px' onclick='" + chapterArray[chapName] + ".addQues(document.getElementById(" + '"quesInput_frCh"' + chapCount + ").value)'>Add a Question</button>";
 
     var chapPlace = document.createElement("dt");
     chapPlace.id = "chapID" + chapCount;
@@ -38,8 +38,12 @@ var delChap = function(chapNameToDel, cPlaceID) {
 };
 
 var chapterObj = function(cCount) {
+    
+    chapName = "chap" + cCount;
     this.quesNum = 0;
+
     this.addQues = function(quesTextInput) {
+        console.log("ees");
 
         // Reset question input text box
         document.getElementById('quesInput').value = "";
