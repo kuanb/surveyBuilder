@@ -56,22 +56,29 @@ var drawPage = function() {
         key = chapObj[sortable[chapterTitle]];
         console.log();
 
-        // set up delete chapter button
-        var delChapButton = "<button type='button' style='width:100px' onclick=runButton(delChap('" + sortable[chapterTitle] + "'))>Delete Chapter</button>";
+        // define input boxes and buttons for chapter level
+        var delChapButton = "<button type='button' style='width:100px' onclick='runButton(delChap(" + '"' + sortable[chapterTitle] + '"' + "))'>Delete Chapter</button>";
         var questionInputId = "chapter" + sortable[chapterTitle] + "question" + Object.keys(key.quesArray).length;
         var addQuesInput = "<input type='text' style='width:200px' id='" + questionInputId + "' value='Enter question phrase.' onfocus='inputFocus(this)' onblur='inputBlur(this)'>";
         var addQuesButton = "<button type='button' style='width:100px' onclick='runButton(chapObj[" + '"' +  sortable[chapterTitle] + '"' + "].addQues(" + questionInputId + ".value))'>Add Question</button>";
 
-        // put delete chapter button in dom
+        // put text, buttons, and input boxes into dom
         var ssChap = document.createElement("dl");
             ssChap.id = key;
             ssChap.innerHTML = key.chapName + " " + delChapButton + "<br>" + addQuesInput + addQuesButton;
             ssChap.style.fontWeight = 'bold';
         document.getElementById("starterSpan").appendChild(ssChap);
         for (var ques in key.quesArray) {
+            // define input boxes and buttons for question level
+            var delQuesButton = "<button type='button' style='width:100px' onclick='runButton(chapObj[" + '"' +  sortable[chapterTitle] + '"' + "].delQues(" + '"' +  ques + '"' + "))'>Delete Chapter</button>";
+            var answerInputId = "chapter" + sortable[chapterTitle] + "question" + Object.keys(key.quesArray).length + "answer" + Object.keys(key.quesArray).length;
+            var addAnswerInput = "";
+            var addAnswerButton = "";
+
+            // put text, buttons, and input boxes into dom
             var ssQues = document.createElement("dt");
                 ssQues.id = ques;
-                ssQues.innerHTML = key.quesArray[ques].quesText;
+                ssQues.innerHTML = key.quesArray[ques].quesText + " " + delQuesButton;
             document.getElementById("starterSpan").appendChild(ssQues);
             for (var ans in key.quesArray[ques].ansArray) {
                 var ssAns = document.createElement("dd");
@@ -81,6 +88,13 @@ var drawPage = function() {
             };
         };
     }
+
+    // add a new chapter at base
+    var newChapInputBox = "<input type='text' style='width:200px' id='addChapInput' value='Enter first chapter name.' onfocus='inputFocus(this)' onblur='inputBlur(this)'>";
+    var newChapInputButton = "<button type='button' style='width:100px' onclick='runButton(createChap(document.getElementById(" + '"' + "addChapInput" + '"' + ").value))'>Add Chapter</button>";
+    var newChapToAppend = document.createElement("dl");
+        newChapToAppend.innerHTML = newChapInputBox + newChapInputButton;
+    document.getElementById("starterSpan").appendChild(newChapToAppend);
 };
 
 // operator to run task and auto-redraw
