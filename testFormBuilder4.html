@@ -70,17 +70,20 @@ var drawPage = function() {
         document.getElementById("starterSpan").appendChild(ssChap);
         for (var ques in key.quesArray) {
             // define input boxes and buttons for question level
-            var delQuesButton = "<button type='button' style='width:100px' onclick='runButton(chapObj[" + '"' +  sortable[chapterTitle] + '"' + "].delQues(" + '"' +  ques + '"' + "))'>Delete Chapter</button>";
+            var delQuesButton = "<button type='button' style='width:110px' onclick='runButton(chapObj[" + '"' +  sortable[chapterTitle] + '"' + "].delQues(" + '"' +  ques + '"' + "))'>Delete Question</button>";
             var answerInputId = "chapter" + sortable[chapterTitle] + "question" + Object.keys(key.quesArray).length + "answer" + Object.keys(key.quesArray).length;
-            var addAnswerInput = "";
-            var addAnswerButton = "";
+            var addAnswerInput = "<input type='text' style='width:200px' id='" + answerInputId + "' value='Enter answer phrase.' onfocus='inputFocus(this)' onblur='inputBlur(this)'>";
+            var addAnswerButton = "<button type='button' style='width:100px' onclick='runButton(chapObj[" + '"' +  sortable[chapterTitle] + '"' + "].quesArray[" + '"' + ques + '"' + "].addAns(" + answerInputId + ".value))'>Add Answer</button>";
 
             // put text, buttons, and input boxes into dom
             var ssQues = document.createElement("dt");
                 ssQues.id = ques;
-                ssQues.innerHTML = key.quesArray[ques].quesText + " " + delQuesButton;
+                ssQues.innerHTML = key.quesArray[ques].quesText + " " + delQuesButton + "<br>" + addAnswerInput + addAnswerButton;
             document.getElementById("starterSpan").appendChild(ssQues);
             for (var ans in key.quesArray[ques].ansArray) {
+                // define delete answer box
+                var delAnsButton = "<button type='button' style='width:110px' onclick='runButton(chapObj[" + '"' +  sortable[chapterTitle] + '"' + "].delQues(" + '"' +  ques + '"' + "))'>Delete Question</button>";
+
                 var ssAns = document.createElement("dd");
                     ssAns.id = key.quesArray[ques].ansArray[ans].replace(/\s+/g, '_').toLowerCase();
                     ssAns.innerHTML = key.quesArray[ques].ansArray[ans]
