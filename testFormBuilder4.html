@@ -1,130 +1,132 @@
+<!DOCTYPE html>
 <html>
-<head>
-<title>Dynamically build FT survey</title>
+    <head>
+        <title>
+            Dynamically build FT survey
+        </title>
+        <script language="javascript">
 
-<script language="javascript">
+            var chapObj = {};
+            var globalChapCount = 0
 
-
-var chapObj = {};
-var globalChapCount = 0
-
-var createChap = function(chapName) {
-    chapNameBasic = globalChapCount + chapName.replace(/\W/g, '').toLowerCase();
-    chapObj[chapNameBasic] = new instChap(chapName);
-    globalChapCount += 1;
-};
-
-var delChap = function(chapNameToDel) {
-    delete chapObj[chapNameToDel];
-};
-
-var instChap = function(cName) {
-    this.chapName = cName
-    this.quesArray = {};
-    var internalQuesCount = 0
-    this.addQues = function(quesTextInput) {
-        quesTextInputBasic = internalQuesCount + quesTextInput.replace(/\W/g, '').toLowerCase();
-        this.quesArray[quesTextInputBasic] = {
-            quesText: quesTextInput,
-            ansArray: [],
-            addAns: function(ansText) { this.ansArray.push(ansText); },
-            delAns: function(index)   { this.ansArray.splice(index, 1); },
-        };
-        internalQuesCount += 1;
-    };
-    this.delQues = function(quesToDel) {
-        delete this.quesArray[quesToDel];
-    }
-};
-
-var drawPage = function() {
-    // clear existing content
-    while (document.getElementById("starterSpan").firstChild) {
-        document.getElementById("starterSpan").removeChild(document.getElementById("starterSpan").firstChild)
-    };
-
-    // sort array by numeric indicator
-    var sortable = [];
-    for (var chapter in chapObj) {
-        sortable.push(chapter);
-    };
-    sortable.sort()
-
-    // iterate through object via sorted keys
-    for (var chapterTitle in sortable) {
-        // key for subsequent nested for loops
-        key = chapObj[sortable[chapterTitle]];
-        console.log();
-
-        // define input boxes and buttons for chapter level
-        var delChapButton = "<button type='button' style='width:100px' onclick='runButton(delChap(" + '"' + sortable[chapterTitle] + '"' + "))'>Delete Chapter</button>";
-        var questionInputId = "chapter" + sortable[chapterTitle] + "question" + Object.keys(key.quesArray).length;
-        var addQuesInput = "<input type='text' style='width:200px' id='" + questionInputId + "' value='Enter question phrase.' onfocus='inputFocus(this)' onblur='inputBlur(this)'>";
-        var addQuesButton = "<button type='button' style='width:100px' onclick='runButton(chapObj[" + '"' +  sortable[chapterTitle] + '"' + "].addQues(" + questionInputId + ".value))'>Add Question</button>";
-
-        // put text, buttons, and input boxes into dom
-        var ssChap = document.createElement("dl");
-            ssChap.id = key;
-            ssChap.innerHTML = key.chapName + " " + delChapButton + "<br>" + addQuesInput + " " + addQuesButton;
-            ssChap.style.fontWeight = 'bold';
-        document.getElementById("starterSpan").appendChild(ssChap);
-        for (var ques in key.quesArray) {
-            // define input boxes and buttons for question level
-            var delQuesButton = "<button type='button' style='width:110px' onclick='runButton(chapObj[" + '"' +  sortable[chapterTitle] + '"' + "].delQues(" + '"' +  ques + '"' + "))'>Delete Question</button>";
-            var answerInputId = "chapter" + sortable[chapterTitle] + "question" + Object.keys(key.quesArray).length + "answer" + Object.keys(key.quesArray).length;
-            var addAnswerInput = "<input type='text' style='width:200px' id='" + answerInputId + "' value='Enter answer phrase.' onfocus='inputFocus(this)' onblur='inputBlur(this)'>";
-            var addAnswerButton = "<button type='button' style='width:100px' onclick='runButton(chapObj[" + '"' +  sortable[chapterTitle] + '"' + "].quesArray[" + '"' + ques + '"' + "].addAns(" + answerInputId + ".value))'>Add Answer</button>";
-
-            // put text, buttons, and input boxes into dom
-            var ssQues = document.createElement("dt");
-                ssQues.id = ques;
-                ssQues.innerHTML = key.quesArray[ques].quesText + " " + delQuesButton + "<br>" + addAnswerInput + " " + addAnswerButton;
-            document.getElementById("starterSpan").appendChild(ssQues);
-            for (var ans in key.quesArray[ques].ansArray) {
-                if(typeof(key.quesArray[ques].ansArray[ans]) != "undefined") {
-                    // define delete answer box
-                    var delAnsButton = "<button type='button' style='width:110px' onclick='runButton(chapObj[" + '"' +  sortable[chapterTitle] + '"' + "].quesArray[" + '"' + ques + '"' + "].delAns(" + ans + "))'>Delete Answer</button>";
-
-                    var ssAns = document.createElement("dd");
-                        ssAns.id = key.quesArray[ques].ansArray[ans].replace(/\s+/g, '_').toLowerCase();
-                        ssAns.innerHTML = key.quesArray[ques].ansArray[ans] + " " + delAnsButton
-                    document.getElementById("starterSpan").appendChild(ssAns);
-                };
+            var createChap = function(chapName) {
+                chapNameBasic = globalChapCount + chapName.replace(/\W/g, '').toLowerCase();
+                chapObj[chapNameBasic] = new instChap(chapName);
+                globalChapCount += 1;
             };
-        };
-    }
 
-    // add a new chapter at base
-    var newChapInputBox = "<input type='text' style='width:200px' id='addChapInput' value='Enter first chapter name.' onfocus='inputFocus(this)' onblur='inputBlur(this)'>";
-    var newChapInputButton = "<button type='button' style='width:100px' onclick='runButton(createChap(document.getElementById(" + '"' + "addChapInput" + '"' + ").value))'>Add Chapter</button>";
-    var newChapToAppend = document.createElement("dl");
-        newChapToAppend.innerHTML = newChapInputBox + " " + newChapInputButton;
-    document.getElementById("starterSpan").appendChild(newChapToAppend);
-};
+            var delChap = function(chapNameToDel) {
+                delete chapObj[chapNameToDel];
+            };
 
-// operator to run task and auto-redraw
-var runButton = function(task) {
-    task;
-    drawPage();
-};
+            var instChap = function(cName) {
+                this.chapName = cName
+                this.quesArray = {};
+                var internalQuesCount = 0
+                this.addQues = function(quesTextInput) {
+                    quesTextInputBasic = internalQuesCount + quesTextInput.replace(/\W/g, '').toLowerCase();
+                    this.quesArray[quesTextInputBasic] = {
+                        quesText: quesTextInput,
+                        ansArray: [],
+                        addAns: function(ansText) { this.ansArray.push(ansText); },
+                        delAns: function(index)   { this.ansArray.splice(index, 1); },
+                    };
+                    internalQuesCount += 1;
+                };
+                this.delQues = function(quesToDel) {
+                    delete this.quesArray[quesToDel];
+                }
+            };
 
-// grey text for text box guidance
-function inputFocus(i){
-    if(i.value==i.defaultValue){ i.value=""; i.style.color="#000"; }
-};
-function inputBlur(i){
-    if(i.value==""){ i.value=i.defaultValue; i.style.color="#888"; }
-};
+            var drawPage = function() {
+                // clear existing content
+                while (document.getElementById("starterSpan").firstChild) {
+                    document.getElementById("starterSpan").removeChild(document.getElementById("starterSpan").firstChild)
+                };
 
-</script>
+                // sort array by numeric indicator
+                var sortable = [];
+                for (var chapter in chapObj) {
+                    sortable.push(chapter);
+                };
+                sortable.sort()
 
-<body>
+                // iterate through object via sorted keys
+                for (var chapterTitle in sortable) {
+                    // key for subsequent nested for loops
+                    key = chapObj[sortable[chapterTitle]];
+                    console.log();
 
-<h2>Flocktracker Survey Builder Tool</h2>
-<dl id="starterSpan">
-    <input type="text" style="width:200px" id="initChapName" value="Enter first chapter name." onfocus="inputFocus(this)" onblur="inputBlur(this)">
-    <button type="button" style="width:100px" onclick="runButton(createChap(document.getElementById('initChapName').value))">Start Building</button>
-</dl>
+                    // define input boxes and buttons for chapter level
+                    var delChapButton = "<button type='button' style='width:100px' onclick='runButton(delChap(" + '"' + sortable[chapterTitle] + '"' + "))'>Delete Chapter<\/button>";
+                    var questionInputId = "chapter" + sortable[chapterTitle] + "question" + Object.keys(key.quesArray).length;
+                    var addQuesInput = "<input type='text' style='width:200px' id='" + questionInputId + "' value='Enter question phrase.' onfocus='inputFocus(this)' onblur='inputBlur(this)'>";
+                    var addQuesButton = "<button type='button' style='width:100px' onclick='runButton(chapObj[" + '"' +  sortable[chapterTitle] + '"' + "].addQues(" + questionInputId + ".value))'>Add Question<\/button>";
 
-</body>
+                    // put text, buttons, and input boxes into dom
+                    var ssChap = document.createElement("dl");
+                        ssChap.id = key;
+                        ssChap.innerHTML = key.chapName + " " + delChapButton + "<br>" + addQuesInput + " " + addQuesButton;
+                        ssChap.style.fontWeight = 'bold';
+                    document.getElementById("starterSpan").appendChild(ssChap);
+                    for (var ques in key.quesArray) {
+                        // define input boxes and buttons for question level
+                        var delQuesButton = "<button type='button' style='width:110px' onclick='runButton(chapObj[" + '"' +  sortable[chapterTitle] + '"' + "].delQues(" + '"' +  ques + '"' + "))'>Delete Question<\/button>";
+                        var answerInputId = "chapter" + sortable[chapterTitle] + "question" + Object.keys(key.quesArray).length + "answer" + Object.keys(key.quesArray).length;
+                        var addAnswerInput = "<input type='text' style='width:200px' id='" + answerInputId + "' value='Enter answer phrase.' onfocus='inputFocus(this)' onblur='inputBlur(this)'>";
+                        var addAnswerButton = "<button type='button' style='width:100px' onclick='runButton(chapObj[" + '"' +  sortable[chapterTitle] + '"' + "].quesArray[" + '"' + ques + '"' + "].addAns(" + answerInputId + ".value))'>Add Answer<\/button>";
+
+                        // put text, buttons, and input boxes into dom
+                        var ssQues = document.createElement("dt");
+                            ssQues.id = ques;
+                            ssQues.innerHTML = key.quesArray[ques].quesText + " " + delQuesButton + "<br>" + addAnswerInput + " " + addAnswerButton;
+                        document.getElementById("starterSpan").appendChild(ssQues);
+                        for (var ans in key.quesArray[ques].ansArray) {
+                            if(typeof(key.quesArray[ques].ansArray[ans]) != "undefined") {
+                                // define delete answer box
+                                var delAnsButton = "<button type='button' style='width:110px' onclick='runButton(chapObj[" + '"' +  sortable[chapterTitle] + '"' + "].quesArray[" + '"' + ques + '"' + "].delAns(" + ans + "))'>Delete Answer<\/button>";
+
+                                var ssAns = document.createElement("dd");
+                                    ssAns.id = key.quesArray[ques].ansArray[ans].replace(/\s+/g, '_').toLowerCase();
+                                    ssAns.innerHTML = key.quesArray[ques].ansArray[ans] + " " + delAnsButton
+                                document.getElementById("starterSpan").appendChild(ssAns);
+                            };
+                        };
+                    };
+                }
+
+                // add a new chapter at base
+                var newChapInputBox = "<input type='text' style='width:200px' id='addChapInput' value='Enter first chapter name.' onfocus='inputFocus(this)' onblur='inputBlur(this)'>";
+                var newChapInputButton = "<button type='button' style='width:100px' onclick='runButton(createChap(document.getElementById(" + '"' + "addChapInput" + '"' + ").value))'>Add Chapter<\/button>";
+                var newChapToAppend = document.createElement("dl");
+                newChapToAppend.innerHTML = newChapInputBox + " " + newChapInputButton;
+                document.getElementById("starterSpan").appendChild(newChapToAppend);
+            };
+
+            // operator to run task and auto-redraw
+            var runButton = function(task) {
+                task;
+                drawPage();
+            };
+
+            // grey text for text box guidance
+            function inputFocus(i){
+                if(i.value==i.defaultValue){ i.value=""; i.style.color="#000"; }
+            };
+            function inputBlur(i){
+                if(i.value==""){ i.value=i.defaultValue; i.style.color="#888"; }
+            };
+        </script>
+    </head>
+    <body>
+        <h2>
+            Flocktracker Survey Builder Tool
+        </h2>
+
+        <dl id="starterSpan">
+            <dd>
+                <input id="initChapName" onblur="inputBlur(this)" onfocus="inputFocus(this)" style="width:200px" type="text" value="Enter first chapter name."> <button onclick="runButton(createChap(document.getElementById('initChapName').value))" style="width:100px" type="button">Start Building</button>
+            </dd>
+        </dl>
+    </body>
 </html>
