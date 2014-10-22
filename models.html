@@ -19,6 +19,8 @@
       		width: 200px;
       		margin: 10px;
 	        padding: 10px
+	        position: relative;
+   			float: left;
       	}	
       	.question{
       		background-color: green;
@@ -27,6 +29,18 @@
       		margin: 10px;
 	        padding: 10px
       	}
+      	.answersContainerDIV{
+      		background-color: black;
+      		min-heightheight: 60px;
+      		min-width: 60px;
+      		margin: 10px;
+	        padding: 10px
+      	}
+      	.chaptersContainerDIV{
+      		background-color: yellow;
+      		overflow: hidden
+
+      	}
     </style>
     <body>
     	<div id="survey_container"></div>
@@ -34,7 +48,7 @@
     <script language="javascript">
     		var survey = new survey();
     		document.getElementsByTagName('body')[0].appendChild(survey.getDIV());
-		function answer() {
+			function answer() {
 			var answerText = null; // String
 			var jumpID = null; // String
 			function getAnswerText() {
@@ -120,17 +134,17 @@
 			this.chapterPosition = chapterPosition;
 		  	var title; // String
 		  	var questions = []; //Array of question objects
-		  	var parentDIV; // div to contain the chapter
 		  	var div = document.createElement('div');
 			div.className = "chapter";
 			var addQuestionButton = document.createElement("button");
 			addQuestionButton.setAttribute("chapterPosition", chapterPosition);
 			addQuestionButton.innerHTML = 'Add Question';
-			div.appendChild(addQuestionButton);
 			addQuestionButton.onclick = function(){
-//				window.alert(this.getAttribute("chapterPosition"));
 				survey.getChapters()[this.getAttribute("chapterPosition")].addQuestion();
          	}
+         	div.appendChild(addQuestionButton);
+         	var answersContainerDIV = document.createElement('div');
+         	answersContainerDIV.className = "answersContainerDIV";
          	function getChapterPosition() {
 		    	return chapterPosition;
 			};
@@ -153,10 +167,20 @@
 				return div;
 			}
 			this.addQuestion = function(){
+				if(this.getQuestionCount() == 0){
+					div.appendChild(answersContainerDIV);
+				}
 				var newQuestion = new question();
 				questions.push(newQuestion);
-				div.appendChild(newQuestion.getDIV());
+				answersContainerDIV.appendChild(newQuestion.getDIV());
 			}
+			this.getQuestionCount = function() {
+				if (questions == null){
+					return 0
+				} else {
+					return questions.length;
+				}
+  			}
 		};
 		function chapterModel(){
 			var chapter = new chapter();
@@ -172,6 +196,8 @@
             	survey.addChapter();
         	}
 			div.appendChild(addChapterButton);
+			var chaptersContainerDIV = document.createElement('div');
+         	chaptersContainerDIV.className = "chaptersContainerDIV";
 			function getfusionTableID() {
 				return fusionTableID;
 			};
@@ -188,9 +214,12 @@
 				return div;
 			}
 			this.addChapter = function(){
+				if(this.getChapterCount() == 0){
+					div.appendChild(chaptersContainerDIV);
+				}
 				var newChapter = new chapter(this.getChapterCount());
 				chapters.push(newChapter);
-				div.appendChild(newChapter.getDIV());
+				chaptersContainerDIV.appendChild(newChapter.getDIV());
 			}
 			this.getChapterCount = function() {
 				if (chapters == null){
