@@ -15,8 +15,15 @@
       	}
       	.chapter {
       		background-color: blue;
-        	height: 100px;
-      		width: 100px;
+        	min-height: 100px;
+      		width: 200px;
+      		margin: 10px;
+	        padding: 10px
+      	}	
+      	.question{
+      		background-color: green;
+        	min-height: 80px;
+      		width: 80px;
       		margin: 10px;
 	        padding: 10px
       	}
@@ -52,6 +59,8 @@
 			var questionID; // String
 			var otherEnabled; // Boolean 
 			var jumpID; // String
+			var div = document.createElement('div');
+			div.className = "question";
 			function getType() {
 				return type;
 			};
@@ -94,6 +103,9 @@
 			function setLoopQuestions(loopQuestions) {
 				this.loopQuestions = loopQuestions;
 			};
+			this.getDIV = function(){
+				return div;
+			}
 		};
 		function questionType(){
 			var MULTIPLE_CHOICE = "MC";
@@ -104,12 +116,27 @@
 			var ORDERED = "OL";
 			var LOOP = "LP";
 		};
-		function chapter() {
+		function chapter(chapterPosition) {
+			this.chapterPosition = chapterPosition;
 		  	var title; // String
 		  	var questions = []; //Array of question objects
 		  	var parentDIV; // div to contain the chapter
 		  	var div = document.createElement('div');
 			div.className = "chapter";
+			var addQuestionButton = document.createElement("button");
+			addQuestionButton.setAttribute("chapterPosition", chapterPosition);
+			addQuestionButton.innerHTML = 'Add Question';
+			div.appendChild(addQuestionButton);
+			addQuestionButton.onclick = function(){
+//				window.alert(this.getAttribute("chapterPosition"));
+				survey.getChapters()[this.getAttribute("chapterPosition")].addQuestion();
+         	}
+         	function getChapterPosition() {
+		    	return chapterPosition;
+			};
+			function setChapterPosition(chapterPosition) {
+				this.chapterPosition = chapterPosition;
+			};
 		  	function getTitle() {
 		    	return title;
 			};
@@ -124,6 +151,11 @@
 			};
 			this.getDIV = function(){
 				return div;
+			}
+			this.addQuestion = function(){
+				var newQuestion = new question();
+				questions.push(newQuestion);
+				div.appendChild(newQuestion.getDIV());
 			}
 		};
 		function chapterModel(){
@@ -146,7 +178,7 @@
 			function setfusionTableID(fusionTableID) {
 				this.fusionTableID = fusionTableID;
 			};
-			function getChapters() {
+			this.getChapters = function() {
 				return chapters;
 			};
 			function setChapters(chapters) {
@@ -156,10 +188,17 @@
 				return div;
 			}
 			this.addChapter = function(){
-				var newChapter = new chapter();
+				var newChapter = new chapter(this.getChapterCount());
 				chapters.push(newChapter);
 				div.appendChild(newChapter.getDIV());
 			}
+			this.getChapterCount = function() {
+				if (chapters == null){
+					return 0
+				} else {
+					return chapters.length;
+				}
+  			}
 		};
 		function tracker(){
 			var questions // Instances of questions
