@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            Dynamically build FT survey
+        </title>
+    <style>
+	    html, body {
+	        height: 100%;
+	        margin: 0px;
+	        padding: 0px
+	    }
+      	.survey {
+      		background-color: pink;
+      	}
+      	.chapter {
+      		background-color: blue;
+        	min-height: 100px;
+      		width: 200px;
+      		margin: 10px;
+	        padding: 10px
+	        position: relative;
+   			float: left;
+      	}	
+      	.question{
+      		background-color: green;
+        	min-height: 80px;
+      		width: 80px;
+      		margin: 10px;
+	        padding: 10px
+      	}
+      	.answersContainerDIV{
+      		background-color: black;
+      		min-heightheight: 60px;
+      		min-width: 60px;
+      		margin: 10px;
+	        padding: 10px
+      	}
+      	.chaptersContainerDIV{
+      		background-color: yellow;
+      		overflow: hidden
+
+      	}
+    </style>
+    <body>
+    	<div id="survey_container"></div>
+  	</body>
+    <script language="javascript">
+    		var survey = new survey();
+    		document.getElementsByTagName('body')[0].appendChild(survey.getDIV());
+			function answer() {
+			var answerText = null; // String
+			var jumpID = null; // String
+			function getAnswerText() {
+				return answerText;
+			};
+			function setAnswerText(answerText) {
+				this.answerText = answerText;
+			};
+			function getJumpID() {
+				return jumpID;
+			};
+			function setjumpID(jumpID) {
+				this.jumpID = jumpID;
+			};
+		};
+
+		function question() {
+			var type; // Instance of question type
+			var loopQuestions = []; // Question instances inside this question.
+			var questionText; // String
+			var answers = []; // Answer instances
+			var questionID; // String
+			var otherEnabled; // Boolean 
+			var jumpID; // String
+			var div = document.createElement('div');
+			div.className = "question";
+			function getType() {
+				return type;
+			};
+			function setType(type) {
+				this.type = type;
+			};
+			function getQuestionText() {
+				return questionText;
+			};
+			function setQuestionText(questionText) {
+				this.questionText = questionText;
+			};
+			function getAnswers() {
+				return answers;
+			};
+			function setAnswers(answers) {
+				this.answers = answers;
+			};
+			function getJumpID() {
+				return jumpID;
+			};
+			function setjumpID(jumpID) {
+				this.jumpID = jumpID;
+			};
+			function getQuestionID() {
+				return questionID;
+			};
+			function setQuestionID(questionID) {
+				this.questionID = questionID;
+			};
+			function isOtherEnabled() {
+				return otherEnabled;
+			};
+			function setOtherEnabled(otherEnabled) {
+				this.otherEnabled = otherEnabled;
+			};
+			function getLoopQuestions() {
+				return loopQuestions;
+			};
+			function setLoopQuestions(loopQuestions) {
+				this.loopQuestions = loopQuestions;
+			};
+			this.getDIV = function(){
+				return div;
+			}
+		};
+		function questionType(){
+			var MULTIPLE_CHOICE = "MC";
+			var OPEN_NUMBER = "ON";
+			var OPEN_TEXT = "OT";
+			var IMAGE = "IM";
+			var CHECKBOX = "CB";
+			var ORDERED = "OL";
+			var LOOP = "LP";
+		};
+		function chapter(chapterPosition) {
+			this.chapterPosition = chapterPosition;
+		  	var title; // String
+		  	var questions = []; //Array of question objects
+		  	var div = document.createElement('div');
+			div.className = "chapter";
+			var addQuestionButton = document.createElement("button");
+			addQuestionButton.setAttribute("chapterPosition", chapterPosition);
+			addQuestionButton.innerHTML = 'Add Question';
+			addQuestionButton.onclick = function(){
+				survey.getChapters()[this.getAttribute("chapterPosition")].addQuestion();
+         	}
+         	div.appendChild(addQuestionButton);
+         	var answersContainerDIV = document.createElement('div');
+         	answersContainerDIV.className = "answersContainerDIV";
+         	function getChapterPosition() {
+		    	return chapterPosition;
+			};
+			function setChapterPosition(chapterPosition) {
+				this.chapterPosition = chapterPosition;
+			};
+		  	function getTitle() {
+		    	return title;
+			};
+			function setTitle(title) {
+				this.title = title;
+			};
+			function getQuestions() {
+				return questions;
+			};
+			function setQuestions(questions) {
+				this.questions = questions;
+			};
+			this.getDIV = function(){
+				return div;
+			}
+			this.addQuestion = function(){
+				if(this.getQuestionCount() == 0){
+					div.appendChild(answersContainerDIV);
+				}
+				var newQuestion = new question();
+				questions.push(newQuestion);
+				answersContainerDIV.appendChild(newQuestion.getDIV());
+			}
+			this.getQuestionCount = function() {
+				if (questions == null){
+					return 0
+				} else {
+					return questions.length;
+				}
+  			}
+		};
+		function chapterModel(){
+			var chapter = new chapter();
+		}
+		function survey(){
+			var chapters = []; // Instances of chapters
+			var fusionTableID = "seee"; // String
+			var div = document.createElement('div');
+			div.className = "survey";
+			var addChapterButton = document.createElement("button");
+			addChapterButton.innerHTML = 'Add Chapter';
+			addChapterButton.onclick = function(){
+            	survey.addChapter();
+        	}
+			div.appendChild(addChapterButton);
+			var chaptersContainerDIV = document.createElement('div');
+         	chaptersContainerDIV.className = "chaptersContainerDIV";
+			function getfusionTableID() {
+				return fusionTableID;
+			};
+			function setfusionTableID(fusionTableID) {
+				this.fusionTableID = fusionTableID;
+			};
+			this.getChapters = function() {
+				return chapters;
+			};
+			function setChapters(chapters) {
+				this.chapters = chapters;
+			};
+			this.getDIV = function(){
+				return div;
+			}
+			this.addChapter = function(){
+				if(this.getChapterCount() == 0){
+					div.appendChild(chaptersContainerDIV);
+				}
+				var newChapter = new chapter(this.getChapterCount());
+				chapters.push(newChapter);
+				chaptersContainerDIV.appendChild(newChapter.getDIV());
+			}
+			this.getChapterCount = function() {
+				if (chapters == null){
+					return 0
+				} else {
+					return chapters.length;
+				}
+  			}
+		};
+		function tracker(){
+			var questions // Instances of questions
+			var fusionTableID; // String
+			function getfusionTableID() {
+				return fusionTableID;
+			};
+			function setfusionTableID(fusionTableID) {
+				this.fusionTableID = fusionTableID;
+			};
+			function getQuestions() {
+			    return questions;
+			};
+			function setQuestions(questions) {
+				this.questions = questions;
+			};
+		};
+	</script>
+</html>
