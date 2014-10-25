@@ -27,7 +27,7 @@
       		margin: 10px;
 	        padding: 10px
       	}
-      	.answersContainerDIV{
+      	.questionsContainerDIV{
       		background-color: black;
       		min-heightheight: 60px;
       		min-width: 60px;
@@ -80,20 +80,25 @@
 				var newChapterView = new chapterView(chapter);
 				survey.addChapter(chapter);
 				chapterViews.push(newChapterView);
-				chapterContainerDIV.appendChild(newChapterView.getView());
+				var newChapterDIV = chapterViews[chapterViews.length-1].getView();
+				chapterContainerDIV.appendChild(newChapterDIV);
 				var eraseChapterButton = document.createElement("button");
 				eraseChapterButton.innerHTML = 'Erase chapter';
 				var that = this;
-				var index = chapterViews.length + 1;
 				chapterContainerDIV.appendChild(eraseChapterButton);
 				chaptersContainerDIV.appendChild(chapterContainerDIV);
-				var thisChapterDIV = chaptersContainerDIV.lastChild;
 				eraseChapterButton.onclick = function(){
-            		that.eraseChapter(thisChapterDIV);
+            		that.eraseChapter(chapterContainerDIV);
         		}
 			};
 			this.eraseChapter = function(chapterDIV){
-				//window.alert(index);
+				var parentChilds = chapterDIV.parentNode.childNodes;
+				for (var i=0; i < parentChilds.length; i++){
+					if (parentChilds[i] == chapterDIV){
+						chapterViews.splice(i,1);
+						break
+					}
+				}
 				chaptersContainerDIV.removeChild(chapterDIV);
 			}	
 		}
@@ -109,20 +114,23 @@
 				that.addQuestion(new question());
          	}
          	div.appendChild(addQuestionButton);
-         	var answersContainerDIV = document.createElement('div');
-         	answersContainerDIV.className = "answersContainerDIV";
+         	var questionsContainerDIV = document.createElement('div');
+         	questionsContainerDIV.className = "questionsContainerDIV";
 			this.getView = function(){
 				return div;
 			}
 			this.addQuestion = function(question){
 				if(chapter.getQuestionCount() == 0){
-					div.appendChild(answersContainerDIV);
+					div.appendChild(questionsContainerDIV);
 				}
 				newQuestionView = new questionView(question);
 				chapter.addQuestion(question);
 				questionViews.push(newQuestionView);
-				answersContainerDIV.appendChild(newQuestionView.getView());
+				questionsContainerDIV.appendChild(newQuestionView.getView());
 			}
+			this.eraseQuestion = function(questionDIV){
+				chaptersContainerDIV.removeChild(chapterDIV);
+			}	
 		};
 		function questionView(question) {
 			this.question = question;
