@@ -12,38 +12,45 @@
 	    }
       	.survey {
       		background-color: pink;
+      		overflow: hidden;
+      		padding: 10px;
       	}
       	.chapter {
       		background-color: blue;
         	min-height: 100px;
-      		width: 200px;
       		margin: 10px;
 	        padding: 10px
       	}	
       	.question{
       		background-color: green;
-        	min-height: 80px;
+        	height: 80px;
       		width: 80px;
       		margin: 10px;
 	        padding: 10px
       	}
       	.questionsContainerDIV{
       		background-color: black;
-      		min-heightheight: 60px;
-      		min-width: 60px;
-      		margin: 10px;
-	        padding: 10px
+      		overflow: hidden;
+      		padding: 10px
       	}
       	.chaptersContainerDIV{
       		background-color: yellow;
-      		overflow: hidden
+      		overflow: hidden;
+      		padding: 10px
       	}
       	.chapterContainerDIV{
       		background-color: green;
       		margin: 2px;
 	        padding: 2px;
 	        position: relative;
+	        width: 32%;
+	        min-width: 400px;
    			float: left;
+      	}
+      	.questionContainerDIV{
+      		background-color: red;
+      		margin: 2px;
+	        padding: 2px;
       	}
     </style>
     <body>
@@ -68,24 +75,21 @@
 			div.appendChild(addChapterButton);
 			var chaptersContainerDIV = document.createElement('div');
          	chaptersContainerDIV.className = "chaptersContainerDIV";
+         	div.appendChild(chaptersContainerDIV);
 			this.getView = function(){
 				return div;
 			}
 			this.addChapter = function(chapter){
-				if(survey.getChapterCount() == 0){
-					div.appendChild(chaptersContainerDIV);
-				}
 				var chapterContainerDIV = document.createElement('div');
          		chapterContainerDIV.className = "chapterContainerDIV";
 				var newChapterView = new chapterView(chapter);
-				survey.addChapter(chapter);
 				chapterViews.push(newChapterView);
-				var newChapterDIV = chapterViews[chapterViews.length-1].getView();
-				chapterContainerDIV.appendChild(newChapterDIV);
+				var newChapterDIV = newChapterView.getView();
 				var eraseChapterButton = document.createElement("button");
 				eraseChapterButton.innerHTML = 'Erase chapter';
 				var that = this;
 				chapterContainerDIV.appendChild(eraseChapterButton);
+				chapterContainerDIV.appendChild(newChapterDIV);
 				chaptersContainerDIV.appendChild(chapterContainerDIV);
 				eraseChapterButton.onclick = function(){
             		that.eraseChapter(chapterContainerDIV);
@@ -116,20 +120,37 @@
          	div.appendChild(addQuestionButton);
          	var questionsContainerDIV = document.createElement('div');
          	questionsContainerDIV.className = "questionsContainerDIV";
+         	div.appendChild(questionsContainerDIV);
 			this.getView = function(){
 				return div;
 			}
 			this.addQuestion = function(question){
-				if(chapter.getQuestionCount() == 0){
-					div.appendChild(questionsContainerDIV);
-				}
+				var questionContainerDIV = document.createElement('div');
+         		questionContainerDIV.className = "questionContainerDIV";
 				newQuestionView = new questionView(question);
-				chapter.addQuestion(question);
 				questionViews.push(newQuestionView);
-				questionsContainerDIV.appendChild(newQuestionView.getView());
+				var newQuestionDIV = newQuestionView.getView();
+				var eraseQuestionButton = document.createElement("button");
+				eraseQuestionButton.innerHTML = 'Erase question';
+				var that = this;
+				questionContainerDIV.appendChild(eraseQuestionButton);
+				questionContainerDIV.appendChild(newQuestionDIV);
+				questionsContainerDIV.appendChild(questionContainerDIV);
+				eraseQuestionButton.onclick = function(){
+            		that.eraseQuestion(questionContainerDIV);
+            	}
 			}
 			this.eraseQuestion = function(questionDIV){
-				chaptersContainerDIV.removeChild(chapterDIV);
+				questionsContainerDIV.removeChild(questionDIV);
+				var parentChilds = questionDIV.parentNode.childNodes;
+				for (var i=0; i < parentChilds.length; i++){
+					if (parentChilds[i] == questionDIV){
+						questionViews.splice(i,1);
+						break
+					}
+					window.alert(i);
+				}
+				questionsContainerDIV.removeChild(questionDIV);
 			}	
 		};
 		function questionView(question) {
@@ -240,9 +261,6 @@
 			function setQuestions(questions) {
 				this.questions = questions;
 			};
-			this.getDIV = function(){
-				return div;
-			}
 			this.addQuestion = function(newQuestion){
 				questions.push(newQuestion);
 			}
