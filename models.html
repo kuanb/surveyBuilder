@@ -82,7 +82,7 @@
 			this.addChapter = function(chapter){
 				var chapterContainerDIV = document.createElement('div');
          		chapterContainerDIV.className = "chapterContainerDIV";
-				var newChapterView = new chapterView(chapter);
+				var newChapterView = new chapterView(chapter, this);
 				chapterViews.push(newChapterView);
 				var newChapterDIV = newChapterView.getView();
 				var eraseChapterButton = document.createElement("button");
