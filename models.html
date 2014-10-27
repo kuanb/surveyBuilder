@@ -12,43 +12,158 @@
 	    }
       	.survey {
       		background-color: pink;
+      		overflow: hidden;
+      		padding: 10px;
       	}
       	.chapter {
       		background-color: blue;
         	min-height: 100px;
-      		width: 200px;
       		margin: 10px;
 	        padding: 10px
-	        position: relative;
-   			float: left;
       	}	
       	.question{
       		background-color: green;
-        	min-height: 80px;
+        	height: 80px;
       		width: 80px;
       		margin: 10px;
 	        padding: 10px
       	}
-      	.answersContainerDIV{
+      	.questionsContainerDIV{
       		background-color: black;
-      		min-heightheight: 60px;
-      		min-width: 60px;
-      		margin: 10px;
-	        padding: 10px
+      		overflow: hidden;
+      		padding: 10px
       	}
       	.chaptersContainerDIV{
       		background-color: yellow;
-      		overflow: hidden
-
+      		overflow: hidden;
+      		padding: 10px
+      	}
+      	.chapterContainerDIV{
+      		background-color: green;
+      		margin: 2px;
+	        padding: 2px;
+	        position: relative;
+	        width: 32%;
+	        min-width: 400px;
+   			float: left;
+      	}
+      	.questionContainerDIV{
+      		background-color: red;
+      		margin: 2px;
+	        padding: 2px;
       	}
     </style>
     <body>
     	<div id="survey_container"></div>
   	</body>
     <script language="javascript">
-    		var survey = new survey();
-    		document.getElementsByTagName('body')[0].appendChild(survey.getDIV());
-			function answer() {
+    	var surveyView = new surveyView(new survey);
+    	document.getElementsByTagName('body')[0].appendChild(surveyView.getView());
+    	// Here be the Views
+    	// !!/!T(&"#("/!(/T#")(/!=)/"=)(!)(YEU!")/H)"(UWE=")!"(!=)(!=#)(=))))
+		function surveyView(survey){
+			this.survey = survey;
+			var chapterViews = []; // Instances of chapters
+			var div = document.createElement('div');
+			div.className = "survey";
+			var addChapterButton = document.createElement("button");
+			addChapterButton.innerHTML = 'Add Chapter';
+			var that = this;
+			addChapterButton.onclick = function(){
+            	that.addChapter(new chapter());
+        	}
+			div.appendChild(addChapterButton);
+			var chaptersContainerDIV = document.createElement('div');
+         	chaptersContainerDIV.className = "chaptersContainerDIV";
+         	div.appendChild(chaptersContainerDIV);
+			this.getView = function(){
+				return div;
+			}
+			this.addChapter = function(chapter){
+				var chapterContainerDIV = document.createElement('div');
+         		chapterContainerDIV.className = "chapterContainerDIV";
+				var newChapterView = new chapterView(chapter, this);
+				chapterViews.push(newChapterView);
+				var newChapterDIV = newChapterView.getView();
+				var eraseChapterButton = document.createElement("button");
+				eraseChapterButton.innerHTML = 'Erase chapter';
+				var that = this;
+				chapterContainerDIV.appendChild(eraseChapterButton);
+				chapterContainerDIV.appendChild(newChapterDIV);
+				chaptersContainerDIV.appendChild(chapterContainerDIV);
+				eraseChapterButton.onclick = function(){
+            		that.eraseChapter(chapterContainerDIV);
+        		}
+			};
+			this.eraseChapter = function(chapterDIV){
+				var parentChilds = chapterDIV.parentNode.childNodes;
+				for (var i=0; i < parentChilds.length; i++){
+					if (parentChilds[i] == chapterDIV){
+						chapterViews.splice(i,1);
+						break
+					}
+				}
+				chaptersContainerDIV.removeChild(chapterDIV);
+			}	
+		}
+		function chapterView(chapter) {
+			this.chapter = chapter;
+		  	var questionViews = []; //Array of question Views objects
+		  	var div = document.createElement('div');
+			div.className = "chapter";
+			var addQuestionButton = document.createElement("button");
+			addQuestionButton.innerHTML = 'Add Question';
+			var that = this;
+			addQuestionButton.onclick = function(){
+				that.addQuestion(new question());
+         	}
+         	div.appendChild(addQuestionButton);
+         	var questionsContainerDIV = document.createElement('div');
+         	questionsContainerDIV.className = "questionsContainerDIV";
+         	div.appendChild(questionsContainerDIV);
+			this.getView = function(){
+				return div;
+			}
+			this.addQuestion = function(question){
+				var questionContainerDIV = document.createElement('div');
+         		questionContainerDIV.className = "questionContainerDIV";
+				newQuestionView = new questionView(question);
+				questionViews.push(newQuestionView);
+				var newQuestionDIV = newQuestionView.getView();
+				var eraseQuestionButton = document.createElement("button");
+				eraseQuestionButton.innerHTML = 'Erase question';
+				var that = this;
+				questionContainerDIV.appendChild(eraseQuestionButton);
+				questionContainerDIV.appendChild(newQuestionDIV);
+				questionsContainerDIV.appendChild(questionContainerDIV);
+				eraseQuestionButton.onclick = function(){
+            		that.eraseQuestion(questionContainerDIV);
+            	}
+			}
+			this.eraseQuestion = function(questionDIV){
+				questionsContainerDIV.removeChild(questionDIV);
+				var parentChilds = questionDIV.parentNode.childNodes;
+				for (var i=0; i < parentChilds.length; i++){
+					if (parentChilds[i] == questionDIV){
+						questionViews.splice(i,1);
+						break
+					}
+					window.alert(i);
+				}
+				questionsContainerDIV.removeChild(questionDIV);
+			}	
+		};
+		function questionView(question) {
+			this.question = question;
+			var div = document.createElement('div');
+			div.className = "question";
+			this.getView = function(){
+				return div;
+			}
+		};
+
+		///"&)(!/=)"!/=)/"!?/((/&(&%"!(&/=")/)"!(??"!)"=)?/")!=/!&"/!&?#&*)
+		function answer() {
 			var answerText = null; // String
 			var jumpID = null; // String
 			function getAnswerText() {
@@ -73,8 +188,6 @@
 			var questionID; // String
 			var otherEnabled; // Boolean 
 			var jumpID; // String
-			var div = document.createElement('div');
-			div.className = "question";
 			function getType() {
 				return type;
 			};
@@ -117,9 +230,6 @@
 			function setLoopQuestions(loopQuestions) {
 				this.loopQuestions = loopQuestions;
 			};
-			this.getDIV = function(){
-				return div;
-			}
 		};
 		function questionType(){
 			var MULTIPLE_CHOICE = "MC";
@@ -130,21 +240,9 @@
 			var ORDERED = "OL";
 			var LOOP = "LP";
 		};
-		function chapter(chapterPosition) {
-			this.chapterPosition = chapterPosition;
+		function chapter() {
 		  	var title; // String
 		  	var questions = []; //Array of question objects
-		  	var div = document.createElement('div');
-			div.className = "chapter";
-			var addQuestionButton = document.createElement("button");
-			addQuestionButton.setAttribute("chapterPosition", chapterPosition);
-			addQuestionButton.innerHTML = 'Add Question';
-			addQuestionButton.onclick = function(){
-				survey.getChapters()[this.getAttribute("chapterPosition")].addQuestion();
-         	}
-         	div.appendChild(addQuestionButton);
-         	var answersContainerDIV = document.createElement('div');
-         	answersContainerDIV.className = "answersContainerDIV";
          	function getChapterPosition() {
 		    	return chapterPosition;
 			};
@@ -163,16 +261,8 @@
 			function setQuestions(questions) {
 				this.questions = questions;
 			};
-			this.getDIV = function(){
-				return div;
-			}
-			this.addQuestion = function(){
-				if(this.getQuestionCount() == 0){
-					div.appendChild(answersContainerDIV);
-				}
-				var newQuestion = new question();
+			this.addQuestion = function(newQuestion){
 				questions.push(newQuestion);
-				answersContainerDIV.appendChild(newQuestion.getDIV());
 			}
 			this.getQuestionCount = function() {
 				if (questions == null){
@@ -182,22 +272,10 @@
 				}
   			}
 		};
-		function chapterModel(){
-			var chapter = new chapter();
-		}
 		function survey(){
 			var chapters = []; // Instances of chapters
 			var fusionTableID = "seee"; // String
-			var div = document.createElement('div');
-			div.className = "survey";
-			var addChapterButton = document.createElement("button");
-			addChapterButton.innerHTML = 'Add Chapter';
-			addChapterButton.onclick = function(){
-            	survey.addChapter();
-        	}
-			div.appendChild(addChapterButton);
-			var chaptersContainerDIV = document.createElement('div');
-         	chaptersContainerDIV.className = "chaptersContainerDIV";
+
 			function getfusionTableID() {
 				return fusionTableID;
 			};
@@ -213,13 +291,8 @@
 			this.getDIV = function(){
 				return div;
 			}
-			this.addChapter = function(){
-				if(this.getChapterCount() == 0){
-					div.appendChild(chaptersContainerDIV);
-				}
-				var newChapter = new chapter(this.getChapterCount());
+			this.addChapter = function(newChapter){
 				chapters.push(newChapter);
-				chaptersContainerDIV.appendChild(newChapter.getDIV());
 			}
 			this.getChapterCount = function() {
 				if (chapters == null){
