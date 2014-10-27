@@ -27,6 +27,12 @@
       		padding: 10px;
       			
       	}
+      	.tracker {
+      		background-color: white;
+      		overflow: hidden;
+      		padding: 10px;
+      			
+      	}      	
       	.chapter {
       		background-color: blue;
         	min-height: 100px;
@@ -91,9 +97,11 @@
 		function projectView(project){
 			this.project = project;
 			this.surveyView = new surveyView(new survey(), this);
+			this.trackerView = new trackerView(new tracker(), this);
 			var div = document.createElement('div');
 			div.className = "project";
 			div.appendChild(this.surveyView.getView());
+			div.appendChild(this.trackerView.getView());
 			var p = document.createElement("p")
 			var jsonText = document.createTextNode("JsonGoesHere");
 			div.appendChild(jsonText);
@@ -103,7 +111,9 @@
 			var contentChanges = 0;
 			this.contentChanged = function(){
 				var survey = this.surveyView.getSurvey();
+				var tracker = this.trackerView.getTracker();
 				project.setSurvey(survey);
+				project.setTracker(tracker);
 				contentChanges++;
 				jsonText.nodeValue = "Changes: " + contentChanges + " JSON: " + JSON.stringify(project.generateJSON());
 			};
@@ -168,13 +178,16 @@
 		function questionArrayView(questionArray, parentView){
 			var questionViews = []; //Array of question Views objects
 			var div = document.createElement('div');
+			div.className = "questionsContainerDIV";
+			var questionsArrayContainer = document.createElement('div');
+			questionsArrayContainer.className = "questionsArrayContainer";
 			var addQuestionButton = new button("add", "", "Add question");
 			var that = this;
 			addQuestionButton.onclick = function(){
 				that.addQuestion(new question());
          	}
          	div.appendChild(addQuestionButton);
-         	div.className = "questionsContainerDIV";
+         	div.appendChild(questionsArrayContainer);
 			this.addQuestion = function(question){
 				var questionContainerDIV = document.createElement('div');
          		questionContainerDIV.className = "questionContainerDIV";
@@ -185,7 +198,7 @@
 				var that = this;
 				questionContainerDIV.appendChild(eraseQuestionButton);
 				questionContainerDIV.appendChild(newQuestionDIV);
-				div.appendChild(questionContainerDIV);
+				questionsArrayContainer.appendChild(questionContainerDIV);
 				eraseQuestionButton.onclick = function(){
             		that.eraseQuestion(questionContainerDIV);
             	}
@@ -199,7 +212,7 @@
 						break
 					}
 				}
-				div.removeChild(questionDIV);
+				questionsArrayContainer.removeChild(questionDIV);
 				this.contentChanged();
 			};
 			this.contentChanged = function(){
@@ -208,6 +221,7 @@
 				// 	changedQuestions[i] = questionViews[i].getQuestion();
 				// }
 				// chapter.setQuestions(changedQuestions);
+				//alert(questionViews.length);
 				parentView.contentChanged();
 			};	
 			this.getView = function(){
@@ -233,14 +247,28 @@
 			this.getChapter = function(){
 				return chapter;
 			}
-			this.getView = function(){
-				return div;
-			}
 			this.contentChanged = function(){
 				this.chapter.setQuestions(this.questionArrayView.getQuestions());
 				parentView.contentChanged();
 			};
 		};
+		function trackerView(tracker, parentView){
+			this.tracker = tracker;
+			var div = document.createElement('div');
+			div.className = "tracker";
+			this.questionArrayView = new questionArrayView(tracker.getQuestions(), this);
+			div.appendChild(this.questionArrayView.getView());
+			this.getView = function(){
+				return div;
+			}
+			this.getTracker = function(){
+				return tracker;
+			}
+			this.contentChanged = function(){
+				this.tracker.setQuestions(this.questionArrayView.getQuestions());
+				parentView.contentChanged();
+			};
+		}
 		function questionView(question, parentView) {
 			this.question = question;
 			this.parentView = parentView;
@@ -400,7 +428,7 @@
 		};
 		function survey(){
 			this.chapters = []; // Instances of chapters
-			this.fusionTableID = "seee"; // String
+			this.fusionTableID = null; // String
 
 			this.getfusionTableID= function() {
 				return fusionTableID;
@@ -429,7 +457,7 @@
   			}
   			this.generateJSON = function(){
 				var surveyJSON = {};
-				chaptersJSONArray = [];
+				var chaptersJSONArray = [];
 				for(var i=0; i < this.chapters.length; i++){
 					chaptersJSONArray.push(this.chapters[i].generateJSON());
 				}
@@ -439,8 +467,8 @@
 			}
 		};
 		function tracker(){
-			var questions; // Instances of questions
-			var fusionTableID; // String
+			this.questions = []; // Instances of questions
+			this.fusionTableID = null; // String
 			this.getfusionTableID = function() {
 				return fusionTableID;
 			};
@@ -448,11 +476,21 @@
 				this.fusionTableID = fusionTableID;
 			};
 			this.getQuestions = function() {
-			    return questions;
+			    return this.questions;
 			};
 			this.setQuestions = function(questions) {
 				this.questions = questions;
 			};
+			this.generateJSON = function(){
+				var trackerJSON = {};
+				var questionsJSONArray = [];
+				for(var i=0; i < this.questions.length; i++){
+					questionsJSONArray.push(this.questions[i].generateJSON());
+				}
+				trackerJSON["Questions"] = questionsJSONArray;
+				trackerJSON["TableID"] = this.fusionTableID;
+				return trackerJSON;
+			}
 		};
 		function project(){
 			this.survey;
@@ -472,6 +510,7 @@
 			this.generateJSON = function(){
 				var projectJSON = {};
 				projectJSON["Survey"] = this.survey.generateJSON();
+				projectJSON["Tracker"] = this.tracker.generateJSON();
 				return projectJSON;
 			}
 		}
