@@ -258,18 +258,18 @@
 		};
 
 		function question() {
-			var type; // Instance of question type
+			var kind = null;
 			var loopQuestions = 	[]; // Question instances inside this question.
-			var questionText; // String
+			var questionText = null; // String
 			var answers = []; // Answer instances
-			var questionID; // String
-			var otherEnabled; // Boolean 
-			var jumpID; // String
+			var questionID = null; // String
+			var otherEnabled = null; // Boolean 
+			var jumpID = null; // String
 			this.getType = function() {
 				return type;
 			};
-			this.setType = function(type) {
-				this.type = type;
+			this.setKind = function(kind) {
+				this.kind = type;
 			};
 			this.getQuestionText = function() {
 				return questionText;
@@ -309,7 +309,11 @@
 			};
 			this.generateJSON = function(){  				
 				questionJSON = {};
-  				questionJSON["SEEE"]="SEEEE";
+  				questionJSON["Question"] = questionText;
+  				questionJSON["id"] = questionID;
+  				questionJSON["Kind"] = kind;
+  				questionJSON["Other"] = otherEnabled;
+  				questionJSON["Jump"] = jumpID;
   				return questionJSON;
   			}
 		};
