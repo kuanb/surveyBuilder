@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+	<!DOCTYPE html>
 <html>
     <head>
         <title>
@@ -8,12 +8,15 @@
 	    html, body {
 	        height: 100%;
 	        margin: 0px;
-	        padding: 0px
+	        padding: 0px;
+	        text-align: center;
 	    }
       	.survey {
       		background-color: pink;
       		overflow: hidden;
       		padding: 10px;
+      		width: 50%;
+      		display: inline-block;
       	}
       	.chapter {
       		background-color: blue;
@@ -24,7 +27,6 @@
       	.question{
       		background-color: green;
         	height: 80px;
-      		width: 80px;
       		margin: 10px;
 	        padding: 10px
       	}
@@ -43,7 +45,7 @@
       		margin: 2px;
 	        padding: 2px;
 	        position: relative;
-	        width: 32%;
+	        width: 100%;
 	        min-width: 400px;
    			float: left;
       	}
@@ -71,7 +73,7 @@
 			var that = this;
 			addChapterButton.onclick = function(){
             	that.addChapter(new chapter());
-        	}
+        	};
 			div.appendChild(addChapterButton);
 			var chaptersContainerDIV = document.createElement('div');
          	chaptersContainerDIV.className = "chaptersContainerDIV";
@@ -141,22 +143,38 @@
             	}
 			}
 			this.eraseQuestion = function(questionDIV){
-				questionsContainerDIV.removeChild(questionDIV);
 				var parentChilds = questionDIV.parentNode.childNodes;
 				for (var i=0; i < parentChilds.length; i++){
 					if (parentChilds[i] == questionDIV){
 						questionViews.splice(i,1);
 						break
 					}
-					window.alert(i);
 				}
 				questionsContainerDIV.removeChild(questionDIV);
 			}	
 		};
 		function questionView(question) {
 			this.question = question;
+			//var questionKind = new questionKind();
 			var div = document.createElement('div');
 			div.className = "question";
+			var IDInput = document.createElement("input");
+			IDInput.type = "text";
+			var questionInput = document.createElement("input");
+			questionInput.type = "text";
+			div.appendChild(IDInput);
+			div.appendChild(questionInput);			
+
+			var questionKindDropDown = document.createElement("select");
+			
+			var op = new Option();
+			op.value = 1;
+			op.text = "First entry";
+			questionKindDropDown.options.add(op);
+
+  			questionKindDropDown.setAttribute('id',"year1")
+  			questionKindDropDown.setAttribute('oncreate',"Date1()");
+  			div.appendChild(questionKindDropDown);
 			this.getView = function(){
 				return div;
 			}
@@ -182,7 +200,7 @@
 
 		function question() {
 			var type; // Instance of question type
-			var loopQuestions = []; // Question instances inside this question.
+			var loopQuestions = 	[]; // Question instances inside this question.
 			var questionText; // String
 			var answers = []; // Answer instances
 			var questionID; // String
@@ -225,13 +243,13 @@
 				this.otherEnabled = otherEnabled;
 			};
 			function getLoopQuestions() {
-				return loopQuestions;
+				return loopQuestions;	
 			};
 			function setLoopQuestions(loopQuestions) {
 				this.loopQuestions = loopQuestions;
 			};
 		};
-		function questionType(){
+		function questionKind(){
 			var MULTIPLE_CHOICE = "MC";
 			var OPEN_NUMBER = "ON";
 			var OPEN_TEXT = "OT";
