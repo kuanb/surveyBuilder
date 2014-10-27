@@ -16,6 +16,7 @@
       		overflow: hidden;
       		padding: 10px;
       		width: 50%;
+      		min-width: 400px;
       		display: inline-block;
 	    }
       	.survey {
@@ -70,10 +71,10 @@
     	// !!/!T(&"#("/!(/T#")(/!=)/"=)(!)(YEU!")/H)"(UWE=")!"(!=)(!=#)(=))))
 		function projectView(project){
 			this.project = project;
-			surveyView = new surveyView(new survey(), this);
+			this.surveyView = new surveyView(new survey(), this);
 			var div = document.createElement('div');
 			div.className = "project";
-			div.appendChild(surveyView.getView());
+			div.appendChild(this.surveyView.getView());
 			var p = document.createElement("p")
 			var jsonText = document.createTextNode("JsonGoesHere");
 			div.appendChild(jsonText);
@@ -82,7 +83,7 @@
 			};
 			var contentChanges = 0;
 			this.contentChanged = function(){
-				survey = surveyView.getSurvey();
+				var survey = this.surveyView.getSurvey();
 				project.setSurvey(survey);
 				contentChanges++;
 				jsonText.nodeValue = "Changes: " + contentChanges + " JSON: " + JSON.stringify(project.generateJSON());
@@ -107,7 +108,7 @@
 			this.getView = function(){
 				return div;
 			}
-			this.addChapter = function(chapter){
+			this.addChapter = function(chapter){	
 				var chapterContainerDIV = document.createElement('div');
          		chapterContainerDIV.className = "chapterContainerDIV";
 				var newChapterView = new chapterView(chapter, this);
@@ -147,11 +148,9 @@
 				return survey;
 			}
 		}
-		function chapterView(chapter, parentView) {
-			this.chapter = chapter;
-		  	var questionViews = []; //Array of question Views objects
-		  	var div = document.createElement('div');
-			div.className = "chapter";
+		function questionArrayView(questionArray, parentView){
+			var questionViews = []; //Array of question Views objects
+			var div = document.createElement('div');
 			var addQuestionButton = document.createElement("button");
 			addQuestionButton.innerHTML = 'Add Question';
 			var that = this;
@@ -159,12 +158,7 @@
 				that.addQuestion(new question());
          	}
          	div.appendChild(addQuestionButton);
-         	var questionsContainerDIV = document.createElement('div');
-         	questionsContainerDIV.className = "questionsContainerDIV";
-         	div.appendChild(questionsContainerDIV);
-			this.getView = function(){
-				return div;
-			}
+         	div.className = "questionsContainerDIV";
 			this.addQuestion = function(question){
 				var questionContainerDIV = document.createElement('div');
          		questionContainerDIV.className = "questionContainerDIV";
@@ -176,7 +170,7 @@
 				var that = this;
 				questionContainerDIV.appendChild(eraseQuestionButton);
 				questionContainerDIV.appendChild(newQuestionDIV);
-				questionsContainerDIV.appendChild(questionContainerDIV);
+				div.appendChild(questionContainerDIV);
 				eraseQuestionButton.onclick = function(){
             		that.eraseQuestion(questionContainerDIV);
             	}
@@ -190,20 +184,47 @@
 						break
 					}
 				}
-				questionsContainerDIV.removeChild(questionDIV);
+				div.removeChild(questionDIV);
 				this.contentChanged();
 			};
 			this.contentChanged = function(){
-				var changedQuestions = [];
-				for(i=0; i<questionViews.length; i++){
-					changedQuestions[i] = questionViews[i].getQuestion();
-				}
-				chapter.setQuestions(changedQuestions);
+				// var changedQuestions = [];
+				// for(i=0; i<questionViews.length; i++){
+				// 	changedQuestions[i] = questionViews[i].getQuestion();
+				// }
+				// chapter.setQuestions(changedQuestions);
 				parentView.contentChanged();
 			};	
+			this.getView = function(){
+				return div;
+			}
+			this.getQuestions = function(){
+				var questions = [];
+				for(i=0; i<questionViews.length; i++){
+					questions[i] = questionViews[i].getQuestion();
+				}
+				return questions;
+			}
+		}
+		function chapterView(chapter, parentView) {
+			this.chapter = chapter;
+		  	var div = document.createElement('div');
+			div.className = "chapter";
+			this.questionArrayView = new questionArrayView(chapter.getQuestions(), this);
+			div.appendChild(this.questionArrayView.getView());
+			this.getView = function(){
+				return div;
+			}
 			this.getChapter = function(){
 				return chapter;
 			}
+			this.getView = function(){
+				return div;
+			}
+			this.contentChanged = function(){
+				this.chapter.setQuestions(this.questionArrayView.getQuestions());
+				parentView.contentChanged();
+			};
 		};
 		function questionView(question, parentView) {
 			this.question = question;
@@ -336,7 +357,7 @@
 				this.title = title;
 			};
 			this.getQuestions = function() {
-				return questions;
+				return this.questions;
 			};
 			this.setQuestions = function(questions) {
 				this.questions = questions;
@@ -435,7 +456,7 @@
 			}
 			this.generateJSON = function(){
 				var projectJSON = {};
-				projectJSON["Survey"] = survey.generateJSON();
+				projectJSON["Survey"] = this.survey.generateJSON();
 				return projectJSON;
 			}
 		}
