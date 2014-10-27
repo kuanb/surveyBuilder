@@ -1,6 +1,7 @@
 	<!DOCTYPE html>
 <html>
     <head>
+    	<link href="css/bootstrap.min.css" rel="stylesheet">
         <title>
             Dynamically build FT survey
         </title>
@@ -152,7 +153,8 @@
 			var questionViews = []; //Array of question Views objects
 			var div = document.createElement('div');
 			var addQuestionButton = document.createElement("button");
-			addQuestionButton.innerHTML = 'Add Question';
+			addQuestionButton.innerHTML = '<span class="glyphicon glyphicon-plus"></span>Add Question';
+			addQuestionButton.className =  "btn btn-default";
 			var that = this;
 			addQuestionButton.onclick = function(){
 				that.addQuestion(new question());
@@ -461,4 +463,6 @@
 			}
 		}
 	</script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
 </html>
