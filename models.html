@@ -68,6 +68,22 @@
     <script language="javascript">
     	var projectView = new projectView(new project());
     	document.getElementsByTagName('body')[0].appendChild(projectView.getView());
+    	// Here we put the ux elements
+    	function button(kind, nodeClass, text){
+    		var button = document.createElement("button");
+    		if(kind == "add"){
+    			button.className =  "btn btn-default" + " " + nodeClass;
+    			button.innerHTML = '<span class="glyphicon glyphicon-plus"></span>' + text;
+    		} else if (kind == "remove"){
+    			button.className =  "btn btn-default" + " " + nodeClass;
+    			button.innerHTML = '<span class="glyphicon glyphicon-remove"></span>' + text;
+    		} else {
+    			button.className =  "btn btn-default"+ " " + nodeClass;
+    			button.innerHTML = text;
+    		}
+    		return button;
+    	}
+
     	// Here be the Views
     	// !!/!T(&"#("/!(/T#")(/!=)/"=)(!)(YEU!")/H)"(UWE=")!"(!=)(!=#)(=))))
 		function projectView(project){
@@ -96,8 +112,7 @@
 			var chapterViews = []; // Instances of chapters
 			var div = document.createElement('div');
 			div.className = "survey";
-			var addChapterButton = document.createElement("button");
-			addChapterButton.innerHTML = 'Add Chapter';
+			var addChapterButton = new button("add", "", "Add chapter");
 			var that = this;
 			addChapterButton.onclick = function(){
             	that.addChapter(new chapter());
@@ -115,8 +130,7 @@
 				var newChapterView = new chapterView(chapter, this);
 				chapterViews.push(newChapterView);
 				var newChapterDIV = newChapterView.getView();
-				var eraseChapterButton = document.createElement("button");
-				eraseChapterButton.innerHTML = 'Erase chapter';
+				var eraseChapterButton = new button("remove", "", "Erase chapter");
 				var that = this;
 				chapterContainerDIV.appendChild(eraseChapterButton);
 				chapterContainerDIV.appendChild(newChapterDIV);
@@ -152,9 +166,7 @@
 		function questionArrayView(questionArray, parentView){
 			var questionViews = []; //Array of question Views objects
 			var div = document.createElement('div');
-			var addQuestionButton = document.createElement("button");
-			addQuestionButton.innerHTML = '<span class="glyphicon glyphicon-plus"></span>Add Question';
-			addQuestionButton.className =  "btn btn-default";
+			var addQuestionButton = new button("add", "", "Add question");
 			var that = this;
 			addQuestionButton.onclick = function(){
 				that.addQuestion(new question());
@@ -167,8 +179,7 @@
 				newQuestionView = new questionView(question, this);
 				questionViews.push(newQuestionView);
 				var newQuestionDIV = newQuestionView.getView();
-				var eraseQuestionButton = document.createElement("button");
-				eraseQuestionButton.innerHTML = 'Erase question';
+				var eraseQuestionButton = new button("remove", "", "Erase question");
 				var that = this;
 				questionContainerDIV.appendChild(eraseQuestionButton);
 				questionContainerDIV.appendChild(newQuestionDIV);
