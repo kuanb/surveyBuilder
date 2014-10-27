@@ -11,12 +11,18 @@
 	        padding: 0px;
 	        text-align: center;
 	    }
-      	.survey {
-      		background-color: pink;
+	    .project{
+	    	background-color: orange;
       		overflow: hidden;
       		padding: 10px;
       		width: 50%;
       		display: inline-block;
+	    }
+      	.survey {
+      		background-color: pink;
+      		overflow: hidden;
+      		padding: 10px;
+      			
       	}
       	.chapter {
       		background-color: blue;
@@ -46,7 +52,6 @@
 	        padding: 2px;
 	        position: relative;
 	        width: 100%;
-	        min-width: 400px;
    			float: left;
       	}
       	.questionContainerDIV{
@@ -59,11 +64,31 @@
     	<div id="survey_container"></div>
   	</body>
     <script language="javascript">
-    	var surveyView = new surveyView(new survey);
-    	document.getElementsByTagName('body')[0].appendChild(surveyView.getView());
+    	var projectView = new projectView(new project());
+    	document.getElementsByTagName('body')[0].appendChild(projectView.getView());
     	// Here be the Views
     	// !!/!T(&"#("/!(/T#")(/!=)/"=)(!)(YEU!")/H)"(UWE=")!"(!=)(!=#)(=))))
-		function surveyView(survey){
+		function projectView(project){
+			this.project = project;
+			surveyView = new surveyView(new survey(), this);
+			var div = document.createElement('div');
+			div.className = "project";
+			div.appendChild(surveyView.getView());
+			var p = document.createElement("p")
+			var jsonText = document.createTextNode("JsonGoesHere");
+			div.appendChild(jsonText);
+			this.getView = function(){
+				return div;
+			};
+			var contentChanges = 0;
+			this.contentChanged = function(){
+				survey = surveyView.getSurvey();
+				project.setSurvey(survey);
+				contentChanges++;
+				jsonText.nodeValue = "Changes: " + contentChanges + " JSON: " + JSON.stringify(project.generateJSON());
+			};
+		}
+		function surveyView(survey, parentView){
 			this.survey = survey;
 			var chapterViews = []; // Instances of chapters
 			var div = document.createElement('div');
@@ -96,6 +121,7 @@
 				eraseChapterButton.onclick = function(){
             		that.eraseChapter(chapterContainerDIV);
         		}
+        		parentView.contentChanged();
 			};
 			this.eraseChapter = function(chapterDIV){
 				var parentChilds = chapterDIV.parentNode.childNodes;
@@ -106,9 +132,20 @@
 					}
 				}
 				chaptersContainerDIV.removeChild(chapterDIV);
-			}	
+				parentView.contentChanged();
+			}
+			this.contentChanged = function(){
+				var changedChapters = [];
+				for(i=0; i<chapterViews.length; i++){
+					changedChapters[i] = chapterViews[i].getChapter();
+				}
+				parentView.contentChanged();
+			};	
+			this.getSurvey = function(){
+				return survey;
+			}
 		}
-		function chapterView(chapter) {
+		function chapterView(chapter, parentView) {
 			this.chapter = chapter;
 		  	var questionViews = []; //Array of question Views objects
 		  	var div = document.createElement('div');
@@ -129,7 +166,7 @@
 			this.addQuestion = function(question){
 				var questionContainerDIV = document.createElement('div');
          		questionContainerDIV.className = "questionContainerDIV";
-				newQuestionView = new questionView(question);
+				newQuestionView = new questionView(question, this);
 				questionViews.push(newQuestionView);
 				var newQuestionDIV = newQuestionView.getView();
 				var eraseQuestionButton = document.createElement("button");
@@ -141,6 +178,7 @@
 				eraseQuestionButton.onclick = function(){
             		that.eraseQuestion(questionContainerDIV);
             	}
+            	parentView.contentChanged();
 			}
 			this.eraseQuestion = function(questionDIV){
 				var parentChilds = questionDIV.parentNode.childNodes;
@@ -151,10 +189,22 @@
 					}
 				}
 				questionsContainerDIV.removeChild(questionDIV);
-			}	
+				parentView.contentChanged();
+			};
+			this.contentChanged = function(){
+				var changedQuestions = [];
+				for(i=0; i<questionViews.length; i++){
+					changedQuestions[i] = questionViews[i].getQuestion();
+				}
+				parentView.contentChanged();
+			};	
+			this.getChapter = function(){
+				return chapter;
+			}
 		};
-		function questionView(question) {
+		function questionView(question, parentView) {
 			this.question = question;
+			this.parentView = parentView;
 			//var questionKind = new questionKind();
 			var div = document.createElement('div');
 			div.className = "question";
@@ -178,22 +228,28 @@
 			this.getView = function(){
 				return div;
 			}
+			this.contentChanged = function(){
+				parentView.contentChanged();
+			}
+			this.getQuestion = function(){
+				return question;
+			}
 		};
 
 		///"&)(!/=)"!/=)/"!?/((/&(&%"!(&/=")/)"!(??"!)"=)?/")!=/!&"/!&?#&*)
 		function answer() {
 			var answerText = null; // String
 			var jumpID = null; // String
-			function getAnswerText() {
+			this.getAnswerText = function() {
 				return answerText;
 			};
-			function setAnswerText(answerText) {
+			this.setAnswerText = function(answerText) {
 				this.answerText = answerText;
 			};
-			function getJumpID() {
+			this.getJumpID = function() {
 				return jumpID;
 			};
-			function setjumpID(jumpID) {
+			this.setjumpID = function(jumpID) {
 				this.jumpID = jumpID;
 			};
 		};
@@ -206,46 +262,46 @@
 			var questionID; // String
 			var otherEnabled; // Boolean 
 			var jumpID; // String
-			function getType() {
+			this.getType = function() {
 				return type;
 			};
-			function setType(type) {
+			this.setType = function(type) {
 				this.type = type;
 			};
-			function getQuestionText() {
+			this.getQuestionText = function() {
 				return questionText;
 			};
-			function setQuestionText(questionText) {
+			this.setQuestionText = function(questionText) {
 				this.questionText = questionText;
 			};
-			function getAnswers() {
+			this.getAnswers = function() {
 				return answers;
 			};
-			function setAnswers(answers) {
+			this.setAnswers = function(answers) {
 				this.answers = answers;
 			};
-			function getJumpID() {
+			this.getJumpID = function() {
 				return jumpID;
 			};
-			function setjumpID(jumpID) {
+			this.setjumpID = function(jumpID) {
 				this.jumpID = jumpID;
 			};
-			function getQuestionID() {
+			this.getQuestionID = function() {
 				return questionID;
 			};
-			function setQuestionID(questionID) {
+			this.setQuestionID = function(questionID) {
 				this.questionID = questionID;
 			};
-			function isOtherEnabled() {
+			this.isOtherEnabled = function() {
 				return otherEnabled;
 			};
-			function setOtherEnabled(otherEnabled) {
+			this.setOtherEnabled = function(otherEnabled) {
 				this.otherEnabled = otherEnabled;
 			};
-			function getLoopQuestions() {
+			this.getLoopQuestions = function() {
 				return loopQuestions;	
 			};
-			function setLoopQuestions(loopQuestions) {
+			this.setLoopQuestions = function(loopQuestions) {
 				this.loopQuestions = loopQuestions;
 			};
 		};
@@ -261,22 +317,16 @@
 		function chapter() {
 		  	var title; // String
 		  	var questions = []; //Array of question objects
-         	function getChapterPosition() {
-		    	return chapterPosition;
-			};
-			function setChapterPosition(chapterPosition) {
-				this.chapterPosition = chapterPosition;
-			};
-		  	function getTitle() {
+		  	this.getTitle = function() {
 		    	return title;
 			};
-			function setTitle(title) {
+			this.setTitle = function(title) {
 				this.title = title;
 			};
-			function getQuestions() {
+			this.getQuestions = function() {
 				return questions;
 			};
-			function setQuestions(questions) {
+			this.setQuestions = function(questions) {
 				this.questions = questions;
 			};
 			this.addQuestion = function(newQuestion){
@@ -294,16 +344,16 @@
 			var chapters = []; // Instances of chapters
 			var fusionTableID = "seee"; // String
 
-			function getfusionTableID() {
+			this.getfusionTableID= function() {
 				return fusionTableID;
 			};
-			function setfusionTableID(fusionTableID) {
+			this.setfusionTableID = function(fusionTableID) {
 				this.fusionTableID = fusionTableID;
 			};
 			this.getChapters = function() {
 				return chapters;
 			};
-			function setChapters(chapters) {
+			this.setChapters = function(chapters) {
 				this.chapters = chapters;
 			};
 			this.getDIV = function(){
@@ -319,22 +369,48 @@
 					return chapters.length;
 				}
   			}
+  			this.generateJSON = function(){
+				var surveyJSON = {};
+				surveyJSON["Survey"] = "SEEEE";
+				return surveyJSON;
+			}
 		};
 		function tracker(){
-			var questions // Instances of questions
+			var questions; // Instances of questions
 			var fusionTableID; // String
-			function getfusionTableID() {
+			this.getfusionTableID = function() {
 				return fusionTableID;
 			};
-			function setfusionTableID(fusionTableID) {
+			this.setfusionTableID = function(fusionTableID) {
 				this.fusionTableID = fusionTableID;
 			};
-			function getQuestions() {
+			this.getQuestions = function() {
 			    return questions;
 			};
-			function setQuestions(questions) {
+			this.setQuestions = function(questions) {
 				this.questions = questions;
 			};
 		};
+		function project(){
+			this.survey;
+			this.tracker;
+			this.getSurvey = function(){
+				return survey;
+			}
+			this.setSurvey = function(survey){	
+				this.survey = survey;
+			}
+			this.getTracker = function(){
+				return tracker;
+			}
+			this.setTracker = function(tracker){
+				this.tracker = tracker;
+			}
+			this.generateJSON = function(){
+				var projectJSON = {};
+				projectJSON["Survey"] = survey.generateJSON().Survey;
+				return projectJSON;
+			}
+		}
 	</script>
 </html>
