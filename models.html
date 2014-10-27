@@ -19,6 +19,7 @@
       		width: 50%;
       		min-width: 400px;
       		display: inline-block;
+      		text-align: left;
 	    }
       	.survey {
       		background-color: pink;
@@ -69,17 +70,18 @@
     	var projectView = new projectView(new project());
     	document.getElementsByTagName('body')[0].appendChild(projectView.getView());
     	// Here we put the ux elements
+    	// Only constructors to apply the bootstrap classes and to change the format quickly.
     	function button(kind, nodeClass, text){
     		var button = document.createElement("button");
     		if(kind == "add"){
-    			button.className =  "btn btn-default" + " " + nodeClass;
-    			button.innerHTML = '<span class="glyphicon glyphicon-plus"></span>' + text;
+    			button.className =  "btn btn-success" + " " + nodeClass;
+    			button.innerHTML = '<span class="glyphicon glyphicon-plus"></span> ' + text;
     		} else if (kind == "remove"){
-    			button.className =  "btn btn-default" + " " + nodeClass;
-    			button.innerHTML = '<span class="glyphicon glyphicon-remove"></span>' + text;
+    			button.className =  "btn btn-danger" + " " + nodeClass;
+    			button.innerHTML = '<span class="glyphicon glyphicon-remove"></span> ' + text;
     		} else {
     			button.className =  "btn btn-default"+ " " + nodeClass;
-    			button.innerHTML = text;
+    			button.innerHTML = " " + text;
     		}
     		return button;
     	}
