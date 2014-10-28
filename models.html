@@ -40,7 +40,6 @@
       	}	
       	.question{
       		background-color: green;
-        	height: 80px;
       		margin: 10px;
 	        padding: 10px
       	}
@@ -234,6 +233,7 @@
 			div.className = "chapter";
 			var titleInput = document.createElement("input");
 			titleInput.type = "text";
+			titleInput.className = "form-control"
 			var that = this;
 			titleInput.oninput=function(){
 				that.contentChanged();
@@ -278,18 +278,25 @@
 			div.className = "question";
 			var IDInput = document.createElement("input");
 			IDInput.type = "text";
+			IDInput.className = "form-control"
+			var that = this;
+			IDInput.oninput=function(){
+				that.contentChanged();
+			};
 			var questionInput = document.createElement("input");
 			questionInput.type = "text";
+			questionInput.className = "form-control"
+			var that = this;
+			questionInput.oninput=function(){
+				that.contentChanged();
+			};
 			div.appendChild(IDInput);
 			div.appendChild(questionInput);			
-
 			var questionKindDropDown = document.createElement("select");
-			
 			var op = new Option();
 			op.value = 1;
 			op.text = "First entry";
 			questionKindDropDown.options.add(op);
-
   			questionKindDropDown.setAttribute('id',"year1")
   			questionKindDropDown.setAttribute('oncreate',"Date1()");
   			div.appendChild(questionKindDropDown);
@@ -297,8 +304,10 @@
 				return div;
 			}
 			this.contentChanged = function(){
+				this.question.setQuestionText(questionInput.value); 
+				this.question.setQuestionID(IDInput.value);	
 				parentView.contentChanged();
-			}
+			};
 			this.getQuestion = function(){
 				return question;
 			}
@@ -323,13 +332,13 @@
 		};
 
 		function question() {
-			var kind = null;
-			var loopQuestions = 	[]; // Question instances inside this question.
-			var questionText = null; // String
-			var answers = []; // Answer instances
-			var questionID = null; // String
-			var otherEnabled = null; // Boolean 
-			var jumpID = null; // String
+			this.kind = null;
+			this.loopQuestions = 	[]; // Question instances inside this question.
+			this.questionText = null; // String
+			this.answers = []; // Answer instances
+			this.questionID = null; // String
+			this.otherEnabled = null; // Boolean 
+			this.jumpID = null; // String
 			this.getType = function() {
 				return type;
 			};
@@ -373,12 +382,12 @@
 				this.loopQuestions = loopQuestions;
 			};
 			this.generateJSON = function(){  				
-				questionJSON = {};
-  				questionJSON["Question"] = questionText;
-  				questionJSON["id"] = questionID;
-  				questionJSON["Kind"] = kind;
-  				questionJSON["Other"] = otherEnabled;
-  				questionJSON["Jump"] = jumpID;
+				var questionJSON = {};
+  				questionJSON["Question"] = this.questionText;
+  				questionJSON["id"] = this.questionID;
+  				questionJSON["Kind"] = this.kind;
+  				questionJSON["Other"] = this.otherEnabled;
+  				questionJSON["Jump"] = this.jumpID;
   				return questionJSON;
   			}
 		};
