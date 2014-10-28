@@ -24,8 +24,7 @@
       	.survey {
       		background-color: pink;
       		overflow: hidden;
-      		padding: 10px;
-      			
+      		padding: 10px;		
       	}
       	.tracker {
       		background-color: white;
@@ -216,12 +215,6 @@
 				this.contentChanged();
 			};
 			this.contentChanged = function(){
-				// var changedQuestions = [];
-				// for(i=0; i<questionViews.length; i++){
-				// 	changedQuestions[i] = questionViews[i].getQuestion();
-				// }
-				// chapter.setQuestions(changedQuestions);
-				//alert(questionViews.length);
 				parentView.contentChanged();
 			};	
 			this.getView = function(){
@@ -239,6 +232,13 @@
 			this.chapter = chapter;
 		  	var div = document.createElement('div');
 			div.className = "chapter";
+			var titleInput = document.createElement("input");
+			titleInput.type = "text";
+			var that = this;
+			titleInput.oninput=function(){
+				that.contentChanged();
+			};
+			div.appendChild(titleInput);
 			this.questionArrayView = new questionArrayView(chapter.getQuestions(), this);
 			div.appendChild(this.questionArrayView.getView());
 			this.getView = function(){
@@ -249,6 +249,7 @@
 			}
 			this.contentChanged = function(){
 				this.chapter.setQuestions(this.questionArrayView.getQuestions());
+				this.chapter.setTitle(titleInput.value); 
 				parentView.contentChanged();
 			};
 		};
