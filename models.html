@@ -10,50 +10,58 @@
 	        height: 100%;
 	        margin: 0px;
 	        padding: 0px;
-	        text-align: center;
+	        text-align: left;
 	    }
 	    .project{
-	    	background-color: orange;
+	    	left: 37%;
+	    	position: relative;
       		overflow: hidden;
       		padding: 10px;
-      		width: 50%;
+      		width: 60%;
       		min-width: 400px;
       		display: inline-block;
       		text-align: left;
 	    }
       	.survey {
-      		background-color: pink;
+      		background: rgba(31, 61, 122, .2);
+      		border-radius: 5px;
       		overflow: hidden;
       		padding: 10px;		
       	}
       	.tracker {
-      		background-color: white;
+      		background: rgba(31, 61, 122, .2);
+      		border-radius: 5px;
       		overflow: hidden;
       		padding: 10px;	
       	}      	
       	.chapter {
-      		background-color: blue;
+      		background: rgba(31, 61, 122, .2);
+      		border-radius: 5px;
         	min-height: 100px;
       		margin: 10px;
 	        padding: 10px
       	}	
       	.question{
-      		background-color: green;
+      		background: rgba(31, 61, 122, .2);
+      		border-radius: 5px;
       		margin: 10px;
 	        padding: 10px
       	}
       	.questionsContainerDIV{
-      		background-color: black;
+      		background: rgba(31, 61, 122, .2);
+      		border-radius: 5px;
       		overflow: hidden;
       		padding: 10px
       	}
       	.chaptersContainerDIV{
-      		background-color: yellow;
+      		background: rgba(31, 61, 122, .2);
+      		border-radius: 5px;
       		overflow: hidden;
       		padding: 10px
       	}
       	.chapterContainerDIV{
-      		background-color: green;
+      		background: rgba(31, 61, 122, .2);
+      		border-radius: 5px;
       		margin: 2px;
 	        padding: 2px;
 	        position: relative;
@@ -61,23 +69,56 @@
    			float: left;
       	}
       	.questionContainerDIV{
-      		background-color: red;
+      		background: rgba(31, 61, 122, .2);
+      		border-radius: 5px;
       		margin: 2px;
 	        padding: 2px;
       	}
       	.answersContainerDIV{
-      		background-color: purple;
+      		background: rgba(31, 61, 122, .2);
+      		border-radius: 5px;
       		overflow: hidden;
       		padding: 10px
       	}
       	.answerContainerDIV{
-      		background-color: brown;
+      		background: rgba(31, 61, 122, .2);
+      		border-radius: 5px;
       		margin: 2px;
 	        padding: 2px;
       	}
+      	.jsonFloat{
+      		position: fixed;
+      		top: 60px;
+      		background: rgba(31, 61, 122, .2);
+      		padding: 20px;
+      		text-align: left;
+      		white-space: pre-wrap; 
+      		width: 35%;
+      		height: 100%;
+      		overflow:hidden;
+      		word-wrap: break-word
+      	}
+      	.floatHeader{
+      		position: fixed;
+      		height: 60px;
+      		background: rgba(31, 61, 122, 1);
+      		padding: 10px;
+      		padding-left: 20px;
+      		text-align: left;
+      		white-space: pre-wrap; 
+      		width: 35%;
+      		overflow:hidden;
+      		font-weight: 900;
+      		font-size: 1.75em;
+      		color: #FFFFFF;
+      	}
     </style>
     <body>
-    	<div id="project_container"></div>
+    	<div id="project_container">
+    		<div class="floatHeader">Flocktracker JSON Builder</div>
+    		<div id="JsonGoesHere" class="jsonFloat"></div>
+    		<div id="survey_container"></div>
+    	</div>
   	</body>
     <script language="javascript">
     	var projectView = new projectView(new project());
@@ -86,16 +127,16 @@
     	// Here we put the ux elements
     	// Only constructors to apply the bootstrap classes and to change the format quickly.
     	function button(kind, nodeClass, text){
-    		var button = document.createElement("button");
+    		var button = document.createElement("button");;
     		if(kind == "add"){
-    			button.className =  "btn btn-success" + " " + nodeClass;
+    			button.className =  "btn btn-primary btn-sm" + " " + nodeClass;
     			button.innerHTML = '<span class="glyphicon glyphicon-plus"></span> ' + text;
     		} else if (kind == "remove"){
-    			button.className =  "btn btn-danger" + " " + nodeClass;
+    			button.className =  "btn btn-danger btn-xs" + " " + nodeClass;
     			button.innerHTML = '<span class="glyphicon glyphicon-remove"></span> ' + text;
     		} else {
-    			button.className =  "btn btn-default"+ " " + nodeClass;
-    			button.innerHTML = " " + text;
+    			button.className =  "btn btn-default btn-sm"+ " " + nodeClass;
+    			button.innerHTML = " " + text + "XX";
     		}
     		return button;
     	}
@@ -125,8 +166,9 @@
 			div.appendChild(this.surveyView.getView());
 			div.appendChild(this.trackerView.getView());
 			var p = document.createElement("p")
-			var jsonText = document.createTextNode("JsonGoesHere");
-			div.appendChild(jsonText);
+			var floatDiv = document.getElementById('JsonGoesHere');
+			var jsonText = document.createTextNode("jTxt");
+			floatDiv.appendChild(jsonText)
 			this.getView = function(){
 				return div;
 			};
@@ -137,7 +179,7 @@
 				project.setSurvey(survey);
 				project.setTracker(tracker);
 				contentChanges++;
-				jsonText.nodeValue = "Changes: " + contentChanges + " JSON: " + JSON.stringify(project.generateJSON());
+				jsonText.nodeValue = "Change count: " + contentChanges + " Cut-and-paste this JSON: " + JSON.stringify(project.generateJSON());
 			};
 			this.contentChanged();
 		}
@@ -208,8 +250,8 @@
 			addQuestionButton.onclick = function(){
 				that.addQuestion(new question());
          	}
-         	div.appendChild(addQuestionButton);
          	div.appendChild(questionsArrayContainer);
+         	div.appendChild(addQuestionButton);
 			this.addQuestion = function(question){
 				var questionContainerDIV = document.createElement('div');
          		questionContainerDIV.className = "questionContainerDIV";
@@ -263,8 +305,8 @@
 			addAnswerButton.onclick = function(){
 				that.addAnswer(new answer());
          	}
-         	div.appendChild(addAnswerButton);
          	div.appendChild(answersArrayContainer);
+         	div.appendChild(addAnswerButton);
 			this.addAnswer = function(answer){
 				var answerContainerDIV = document.createElement('div');
          		answerContainerDIV.className = "answerContainerDIV";
