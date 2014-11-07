@@ -29,8 +29,7 @@
       	.tracker {
       		background-color: white;
       		overflow: hidden;
-      		padding: 10px;
-      			
+      		padding: 10px;	
       	}      	
       	.chapter {
       		background-color: blue;
@@ -137,10 +136,10 @@
 			addChapterButton.onclick = function(){
             	that.addChapter(new chapter());
         	};
-			div.appendChild(addChapterButton);
 			var chaptersContainerDIV = document.createElement('div');
          	chaptersContainerDIV.className = "chaptersContainerDIV";
          	div.appendChild(chaptersContainerDIV);
+         	div.appendChild(addChapterButton);
 			this.getView = function(){
 				return div;
 			}
