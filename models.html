@@ -417,6 +417,7 @@
 			this.contentChanged = function(){
 				this.question.setQuestionText(questionInput.value); 
 				this.question.setQuestionID(IDInput.value);	
+				this.question.setjumpID(jumpInput.value);
 				this.question.setAnswers(this.answerArrayView.getAnswers());
 				parentView.contentChanged();
 			};
@@ -506,7 +507,7 @@
   				questionJSON["Kind"] = this.kind;
   				questionJSON["Other"] = this.otherEnabled;
   				questionJSON["Jump"] = this.jumpID;
-  				questionJSON["Answers"] = this.answers;
+  				questionJSON["Answers"] = this.answers;	
   				return questionJSON;
   			}
 		};
