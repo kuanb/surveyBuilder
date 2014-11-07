@@ -77,11 +77,12 @@
       	}
     </style>
     <body>
-    	<div id="survey_container"></div>
+    	<div id="project_container"></div>
   	</body>
     <script language="javascript">
     	var projectView = new projectView(new project());
-    	document.getElementsByTagName('body')[0].appendChild(projectView.getView());
+    	var container = document.getElementById("project_container");
+    	container.appendChild(projectView.getView());
     	// Here we put the ux elements
     	// Only constructors to apply the bootstrap classes and to change the format quickly.
     	function button(kind, nodeClass, text){
@@ -97,6 +98,20 @@
     			button.innerHTML = " " + text;
     		}
     		return button;
+    	}
+    	function select(kind, nodeClass, dropdownElementsArray){
+    		this.kind = kind;
+    		this.nodeClass = nodeClass;
+    		this.dopdownElementsArray = dropdownElementsArray;
+    		select = document.createElement("select");
+    		select.className = "form-control" + " " + nodeClass;
+    		for (var i=0; i < dropdownElementsArray.length; i++){
+    			option = document.createElement("option");
+    			option.value = dropdownElementsArray[i];
+    			option.innerHTML = dropdownElementsArray[i];
+    			select.appendChild(option);
+    		}
+    		return select;
     	}
 
     	// Here be the Views
@@ -373,43 +388,41 @@
 		function questionView(question, parentView) {
 			this.question = question;
 			this.parentView = parentView;
-			//var questionKind = new questionKind();
+			var questionKinds = new questionKind();
+			answerArrayView = null;
 			var div = document.createElement('div');
 			div.className = "question";
+			var that = this;
 			var IDInput = document.createElement("input");
 			IDInput.type = "text";
 			IDInput.className = "form-control"
-			var that = this;
 			IDInput.oninput=function(){
 				that.contentChanged();
 			};
 			var questionInput = document.createElement("input");
 			questionInput.type = "text";
 			questionInput.className = "form-control"
-			var that = this;
-			questionInput.oninput=function(){
+			questionInput.oninput = function(){
 				that.contentChanged();
 			};
+
+			var questionKindDropDown = new select("seee", "", questionKinds.getOptions());
+			questionKindDropDown.onchange = function(){
+				that.questionKindChanged(this.options[this.selectedIndex].value);
+				that.contentChanged();
+			}
+
 			var jumpInput = document.createElement("input");
 			jumpInput.type = "text";
 			jumpInput.className = "form-control"
-			var that = this;
 			jumpInput.oninput=function(){
 				that.contentChanged();
 			};
 			div.appendChild(IDInput);
-			div.appendChild(questionInput);		
+			div.appendChild(questionInput);	
 			div.appendChild(jumpInput);	
-			this.answerArrayView = new answerArrayView(question.getAnswers(), this);
-			div.appendChild(this.answerArrayView.getView());
-			var questionKindDropDown = document.createElement("select");
-			var op = new Option();
-			op.value = 1;
-			op.text = "First entry";
-			questionKindDropDown.options.add(op);
-  			questionKindDropDown.setAttribute('id',"year1")
-  			questionKindDropDown.setAttribute('oncreate',"Date1()");
-  			div.appendChild(questionKindDropDown);
+			div.appendChild(questionKindDropDown);	
+
 			this.getView = function(){
 				return div;
 			}
@@ -417,11 +430,29 @@
 				this.question.setQuestionText(questionInput.value); 
 				this.question.setQuestionID(IDInput.value);	
 				this.question.setjumpID(jumpInput.value);
-				this.question.setAnswers(this.answerArrayView.getAnswers());
+				if (answerArrayView != null){
+					this.question.setAnswers(this.answerArrayView.getAnswers());
+				} else{
+					this.question.setAnswers(null);
+				}
+				this.question.setKind(questionKindDropDown.options[questionKindDropDown.selectedIndex].value);
 				parentView.contentChanged();
 			};
 			this.getQuestion = function(){
 				return question;
+			}
+			this.questionKindChanged = function(newQuestionKind){
+				if (((this.question.getKind() == questionKinds.OPEN_TEXT) || (this.question.getKind() == questionKinds.OPEN_NUMBER)) || (this.question.getKind() == questionKinds.IMAGE)){
+					if (answerArrayView != null){
+						div.removeChild(answerArrayView);
+						answerArrayView = null;
+					}
+				} else{
+					if (answerArrayView == null){
+						answerArrayView = new answerArrayView(this.question.getAnswers(), this);
+						div.appendChild(this.answerArrayView.getView());
+					}
+				}
 			}
 		};
 
@@ -457,11 +488,11 @@
 			this.questionID = null; // String
 			this.otherEnabled = null; // Boolean 
 			this.jumpID = null; // String
-			this.getType = function() {
-				return type;
+			this.getKind = function() {
+				return this.kind;
 			};
 			this.setKind = function(kind) {
-				this.kind = type;
+				this.kind = kind;
 			};
 			this.getQuestionText = function() {
 				return this.questionText;
@@ -518,6 +549,17 @@
 			var CHECKBOX = "CB";
 			var ORDERED = "OL";
 			var LOOP = "LP";
+			this.getOptions = function(){
+				var options = [];
+				options.push(OPEN_TEXT);
+				options.push(OPEN_NUMBER);				
+				options.push(MULTIPLE_CHOICE);
+				options.push(CHECKBOX);
+				options.push(ORDERED);
+				options.push(IMAGE);
+				options.push(LOOP);
+				return options;
+			};
 		};
 		function chapter() {
 		  	this.title = null; // String
