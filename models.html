@@ -144,7 +144,7 @@
     		this.kind = kind;
     		this.nodeClass = nodeClass;
     		this.dopdownElementsArray = dropdownElementsArray;
-    		select = document.createElement("select");
+    		var select = document.createElement("select");
     		select.className = "form-control" + " " + nodeClass;
     		for (var i=0; i < dropdownElementsArray.length; i++){
     			option = document.createElement("option");
@@ -448,9 +448,9 @@
 				that.contentChanged();
 			};
 
-			var questionKindDropDown = new select("seee", "", questionKinds.getOptions());
+			var questionKindDropDown = new select("", "", questionKinds.getOptions());
 			questionKindDropDown.onchange = function(){
-				that.questionKindChanged(this.options[this.selectedIndex].value);
+				that.questionKindChanged(that.options[that.selectedIndex].value);
 				that.contentChanged();
 			}
 
