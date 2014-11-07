@@ -66,6 +66,16 @@
       		margin: 2px;
 	        padding: 2px;
       	}
+      	.answersContainerDIV{
+      		background-color: purple;
+      		overflow: hidden;
+      		padding: 10px
+      	}
+      	.answerContainerDIV{
+      		background-color: brown;
+      		margin: 2px;
+	        padding: 2px;
+      	}
     </style>
     <body>
     	<div id="survey_container"></div>
@@ -227,6 +237,97 @@
 				return questions;
 			}
 		}
+
+		function answerArrayView(questionArray, parentView){
+			var answerViews = []; //Array of question Views objects
+			var div = document.createElement('div');
+			div.className = "answersContainerDIV";
+			var answersArrayContainer = document.createElement('div');
+			answersArrayContainer.className = "answersContainerDIV";
+			var addAnswerButton = new button("add", "", "Add answer");
+			var that = this;
+			addAnswerButton.onclick = function(){
+				that.addAnswer(new answer());
+         	}
+         	div.appendChild(addAnswerButton);
+         	div.appendChild(answersArrayContainer);
+			this.addAnswer = function(answer){
+				var answerContainerDIV = document.createElement('div');
+         		answerContainerDIV.className = "answerContainerDIV";
+				newAnswerView = new answerView(answer, this);
+				answerViews.push(newAnswerView);
+				var newAnswerDIV = newAnswerView.getView();
+				var eraseAnswerButton = new button("remove", "", "Erase answer");
+				var that = this;
+				answerContainerDIV.appendChild(eraseAnswerButton);
+				answerContainerDIV.appendChild(newAnswerDIV);
+				answersArrayContainer.appendChild(answerContainerDIV);
+				eraseAnswerButton.onclick = function(){
+            		that.eraseAnswer(answerContainerDIV);
+            	}
+            	this.contentChanged();
+			}
+			this.eraseAnswer = function(answerDIV){
+				var parentChilds = answerDIV.parentNode.childNodes;
+				for (var i=0; i < parentChilds.length; i++){
+					if (parentChilds[i] == answerDIV){
+						answerViews.splice(i,1);
+						break
+					}
+				}
+				answersArrayContainer.removeChild(answerDIV);
+				this.contentChanged();
+			};
+			this.contentChanged = function(){
+				parentView.contentChanged();
+			};	
+			this.getView = function(){
+				return div;
+			}
+			this.getAnswers = function(){
+				var answers = [];
+				for(i=0; i<answerViews.length; i++){
+					answers[i] = answerViews[i].getAnswer();
+				}
+				return answers;
+			}
+		}
+
+		function answerView(answer, parentView) {
+			this.answer = answer;
+			this.parentView = parentView;
+			//var questionKind = new questionKind();
+			var div = document.createElement('div');
+			div.className = "answer";
+			var answerInput = document.createElement("input");
+			answerInput.type = "text";
+			answerInput.className = "form-control"
+			var that = this;
+			answerInput.oninput=function(){
+				that.contentChanged();
+			};
+			var jumpInput = document.createElement("input");
+			jumpInput.type = "text";
+			jumpInput.className = "form-control"
+			var that = this;
+			jumpInput.oninput=function(){
+				that.contentChanged();
+			};
+			div.appendChild(answerInput);
+			div.appendChild(jumpInput);			
+			this.getView = function(){
+				return div;
+			}
+			this.contentChanged = function(){
+				this.answer.setAnswerText(answerInput.value); 
+				this.answer.setjumpID(jumpInput.value);	
+				parentView.contentChanged();
+			};
+			this.getAnswer = function(){
+				return answer;
+			}
+		};
+
 		function chapterView(chapter, parentView) {
 			this.chapter = chapter;
 		  	var div = document.createElement('div');
@@ -290,8 +391,18 @@
 			questionInput.oninput=function(){
 				that.contentChanged();
 			};
+			var jumpInput = document.createElement("input");
+			jumpInput.type = "text";
+			jumpInput.className = "form-control"
+			var that = this;
+			jumpInput.oninput=function(){
+				that.contentChanged();
+			};
 			div.appendChild(IDInput);
-			div.appendChild(questionInput);			
+			div.appendChild(questionInput);		
+			div.appendChild(jumpInput);	
+			this.answerArrayView = new answerArrayView(question.getAnswers(), this);
+			div.appendChild(this.answerArrayView.getView());
 			var questionKindDropDown = document.createElement("select");
 			var op = new Option();
 			op.value = 1;
@@ -306,6 +417,7 @@
 			this.contentChanged = function(){
 				this.question.setQuestionText(questionInput.value); 
 				this.question.setQuestionID(IDInput.value);	
+				this.question.setAnswers(this.answerArrayView.getAnswers());
 				parentView.contentChanged();
 			};
 			this.getQuestion = function(){
@@ -324,11 +436,17 @@
 				this.answerText = answerText;
 			};
 			this.getJumpID = function() {
-				return jumpID;
+				return this.jumpID;
 			};
 			this.setjumpID = function(jumpID) {
 				this.jumpID = jumpID;
 			};
+			this.generateJSON = function(){  				
+				var answerJSON = {};
+  				answerJSON["Answer"] = this.answerText;
+  				questionJSON["Jump"] = this.jumpID;
+  				return answerJSON;
+  			}
 		};
 
 		function question() {
@@ -346,19 +464,19 @@
 				this.kind = type;
 			};
 			this.getQuestionText = function() {
-				return questionText;
+				return this.questionText;
 			};
 			this.setQuestionText = function(questionText) {
 				this.questionText = questionText;
 			};
 			this.getAnswers = function() {
-				return answers;
+				return this.answers;
 			};
 			this.setAnswers = function(answers) {
 				this.answers = answers;
 			};
 			this.getJumpID = function() {
-				return jumpID;
+				return this.jumpID;
 			};
 			this.setjumpID = function(jumpID) {
 				this.jumpID = jumpID;
@@ -388,6 +506,7 @@
   				questionJSON["Kind"] = this.kind;
   				questionJSON["Other"] = this.otherEnabled;
   				questionJSON["Jump"] = this.jumpID;
+  				questionJSON["Answers"] = this.answers;
   				return questionJSON;
   			}
 		};
@@ -456,7 +575,7 @@
 				return div;
 			}
 			this.addChapter = function(newChapter){
-				chapters.push(newChapter);
+				chapters.push(newChapter);3
 			}
 			this.getChapterCount = function() {
 				if (chapters == null){
