@@ -450,7 +450,6 @@
 
 			var questionKindDropDown = new select("", "", questionKinds.getOptions());
 			questionKindDropDown.onchange = function(){
-				that.questionKindChanged(that.options[that.selectedIndex].value);
 				that.contentChanged();
 			}
 
@@ -472,6 +471,7 @@
 				this.question.setQuestionText(questionInput.value); 
 				this.question.setQuestionID(IDInput.value);	
 				this.question.setjumpID(jumpInput.value);
+				this.updateQuestionKind(questionKindDropDown.options[questionKindDropDown.selectedIndex].value);
 				if (answerArrayView != null){
 					this.question.setAnswers(this.answerArrayView.getAnswers());
 				} else{
@@ -483,17 +483,28 @@
 			this.getQuestion = function(){
 				return question;
 			}
-			this.questionKindChanged = function(newQuestionKind){
-				if (((this.question.getKind() == questionKinds.OPEN_TEXT) || (this.question.getKind() == questionKinds.OPEN_NUMBER)) || (this.question.getKind() == questionKinds.IMAGE)){
-					if (answerArrayView != null){
-						div.removeChild(answerArrayView);
-						answerArrayView = null;
-					}
-				} else{
-					if (answerArrayView == null){
-						answerArrayView = new answerArrayView(this.question.getAnswers(), this);
-						div.appendChild(this.answerArrayView.getView());
-					}
+			this.updateQuestionKind = function(newQuestionKind){
+				window.alert(questionKinds.OPEN_TEXT);
+				switch(newQuestionKind){
+					case questionKinds.OPEN_TEXT:
+					case questionKinds.OPEN_NUMBER:
+					case questionKinds.IMAGE:
+						if (answerArrayView != null){
+							div.removeChild(answerArrayView);
+							answerArrayView = null;
+						}
+						break;
+					case questionKinds.MULTIPLE_CHOICE:
+					case questionKinds.ORDERED:
+					case questionKinds.CHECKBOX:
+						window.alert(newQuestionKind);
+						if (answerArrayView == null){
+							answerArrayView = new answerArrayView(this.question.getAnswers(), this);
+							div.appendChild(this.answerArrayView.getView());
+						}
+						break;
+					case questionKinds.LOOP:
+						break;	
 				}
 			}
 		};
@@ -584,22 +595,22 @@
   			}
 		};
 		function questionKind(){
-			var MULTIPLE_CHOICE = "MC";
-			var OPEN_NUMBER = "ON";
-			var OPEN_TEXT = "OT";
-			var IMAGE = "IM";
-			var CHECKBOX = "CB";
-			var ORDERED = "OL";
-			var LOOP = "LP";
+			this.MULTIPLE_CHOICE = "MC";
+			this.OPEN_NUMBER = "ON";
+			this.OPEN_TEXT = "OT";
+			this.IMAGE = "IM";
+			this.CHECKBOX = "CB";
+			this.ORDERED = "OL";
+			this.LOOP = "LP";
 			this.getOptions = function(){
 				var options = [];
-				options.push(OPEN_TEXT);
-				options.push(OPEN_NUMBER);				
-				options.push(MULTIPLE_CHOICE);
-				options.push(CHECKBOX);
-				options.push(ORDERED);
-				options.push(IMAGE);
-				options.push(LOOP);
+				options.push(this.OPEN_TEXT);
+				options.push(this.OPEN_NUMBER);				
+				options.push(this.MULTIPLE_CHOICE);
+				options.push(this.CHECKBOX);
+				options.push(this.ORDERED);
+				options.push(this.IMAGE);
+				options.push(this.LOOP);
 				return options;
 			};
 		};
