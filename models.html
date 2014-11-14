@@ -8,7 +8,7 @@
     <style>
 	    html, body {
 	        height: 100%;
-	        margin: 0px;
+	        margin: 0px;	
 	        padding: 0px;
 	        text-align: left;
 	    }
@@ -431,7 +431,7 @@
 			this.question = question;
 			this.parentView = parentView;
 			var questionKinds = new questionKind();
-			answerArrayView = null;
+			this.answerArrayView = null;
 			var div = document.createElement('div');
 			div.className = "question";
 			var that = this;
@@ -463,7 +463,7 @@
 			div.appendChild(questionInput);	
 			div.appendChild(jumpInput);	
 			div.appendChild(questionKindDropDown);	
-
+			
 			this.getView = function(){
 				return div;
 			}
@@ -472,7 +472,7 @@
 				this.question.setQuestionID(IDInput.value);	
 				this.question.setjumpID(jumpInput.value);
 				this.updateQuestionKind(questionKindDropDown.options[questionKindDropDown.selectedIndex].value);
-				if (answerArrayView != null){
+				if (this.answerArrayView != null){
 					this.question.setAnswers(this.answerArrayView.getAnswers());
 				} else{
 					this.question.setAnswers(null);
@@ -484,22 +484,21 @@
 				return question;
 			}
 			this.updateQuestionKind = function(newQuestionKind){
-				window.alert(questionKinds.OPEN_TEXT);
 				switch(newQuestionKind){
 					case questionKinds.OPEN_TEXT:
 					case questionKinds.OPEN_NUMBER:
 					case questionKinds.IMAGE:
 						if (answerArrayView != null){
-							div.removeChild(answerArrayView);
-							answerArrayView = null;
+							div.removeChild(this.answerArrayView.getView());
+							this.answerArrayView = null;
 						}
 						break;
 					case questionKinds.MULTIPLE_CHOICE:
 					case questionKinds.ORDERED:
 					case questionKinds.CHECKBOX:
-						window.alert(newQuestionKind);
-						if (answerArrayView == null){
-							answerArrayView = new answerArrayView(this.question.getAnswers(), this);
+						if (this.answerArrayView == null){
+							answers = this.question.getAnswers();
+							this.answerArrayView = new answerArrayView(this.question.getAnswers(), this);
 							div.appendChild(this.answerArrayView.getView());
 						}
 						break;
@@ -666,9 +665,6 @@
 			this.setChapters = function(chapters) {
 				this.chapters = chapters;
 			};
-			this.getDIV = function(){
-				return div;
-			}
 			this.addChapter = function(newChapter){
 				chapters.push(newChapter);3
 			}
