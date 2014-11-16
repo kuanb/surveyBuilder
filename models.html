@@ -255,7 +255,7 @@
 			this.addQuestion = function(question){
 				var questionContainerDIV = document.createElement('div');
          		questionContainerDIV.className = "questionContainerDIV";
-				newQuestionView = new questionView(question, this);
+				newQuestionView = new questionView(question, this, new questionKind());
 				questionViews.push(newQuestionView);
 				var newQuestionDIV = newQuestionView.getView();
 				var eraseQuestionButton = new button("remove", "", "Erase question");
@@ -427,11 +427,12 @@
 				parentView.contentChanged();
 			};
 		}
-		function questionView(question, parentView) {
+		function questionView(question, parentView, questionKinds) {
 			this.question = question;
 			this.parentView = parentView;
-			var questionKinds = new questionKind();
+			this.questionKinds = questionKinds;
 			this.answerArrayView = null;
+			this.questionArrayView = null;
 			var div = document.createElement('div');
 			div.className = "question";
 			var that = this;
@@ -448,7 +449,7 @@
 				that.contentChanged();
 			};
 
-			var questionKindDropDown = new select("", "", questionKinds.getOptions());
+			var questionKindDropDown = new select("", "", this.questionKinds.getOptions());
 			questionKindDropDown.onchange = function(){
 				that.contentChanged();
 			}
@@ -485,24 +486,29 @@
 			}
 			this.updateQuestionKind = function(newQuestionKind){
 				switch(newQuestionKind){
-					case questionKinds.OPEN_TEXT:
-					case questionKinds.OPEN_NUMBER:
-					case questionKinds.IMAGE:
-						if (answerArrayView != null){
+					case this.questionKinds.OPEN_TEXT:
+					case this.questionKinds.OPEN_NUMBER:
+					case this.questionKinds.IMAGE:
+						if (this.answerArrayView != null){
 							div.removeChild(this.answerArrayView.getView());
 							this.answerArrayView = null;
 						}
 						break;
-					case questionKinds.MULTIPLE_CHOICE:
-					case questionKinds.ORDERED:
-					case questionKinds.CHECKBOX:
+					case this.questionKinds.MULTIPLE_CHOICE:
+					case this.questionKinds.ORDERED:
+					case this.questionKinds.CHECKBOX:
 						if (this.answerArrayView == null){
 							answers = this.question.getAnswers();
 							this.answerArrayView = new answerArrayView(this.question.getAnswers(), this);
 							div.appendChild(this.answerArrayView.getView());
 						}
 						break;
-					case questionKinds.LOOP:
+					case this.questionKinds.LOOP:
+						if (this.questionArrayView == null){
+							answers = this.question.getAnswers();
+							this.answerArrayView = new answerArrayView(this.question.getAnswers(), this);
+							div.appendChild(this.answerArrayView.getView());
+						}
 						break;	
 				}
 			}
