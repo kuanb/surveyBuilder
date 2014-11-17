@@ -486,6 +486,7 @@
 			}
 			this.updateQuestionKind = function(newQuestionKind){
 				switch(newQuestionKind){
+					// We don't need arrays
 					case this.questionKinds.OPEN_TEXT:
 					case this.questionKinds.OPEN_NUMBER:
 					case this.questionKinds.IMAGE:
@@ -493,21 +494,35 @@
 							div.removeChild(this.answerArrayView.getView());
 							this.answerArrayView = null;
 						}
+						if (this.questionArrayView != null){
+							div.removeChild(this.questionArrayView.getView());
+							this.questionArrayView = null;
+						}
 						break;
+					// We need an answers array
 					case this.questionKinds.MULTIPLE_CHOICE:
 					case this.questionKinds.ORDERED:
 					case this.questionKinds.CHECKBOX:
+						if (this.questionArrayView != null){
+							div.removeChild(this.questionArrayView.getView());
+							this.questionArrayView = null;
+						}
 						if (this.answerArrayView == null){
 							answers = this.question.getAnswers();
 							this.answerArrayView = new answerArrayView(this.question.getAnswers(), this);
 							div.appendChild(this.answerArrayView.getView());
 						}
 						break;
+					// We need a question array
 					case this.questionKinds.LOOP:
+						if (this.answerArrayView != null){
+							div.removeChild(this.answerArrayView.getView());
+							this.answerArrayView = null;
+						}
 						if (this.questionArrayView == null){
-							answers = this.question.getAnswers();
-							this.answerArrayView = new answerArrayView(this.question.getAnswers(), this);
-							div.appendChild(this.answerArrayView.getView());
+							loopQuestions = this.question.getLoopQuestions();
+							this.questionArrayView = new questionArrayView(this.question.getLoopQuestions(), this);
+							div.appendChild(this.questionArrayView.getView());
 						}
 						break;	
 				}
@@ -540,7 +555,7 @@
 
 		function question() {
 			this.kind = null;
-			this.loopQuestions = 	[]; // Question instances inside this question.
+			this.loopQuestions = []; // Question instances inside this question.
 			this.questionText = null; // String
 			this.answers = []; // Answer instances
 			this.questionID = null; // String
@@ -571,7 +586,7 @@
 				this.jumpID = jumpID;
 			};
 			this.getQuestionID = function() {
-				return questionID;
+				return this.questionID;
 			};
 			this.setQuestionID = function(questionID) {
 				this.questionID = questionID;
@@ -583,7 +598,7 @@
 				this.otherEnabled = otherEnabled;
 			};
 			this.getLoopQuestions = function() {
-				return loopQuestions;	
+				return this.loopQuestions;	
 			};
 			this.setLoopQuestions = function(loopQuestions) {
 				this.loopQuestions = loopQuestions;
