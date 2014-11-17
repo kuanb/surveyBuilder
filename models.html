@@ -188,13 +188,20 @@
 			var chapterViews = []; // Instances of chapters
 			var div = document.createElement('div');
 			div.className = "survey";
-			var addChapterButton = new button("add", "", "Add chapter");
 			var that = this;
+			var addChapterButton = new button("add", "", "Add chapter");
 			addChapterButton.onclick = function(){
             	that.addChapter(new chapter());
         	};
+			var fusionTableIDInput = document.createElement("input");
+			fusionTableIDInput.type = "text";
+			fusionTableIDInput.className = "form-control"
+			fusionTableIDInput.oninput=function(){
+				that.contentChanged();
+			};
 			var chaptersContainerDIV = document.createElement('div');
          	chaptersContainerDIV.className = "chaptersContainerDIV";
+         	div.appendChild(fusionTableIDInput);
          	div.appendChild(chaptersContainerDIV);
          	div.appendChild(addChapterButton);
 			this.getView = function(){
@@ -233,6 +240,7 @@
 					changedChapters[i] = chapterViews[i].getChapter();
 				}
 				survey.setChapters(changedChapters);
+				this.survey.setfusionTableID(fusionTableIDInput.value);
 				parentView.contentChanged();
 			};	
 			this.getSurvey = function(){
@@ -415,6 +423,14 @@
 			var div = document.createElement('div');
 			div.className = "tracker";
 			this.questionArrayView = new questionArrayView(tracker.getQuestions(), this);
+			var that = this;
+			var fusionTableIDInput = document.createElement("input");
+			fusionTableIDInput.type = "text";
+			fusionTableIDInput.className = "form-control"
+			fusionTableIDInput.oninput=function(){
+				that.contentChanged();
+			};			
+			div.appendChild(fusionTableIDInput);
 			div.appendChild(this.questionArrayView.getView());
 			this.getView = function(){
 				return div;
@@ -424,6 +440,7 @@
 			}
 			this.contentChanged = function(){
 				this.tracker.setQuestions(this.questionArrayView.getQuestions());
+				this.tracker.setfusionTableID(fusionTableIDInput.value);
 				parentView.contentChanged();
 			};
 		}
