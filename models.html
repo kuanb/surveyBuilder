@@ -5,114 +5,115 @@
         <title>
             Dynamically build FT survey
         </title>
-    <style>
-	    html, body {
-	        height: 100%;
-	        margin: 0px;	
-	        padding: 0px;
-	        text-align: left;
-	    }
-	    .project{
-	    	left: 37%;
-	    	position: relative;
-      		overflow: hidden;
-      		padding: 10px;
-      		width: 60%;
-      		min-width: 400px;
-      		display: inline-block;
-      		text-align: left;
-	    }
-      	.survey {
-      		background: rgba(31, 61, 122, .2);
-      		border-radius: 5px;
-      		overflow: hidden;
-      		padding: 10px;		
-      	}
-      	.tracker {
-      		background: rgba(31, 61, 122, .2);
-      		border-radius: 5px;
-      		overflow: hidden;
-      		padding: 10px;	
-      	}      	
-      	.chapter {
-      		background: rgba(31, 61, 122, .2);
-      		border-radius: 5px;
-        	min-height: 100px;
-      		margin: 10px;
-	        padding: 10px
-      	}	
-      	.question{
-      		background: rgba(31, 61, 122, .2);
-      		border-radius: 5px;
-      		margin: 10px;
-	        padding: 10px
-      	}
-      	.questionsContainerDIV{
-      		background: rgba(31, 61, 122, .2);
-      		border-radius: 5px;
-      		overflow: hidden;
-      		padding: 10px
-      	}
-      	.chaptersContainerDIV{
-      		background: rgba(31, 61, 122, .2);
-      		border-radius: 5px;
-      		overflow: hidden;
-      		padding: 10px
-      	}
-      	.chapterContainerDIV{
-      		background: rgba(31, 61, 122, .2);
-      		border-radius: 5px;
-      		margin: 2px;
-	        padding: 2px;
-	        position: relative;
-	        width: 100%;
-   			float: left;
-      	}
-      	.questionContainerDIV{
-      		background: rgba(31, 61, 122, .2);
-      		border-radius: 5px;
-      		margin: 2px;
-	        padding: 2px;
-      	}
-      	.answersContainerDIV{
-      		background: rgba(31, 61, 122, .2);
-      		border-radius: 5px;
-      		overflow: hidden;
-      		padding: 10px
-      	}
-      	.answerContainerDIV{
-      		background: rgba(31, 61, 122, .2);
-      		border-radius: 5px;
-      		margin: 2px;
-	        padding: 2px;
-      	}
-      	.jsonFloat{
-      		position: fixed;
-      		top: 60px;
-      		background: rgba(31, 61, 122, .2);
-      		padding: 20px;
-      		text-align: left;
-      		white-space: pre-wrap; 
-      		width: 35%;
-      		height: 100%;
-      		overflow:hidden;
-      		word-wrap: break-word
-      	}
-      	.floatHeader{
-      		position: fixed;
-      		height: 60px;
-      		background: rgba(31, 61, 122, 1);
-      		padding: 10px;
-      		padding-left: 20px;
-      		text-align: left;
-      		white-space: pre-wrap; 
-      		width: 35%;
-      		overflow:hidden;
-      		font-weight: 900;
-      		font-size: 1.75em;
-      		color: #FFFFFF;
-      	}
-    </style>
+    	<style>
+		    html, body {
+		        height: 100%;
+		        margin: 0px;	
+		        padding: 0px;
+		        text-align: left;
+		    }
+		    .project{
+		    	left: 37%;
+		    	position: relative;
+	      		overflow: hidden;
+	      		padding: 10px;
+	      		width: 60%;
+	      		min-width: 400px;
+	      		display: inline-block;
+	      		text-align: left;
+		    }
+	      	.survey {
+	      		background: rgba(31, 61, 122, .2);
+	      		border-radius: 5px;
+	      		overflow: hidden;
+	      		padding: 10px;		
+	      	}
+	      	.tracker {
+	      		background: rgba(31, 61, 122, .2);
+	      		border-radius: 5px;
+	      		overflow: hidden;
+	      		padding: 10px;	
+	      	}      	
+	      	.chapter {
+	      		background: rgba(31, 61, 122, .2);
+	      		border-radius: 5px;
+	        	min-height: 100px;
+	      		margin: 10px;
+		        padding: 10px
+	      	}	
+	      	.question{
+	      		background: rgba(31, 61, 122, .2);
+	      		border-radius: 5px;
+	      		margin: 10px;
+		        padding: 10px
+	      	}
+	      	.questionsContainerDIV{
+	      		background: rgba(31, 61, 122, .2);
+	      		border-radius: 5px;
+	      		overflow: hidden;
+	      		padding: 10px
+	      	}
+	      	.chaptersContainerDIV{
+	      		background: rgba(31, 61, 122, .2);
+	      		border-radius: 5px;
+	      		overflow: hidden;
+	      		padding: 10px
+	      	}
+	      	.chapterContainerDIV{
+	      		background: rgba(31, 61, 122, .2);
+	      		border-radius: 5px;
+	      		margin: 2px;
+		        padding: 2px;
+		        position: relative;
+		        width: 100%;
+	   			float: left;
+	      	}
+	      	.questionContainerDIV{
+	      		background: rgba(31, 61, 122, .2);
+	      		border-radius: 5px;
+	      		margin: 2px;
+		        padding: 2px;
+	      	}
+	      	.answersContainerDIV{
+	      		background: rgba(31, 61, 122, .2);
+	      		border-radius: 5px;
+	      		overflow: hidden;
+	      		padding: 10px
+	      	}
+	      	.answerContainerDIV{
+	      		background: rgba(31, 61, 122, .2);
+	      		border-radius: 5px;
+	      		margin: 2px;
+		        padding: 2px;
+	      	}
+	      	.jsonFloat{
+	      		position: fixed;
+	      		top: 60px;
+	      		background: rgba(31, 61, 122, .2);
+	      		padding: 20px;
+	      		text-align: left;
+	      		white-space: pre-wrap; 
+	      		width: 35%;
+	      		height: 100%;
+	      		overflow:hidden;
+	      		word-wrap: break-word
+	      	}
+	      	.floatHeader{
+	      		position: fixed;
+	      		height: 60px;
+	      		background: rgba(31, 61, 122, 1);
+	      		padding: 10px;
+	      		padding-left: 20px;
+	      		text-align: left;
+	      		white-space: pre-wrap; 
+	      		width: 35%;
+	      		overflow:hidden;
+	      		font-weight: 900;
+	      		font-size: 1.75em;
+	      		color: #FFFFFF;
+	      	}
+    	</style>
+	</head>
     <body>
     	<div id="project_container">
     		<div class="floatHeader">Flocktracker JSON Builder</div>
@@ -477,6 +478,10 @@
 			jumpInput.oninput=function(){
 				that.contentChanged();
 			};
+
+			var otherCheckbox = document.createElement("input");
+			otherCheckbox.type = "checkbox";	
+
 			div.appendChild(IDInput);
 			div.appendChild(questionInput);	
 			div.appendChild(jumpInput);	
