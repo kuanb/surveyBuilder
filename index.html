@@ -200,10 +200,13 @@
 			fusionTableIDInput.oninput=function(){
 				that.contentChanged();
 			};
+			var chaptersArrayContainerDiV = document.createElement('div');
+         	chaptersArrayContainerDiV.className = "chaptersArrayContainerDiV";
 			var chaptersContainerDIV = document.createElement('div');
          	chaptersContainerDIV.className = "chaptersContainerDIV";
-         	div.appendChild(fusionTableIDInput);
+         	chaptersContainerDIV.appendChild(chaptersArrayContainerDiV);
          	chaptersContainerDIV.appendChild(addChapterButton);
+         	div.appendChild(fusionTableIDInput);
          	div.appendChild(chaptersContainerDIV);
 			this.getView = function(){
 				return div;
@@ -218,7 +221,7 @@
 				var that = this;
 				chapterContainerDIV.appendChild(eraseChapterButton);
 				chapterContainerDIV.appendChild(newChapterDIV);
-				chaptersContainerDIV.appendChild(chapterContainerDIV);
+				chaptersArrayContainerDiV.appendChild(chapterContainerDIV);
 				eraseChapterButton.onclick = function(){
             		that.eraseChapter(chapterContainerDIV);
         		}
@@ -232,7 +235,7 @@
 						break
 					}
 				}
-				chaptersContainerDIV.removeChild(chapterDIV);
+				chaptersArrayContainerDiV.removeChild(chapterDIV);
 				this.contentChanged();
 			}
 			this.contentChanged = function(){
