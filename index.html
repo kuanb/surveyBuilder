@@ -141,16 +141,16 @@
     		}
     		return button;
     	}
-    	function select(kind, nodeClass, dropdownElementsArray){
+    	function select(kind, nodeClass, dropdownTextArray, dropdownValueArray){
     		this.kind = kind;
     		this.nodeClass = nodeClass;
-    		this.dopdownElementsArray = dropdownElementsArray;
+    		this.dropdownTextArray = dropdownTextArray;
     		var select = document.createElement("select");
     		select.className = "form-control" + " " + nodeClass;
-    		for (var i=0; i < dropdownElementsArray.length; i++){
+    		for (var i=0; i < dropdownTextArray.length; i++){
     			option = document.createElement("option");
-    			option.value = dropdownElementsArray[i];
-    			option.innerHTML = dropdownElementsArray[i];
+    			option.value = dropdownValueArray[i];
+    			option.innerHTML = dropdownTextArray[i];
     			select.appendChild(option);
     		}
     		return select;
@@ -467,7 +467,7 @@
 				that.contentChanged();
 			};
 
-			var questionKindDropDown = new select("", "", this.questionKinds.getOptions());
+			var questionKindDropDown = new select("", "", this.questionKinds.getNames(), this.questionKinds.getJsonNames());
 			questionKindDropDown.onchange = function(){
 				that.contentChanged();
 			}
@@ -514,9 +514,9 @@
 			this.updateQuestionKind = function(newQuestionKind){
 				switch(newQuestionKind){
 					// We don't need arrays
-					case this.questionKinds.OPEN_TEXT:
-					case this.questionKinds.OPEN_NUMBER: 
-					case this.questionKinds.IMAGE:
+					case this.questionKinds.OPEN_TEXT["jsonName"]:
+					case this.questionKinds.OPEN_NUMBER["jsonName"]: 
+					case this.questionKinds.IMAGE["jsonName"]:
 						if (this.answerArrayView != null){
 							div.removeChild(this.answerArrayView.getView());
 							this.answerArrayView = null;
@@ -527,9 +527,9 @@
 						}
 						break;
 					// We need an answers array
-					case this.questionKinds.MULTIPLE_CHOICE:
-					case this.questionKinds.ORDERED:
-					case this.questionKinds.CHECKBOX:
+					case this.questionKinds.MULTIPLE_CHOICE["jsonName"]:
+					case this.questionKinds.ORDERED["jsonName"]:
+					case this.questionKinds.CHECKBOX["jsonName"]:
 						if (this.questionArrayView != null){
 							div.removeChild(this.questionArrayView.getView());
 							this.questionArrayView = null;
@@ -541,7 +541,7 @@
 						}
 						break;
 					// We need a question array
-					case this.questionKinds.LOOP:
+					case this.questionKinds.LOOP["jsonName"]:
 						if (this.answerArrayView != null){
 							div.removeChild(this.answerArrayView.getView());
 							this.answerArrayView = null;
@@ -651,24 +651,56 @@
   			}
 		};
 		function questionKind(){
-			this.MULTIPLE_CHOICE = "MC";
-			this.OPEN_NUMBER = "ON";
-			this.OPEN_TEXT = "OT";
-			this.IMAGE = "IM";
-			this.CHECKBOX = "CB";
-			this.ORDERED = "OL";
-			this.LOOP = "LP";
-			this.getOptions = function(){
-				var options = [];
-				options.push(this.OPEN_TEXT);
-				options.push(this.OPEN_NUMBER);				
-				options.push(this.MULTIPLE_CHOICE);
-				options.push(this.CHECKBOX);
-				options.push(this.ORDERED);
-				options.push(this.IMAGE);
-				options.push(this.LOOP);
-				return options;
+			this.MULTIPLE_CHOICE = {
+				jsonName:"MC",
+				name:"Multiple choice"
 			};
+			this.OPEN_NUMBER = {
+				jsonName:"ON",
+				name:"Open number"
+			};
+			this.OPEN_TEXT = {
+				jsonName:"OT",
+				name:"Open text"
+			};
+			this.IMAGE = {
+				jsonName:"IM",
+				name:"Picture"
+			};;
+			this.CHECKBOX = {
+				jsonName:"CB",
+				name:"Checkbox"
+			};;
+			this.ORDERED = {
+				jsonName:"OL",
+				name:"Ordered list"
+			};
+			this.LOOP = {
+				jsonName:"LP",
+				name:"Loop"
+			};
+			this.getJsonNames = function(){
+				var jsonNames = [];
+				jsonNames.push(this.OPEN_TEXT["jsonName"]);
+				jsonNames.push(this.OPEN_NUMBER["jsonName"]);				
+				jsonNames.push(this.MULTIPLE_CHOICE["jsonName"]);
+				jsonNames.push(this.CHECKBOX["jsonName"]);
+				jsonNames.push(this.ORDERED["jsonName"]);
+				jsonNames.push(this.IMAGE["jsonName"]);
+				jsonNames.push(this.LOOP["jsonName"]);
+				return jsonNames;
+			};
+			this.getNames = function(){
+				var options = [];
+				options.push(this.OPEN_TEXT["name"]);
+				options.push(this.OPEN_NUMBER["name"]);				
+				options.push(this.MULTIPLE_CHOICE["name"]);
+				options.push(this.CHECKBOX["name"]);
+				options.push(this.ORDERED["name"]);
+				options.push(this.IMAGE["name"]);
+				options.push(this.LOOP["name"]);
+				return options;
+			}
 		};
 		function chapter() {
 		  	this.title = null; // String
