@@ -172,6 +172,13 @@
     			this.checkbox.name = "";
     			div.removeChild(this.checkbox);
     		}
+    		this.isChecked = function(){
+    			return this.checkbox.checked;
+    		}
+    		this.getView = function(){
+    			return this.checkbox;
+    		}
+
     	}
     	// Here be the Views
     	// !!/!T(&"#("/!(/T#")(/!=)/"=)(!)(YEU!")/H)"(UWE=")!"(!=)(!=#)(=))))
@@ -522,7 +529,7 @@
 					this.question.setLoopQuestions(null);
 				}
 				if (this.otherCheckbox != null){
-					this.question.setOtherEnabled(this.otherCheckbox.value);
+					this.question.setOtherEnabled(this.otherCheckbox.isChecked());
 				} else{
 					this.question.setOtherEnabled(null);
 				}
@@ -592,6 +599,10 @@
 				if (this.otherCheckbox == null){
 					this.otherCheckbox = new checkbox("", "otherEnabled");
 					this.otherCheckbox.addTo(div);
+					var that = this;
+					this.otherCheckbox.getView().onchange = function(){
+						that.contentChanged();
+					};
 				}
 			}
 			this.removeOtherOption = function(){
