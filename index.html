@@ -2,6 +2,7 @@
 <html>
     <head>
     	<link href="css/bootstrap.min.css" rel="stylesheet">
+    	<link href="css/bootstrap-switch.min.css" rel="stylesheet">
         <title>
             Dynamically build FT survey
         </title>
@@ -155,7 +156,19 @@
     		}
     		return select;
     	}
-
+    	function checkbox(kind, nodeClass){
+    		this.checkbox = document.createElement("input");
+			this.checkbox.type = "checkbox";
+			this.checkbox.className = "bootstrap-switch" + " " + nodeClass;
+    		this.addTo = function(div){
+    			div.appendChild(this.checkbox);
+    			$('.bootstrap-switch').bootstrapSwitch('state', true);
+    		}
+    		this.removeFrom = function(div){
+    			$('.bootstrap-switch').bootstrapSwitch('destroy');
+    			div.removeChild(this.checkbox);
+    		}
+    	}
     	// Here be the Views
     	// !!/!T(&"#("/!(/T#")(/!=)/"=)(!)(YEU!")/H)"(UWE=")!"(!=)(!=#)(=))))
 		function projectView(project){
@@ -361,7 +374,6 @@
 				return answers;
 			}
 		}
-
 		function answerView(answer, parentView){
 			this.answer = answer;
 			this.parentView = parentView;
@@ -505,6 +517,11 @@
 				} else{
 					this.question.setLoopQuestions(null);
 				}
+				if (this.otherCheckbox != null){
+					this.question.setOtherEnabled(this.otherCheckbox.value);
+				} else{
+					this.question.setOtherEnabled(null);
+				}
 				this.question.setKind(questionKindDropDown.options[questionKindDropDown.selectedIndex].value);
 				parentView.contentChanged();
 			};
@@ -569,14 +586,13 @@
 			}
 			this.addOtherOption = function(){
 				if (this.otherCheckbox == null){
-					this.otherCheckbox = document.createElement("input");
-					this.otherCheckbox.type = "checkbox";
-					div.appendChild(this.otherCheckbox);
+					this.otherCheckbox = new checkbox("", "otherEnabled");
+					this.otherCheckbox.addTo(div);
 				}
 			}
 			this.removeOtherOption = function(){
 				if (this.otherCheckbox != null){
-					div.removeChild(this.otherCheckbox);
+					this.otherCheckbox.removeFrom(div);
 					this.otherCheckbox = null;
 				}
 			}
@@ -661,8 +677,10 @@
   				questionJSON["Question"] = this.questionText;
   				questionJSON["id"] = this.questionID;
   				questionJSON["Kind"] = this.kind;
-  				questionJSON["Other"] = this.otherEnabled;
   				questionJSON["Jump"] = this.jumpID;
+  				if (this.otherEnabled != null){
+  					questionJSON["Other"] = this.otherEnabled;
+  				}
   				if (this.answers != null){
   					questionJSON["Answers"] = this.answers;	
   				}
@@ -858,4 +876,5 @@
 	</script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
+	<script src="js/bootstrap-switch.min.js"></script>
 </html>
