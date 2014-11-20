@@ -489,8 +489,8 @@
 			div.appendChild(IDInput);
 			div.appendChild(questionInput);	
 			div.appendChild(jumpInput);	
+			div.appendChild(otherCheckbox);
 			div.appendChild(questionKindDropDown);	
-			
 			this.getView = function(){
 				return div;
 			}
@@ -521,41 +521,47 @@
 					case this.questionKinds.OPEN_TEXT["jsonName"]:
 					case this.questionKinds.OPEN_NUMBER["jsonName"]: 
 					case this.questionKinds.IMAGE["jsonName"]:
-						if (this.answerArrayView != null){
-							div.removeChild(this.answerArrayView.getView());
-							this.answerArrayView = null;
-						}
-						if (this.questionArrayView != null){
-							div.removeChild(this.questionArrayView.getView());
-							this.questionArrayView = null;
-						}
+						this.removeAnswerArray();
+						this.removeQuestionArray();
 						break;
 					// We need an answers array
 					case this.questionKinds.MULTIPLE_CHOICE["jsonName"]:
 					case this.questionKinds.ORDERED["jsonName"]:
 					case this.questionKinds.CHECKBOX["jsonName"]:
-						if (this.questionArrayView != null){
-							div.removeChild(this.questionArrayView.getView());
-							this.questionArrayView = null;
-						}
-						if (this.answerArrayView == null){
-							answers = this.question.getAnswers();
-							this.answerArrayView = new answerArrayView(this.question.getAnswers(), this);
-							div.appendChild(this.answerArrayView.getView());
-						}
+						this.removeQuestionArray();
+						this.addAnswerArray();	
 						break;
 					// We need a question array
 					case this.questionKinds.LOOP["jsonName"]:
-						if (this.answerArrayView != null){
-							div.removeChild(this.answerArrayView.getView());
-							this.answerArrayView = null;
-						}
-						if (this.questionArrayView == null){
-							loopQuestions = this.question.getLoopQuestions();
-							this.questionArrayView = new questionArrayView(this.question.getLoopQuestions(), this, false);
-							div.appendChild(this.questionArrayView.getView());
-						}
+						this.removeAnswerArray();
+						this.addQuestionArray();
 						break;	
+				}
+			}
+			this.addQuestionArray = function(){
+				if (this.questionArrayView == null){
+					loopQuestions = this.question.getLoopQuestions();
+					this.questionArrayView = new questionArrayView(this.question.getLoopQuestions(), this, false);
+					div.appendChild(this.questionArrayView.getView());
+				}				
+			}
+			this.addAnswerArray = function(){
+				if (this.answerArrayView == null){
+					answers = this.question.getAnswers();
+					this.answerArrayView = new answerArrayView(this.question.getAnswers(), this);
+					div.appendChild(this.answerArrayView.getView());
+				}
+			}
+			this.removeQuestionArray = function(){
+				if (this.questionArrayView != null){
+					div.removeChild(this.questionArrayView.getView());
+					this.questionArrayView = null;
+				}
+			}
+			this.removeAnswerArray = function(){
+				if (this.answerArrayView != null){
+					div.removeChild(this.answerArrayView.getView());
+					this.answerArrayView = null;
 				}
 			}
 		};
