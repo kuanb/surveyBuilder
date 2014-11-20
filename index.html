@@ -1,4 +1,4 @@
-	<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
     <head>
     	<link href="css/bootstrap.min.css" rel="stylesheet">
@@ -251,7 +251,8 @@
 				return survey;
 			}
 		}
-		function questionArrayView(questionArray, parentView){
+		function questionArrayView(questionArray, parentView, loopAllowed){
+			this.loopAllowed = loopAllowed;
 			var questionViews = []; //Array of question Views objects
 			var div = document.createElement('div');
 			div.className = "questionsContainerDIV";
@@ -267,7 +268,7 @@
 			this.addQuestion = function(question){
 				var questionContainerDIV = document.createElement('div');
          		questionContainerDIV.className = "questionContainerDIV";
-				newQuestionView = new questionView(question, this, new questionKind());
+				newQuestionView = new questionView(question, this, loopAllowed);
 				questionViews.push(newQuestionView);
 				var newQuestionDIV = newQuestionView.getView();
 				var eraseQuestionButton = new button("remove", "", "Erase question");
@@ -408,7 +409,7 @@
 				that.contentChanged();
 			};
 			div.appendChild(titleInput);
-			this.questionArrayView = new questionArrayView(chapter.getQuestions(), this);
+			this.questionArrayView = new questionArrayView(chapter.getQuestions(), this, true);
 			div.appendChild(this.questionArrayView.getView());
 			this.getView = function(){
 				return div;
@@ -426,7 +427,7 @@
 			this.tracker = tracker;
 			var div = document.createElement('div');
 			div.className = "tracker";
-			this.questionArrayView = new questionArrayView(tracker.getQuestions(), this);
+			this.questionArrayView = new questionArrayView(tracker.getQuestions(), this, true);
 			var that = this;
 			var fusionTableIDInput = document.createElement("input");
 			fusionTableIDInput.type = "text";
@@ -448,10 +449,10 @@
 				parentView.contentChanged();
 			};
 		}
-		function questionView(question, parentView, questionKinds) {
+		function questionView(question, parentView, loopAllowed) {
 			this.question = question;
 			this.parentView = parentView;
-			this.questionKinds = questionKinds;
+			this.questionKinds = new questionKind(loopAllowed);
 			this.answerArrayView = null;
 			this.questionArrayView = null;
 			var div = document.createElement('div');
@@ -551,7 +552,7 @@
 						}
 						if (this.questionArrayView == null){
 							loopQuestions = this.question.getLoopQuestions();
-							this.questionArrayView = new questionArrayView(this.question.getLoopQuestions(), this);
+							this.questionArrayView = new questionArrayView(this.question.getLoopQuestions(), this, false);
 							div.appendChild(this.questionArrayView.getView());
 						}
 						break;	
@@ -653,7 +654,9 @@
   				return questionJSON;
   			}
 		};
-		function questionKind(){
+		function questionKind(loopAllowed){
+			// Object to list the question kinds possible to add to a question array
+			this.loopAllowed = loopAllowed;
 			this.MULTIPLE_CHOICE = {
 				jsonName:"MC",
 				name:"Multiple choice"
@@ -669,11 +672,11 @@
 			this.IMAGE = {
 				jsonName:"IM",
 				name:"Picture"
-			};;
+			};
 			this.CHECKBOX = {
 				jsonName:"CB",
 				name:"Checkbox"
-			};;
+			};
 			this.ORDERED = {
 				jsonName:"OL",
 				name:"Ordered list"
@@ -690,20 +693,24 @@
 				jsonNames.push(this.CHECKBOX["jsonName"]);
 				jsonNames.push(this.ORDERED["jsonName"]);
 				jsonNames.push(this.IMAGE["jsonName"]);
-				jsonNames.push(this.LOOP["jsonName"]);
+				if(loopAllowed){
+					jsonNames.push(this.LOOP["jsonName"]);
+				}
 				return jsonNames;
 			};
 			this.getNames = function(){
-				var options = [];
-				options.push(this.OPEN_TEXT["name"]);
-				options.push(this.OPEN_NUMBER["name"]);				
-				options.push(this.MULTIPLE_CHOICE["name"]);
-				options.push(this.CHECKBOX["name"]);
-				options.push(this.ORDERED["name"]);
-				options.push(this.IMAGE["name"]);
-				options.push(this.LOOP["name"]);
-				return options;
-			}
+				var names = [];
+				names.push(this.OPEN_TEXT["name"]);
+				names.push(this.OPEN_NUMBER["name"]);				
+				names.push(this.MULTIPLE_CHOICE["name"]);
+				names.push(this.CHECKBOX["name"]);
+				names.push(this.ORDERED["name"]);
+				names.push(this.IMAGE["name"]);
+				if(loopAllowed){
+					names.push(this.LOOP["name"]);
+				}
+				return names;
+			};
 		};
 		function chapter() {
 		  	this.title = null; // String
@@ -722,14 +729,14 @@
 			};
 			this.addQuestion = function(newQuestion){
 				questions.push(newQuestion);
-			}
+			};
 			this.getQuestionCount = function() {
 				if (questions == null){
 					return 0
 				} else {
 					return questions.length;
 				}
-  			}
+  			};
   			this.generateJSON = function(){
   				var chapterJSON = {};
 				questionsJSONArray = [];
