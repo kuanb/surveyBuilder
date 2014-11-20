@@ -262,7 +262,7 @@
 			var that = this;
 			addQuestionButton.onclick = function(){
 				that.addQuestion(new question());
-         	}
+         	};
          	div.appendChild(questionsArrayContainer);
          	div.appendChild(addQuestionButton);
 			this.addQuestion = function(question){
@@ -278,17 +278,17 @@
 				questionsArrayContainer.appendChild(questionContainerDIV);
 				eraseQuestionButton.onclick = function(){
             		that.eraseQuestion(questionContainerDIV);
-            	}
+            	};
             	this.contentChanged();
-			}
+			};
 			this.eraseQuestion = function(questionDIV){
 				var parentChilds = questionDIV.parentNode.childNodes;
 				for (var i=0; i < parentChilds.length; i++){
 					if (parentChilds[i] == questionDIV){
 						questionViews.splice(i,1);
 						break
-					}
-				}
+					};
+				};
 				questionsArrayContainer.removeChild(questionDIV);
 				this.contentChanged();
 			};
@@ -302,10 +302,10 @@
 				var questions = [];
 				for(i=0; i<questionViews.length; i++){
 					questions[i] = questionViews[i].getQuestion();
-				}
+				};
 				return questions;
-			}
-		}
+			};
+		};
 
 		function answerArrayView(questionArray, parentView){
 			var answerViews = []; //Array of question Views objects
@@ -317,7 +317,7 @@
 			var that = this;
 			addAnswerButton.onclick = function(){
 				that.addAnswer(new answer());
-         	}
+         	};
          	div.appendChild(answersArrayContainer);
          	div.appendChild(addAnswerButton);
 			this.addAnswer = function(answer){
@@ -333,9 +333,9 @@
 				answersArrayContainer.appendChild(answerContainerDIV);
 				eraseAnswerButton.onclick = function(){
             		that.eraseAnswer(answerContainerDIV);
-            	}
+            	};
             	this.contentChanged();
-			}
+			};
 			this.eraseAnswer = function(answerDIV){
 				var parentChilds = answerDIV.parentNode.childNodes;
 				for (var i=0; i < parentChilds.length; i++){
@@ -362,7 +362,7 @@
 			}
 		}
 
-		function answerView(answer, parentView) {
+		function answerView(answer, parentView){
 			this.answer = answer;
 			this.parentView = parentView;
 			//var questionKind = new questionKind();
@@ -386,7 +386,7 @@
 			div.appendChild(jumpInput);			
 			this.getView = function(){
 				return div;
-			}
+			};
 			this.contentChanged = function(){
 				this.answer.setAnswerText(answerInput.value); 
 				this.answer.setjumpID(jumpInput.value);	
@@ -394,9 +394,8 @@
 			};
 			this.getAnswer = function(){
 				return answer;
-			}
+			};
 		};
-
 		function chapterView(chapter, parentView) {
 			this.chapter = chapter;
 		  	var div = document.createElement('div');
@@ -455,6 +454,7 @@
 			this.questionKinds = new questionKind(loopAllowed);
 			this.answerArrayView = null;
 			this.questionArrayView = null;
+			this.otherCheckbox = null;
 			var div = document.createElement('div');
 			div.className = "question";
 			var that = this;
@@ -483,13 +483,9 @@
 				that.contentChanged();
 			};
 
-			var otherCheckbox = document.createElement("input");
-			otherCheckbox.type = "checkbox";	
-
 			div.appendChild(IDInput);
 			div.appendChild(questionInput);	
 			div.appendChild(jumpInput);	
-			div.appendChild(otherCheckbox);
 			div.appendChild(questionKindDropDown);	
 			this.getView = function(){
 				return div;
@@ -521,18 +517,25 @@
 					case this.questionKinds.OPEN_TEXT["jsonName"]:
 					case this.questionKinds.OPEN_NUMBER["jsonName"]: 
 					case this.questionKinds.IMAGE["jsonName"]:
+						this.removeOtherOption();
 						this.removeAnswerArray();
 						this.removeQuestionArray();
 						break;
 					// We need an answers array
-					case this.questionKinds.MULTIPLE_CHOICE["jsonName"]:
 					case this.questionKinds.ORDERED["jsonName"]:
+						this.removeQuestionArray();
+						this.removeOtherOption();
+						this.addAnswerArray();	
+						break;					
+					case this.questionKinds.MULTIPLE_CHOICE["jsonName"]:
 					case this.questionKinds.CHECKBOX["jsonName"]:
+						this.addOtherOption();
 						this.removeQuestionArray();
 						this.addAnswerArray();	
 						break;
 					// We need a question array
 					case this.questionKinds.LOOP["jsonName"]:
+						this.removeOtherOption();
 						this.removeAnswerArray();
 						this.addQuestionArray();
 						break;	
@@ -562,6 +565,19 @@
 				if (this.answerArrayView != null){
 					div.removeChild(this.answerArrayView.getView());
 					this.answerArrayView = null;
+				}
+			}
+			this.addOtherOption = function(){
+				if (this.otherCheckbox == null){
+					this.otherCheckbox = document.createElement("input");
+					this.otherCheckbox.type = "checkbox";
+					div.appendChild(this.otherCheckbox);
+				}
+			}
+			this.removeOtherOption = function(){
+				if (this.otherCheckbox != null){
+					div.removeChild(this.otherCheckbox);
+					this.otherCheckbox = null;
 				}
 			}
 		};
@@ -701,7 +717,7 @@
 				jsonNames.push(this.IMAGE["jsonName"]);
 				if(loopAllowed){
 					jsonNames.push(this.LOOP["jsonName"]);
-				}
+				};
 				return jsonNames;
 			};
 			this.getNames = function(){
