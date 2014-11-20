@@ -161,11 +161,15 @@
 			this.checkbox.type = "checkbox";
 			this.checkbox.className = "bootstrap-switch" + " " + nodeClass;
     		this.addTo = function(div){
+    			this.checkbox.name = "switch-to-add";
     			div.appendChild(this.checkbox);
-    			$('.bootstrap-switch').bootstrapSwitch('state', true);
+    			$("[name='switch-to-add']").bootstrapSwitch('state', true);
+    			this.checkbox.name = "";
     		}
     		this.removeFrom = function(div){
-    			$('.bootstrap-switch').bootstrapSwitch('destroy');
+    			this.checkbox.name = "switch-to-remove";
+    			$("[name='switch-to-remove']").bootstrapSwitch('destroy');
+    			this.checkbox.name = "";
     			div.removeChild(this.checkbox);
     		}
     	}
