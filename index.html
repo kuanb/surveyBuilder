@@ -161,11 +161,10 @@
 			this.checkbox.type = "checkbox";
 			this.checkbox.className = "bootstrap-switch" + " " + nodeClass;
     		this.addTo = function(div){
-    			this.checkbox.name = "switch-to-add";
+    			var that = this;
     			div.appendChild(this.checkbox);
-    			$("[name='switch-to-add']").bootstrapSwitch('state', true);
-    			this.checkbox.name = "";
-    		}
+    			$(this.checkbox).bootstrapSwitch('state', true);
+    		};
     		this.removeFrom = function(div){
     			this.checkbox.name = "switch-to-remove";
     			$("[name='switch-to-remove']").bootstrapSwitch('destroy');
@@ -393,7 +392,7 @@
 			div.className = "answer";
 			var answerInput = document.createElement("input");
 			answerInput.type = "text";
-			answerInput.className = "form-control"
+			answerInput.className = "form-control";
 			var that = this;
 			answerInput.oninput=function(){
 				that.contentChanged();
@@ -406,7 +405,8 @@
 				that.contentChanged();
 			};
 			div.appendChild(answerInput);
-			div.appendChild(jumpInput);			
+			div.appendChild(jumpInput);	
+
 			this.getView = function(){
 				return div;
 			};
@@ -478,6 +478,7 @@
 			this.answerArrayView = null;
 			this.questionArrayView = null;
 			this.otherCheckbox = null;
+			this.jumpCheckbox = null;
 			var div = document.createElement('div');
 			div.className = "question";
 			var that = this;
@@ -497,17 +498,25 @@
 			var questionKindDropDown = new select("", "", this.questionKinds.getNames(), this.questionKinds.getJsonNames());
 			questionKindDropDown.onchange = function(){
 				that.contentChanged();
-			}
+			};
 
 			var jumpInput = document.createElement("input");
 			jumpInput.type = "text";
 			jumpInput.className = "form-control"
+			jumpInput.style.display = "none";
 			jumpInput.oninput=function(){
 				that.contentChanged();
 			};
 
+			this.jumpCheckbox = new checkbox("", "jumpEnabled");
+			this.jumpCheckbox.getView().onchange = function(){
+/*				that.toggleJumpOption();*/
+			};
+
+
 			div.appendChild(IDInput);
 			div.appendChild(questionInput);	
+			this.jumpCheckbox.addTo(div);
 			div.appendChild(jumpInput);	
 			div.appendChild(questionKindDropDown);	
 			this.getView = function(){
@@ -538,6 +547,14 @@
 			};
 			this.getQuestion = function(){
 				return question;
+			}
+			this.toggleJumpOption = function(){
+				if(jumpInput.style.display == "none"){
+					this.jumpInput.style.display = "block";
+				} else {
+
+				}
+
 			}
 			this.updateQuestionKind = function(newQuestionKind){
 				switch(newQuestionKind){
