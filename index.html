@@ -156,14 +156,14 @@
     		}
     		return select;
     	}
-    	function checkbox(kind, nodeClass){
+    	function checkbox(kind, labelText, nodeClass){
     		this.checkbox = document.createElement("input");
 			this.checkbox.type = "checkbox";
 			this.checkbox.className = "bootstrap-switch" + " " + nodeClass;
     		this.addTo = function(div){
     			var that = this;
     			div.appendChild(this.checkbox);
-    			$(this.checkbox).bootstrapSwitch();
+    			$(this.checkbox).bootstrapSwitch("labelText", labelText);
     		};
     		this.removeFrom = function(div){
     			this.checkbox.name = "switch-to-remove";
@@ -274,8 +274,8 @@
 				return survey;
 			}
 		}
-		function questionArrayView(questionArray, parentView, loopAllowed){
-			this.loopAllowed = loopAllowed;
+		function questionArrayView(questionArray, parentView, inLoop){
+			this.inLoop = inLoop;
 			var questionViews = []; //Array of question Views objects
 			var div = document.createElement('div');
 			div.className = "questionsContainerDIV";
@@ -291,7 +291,7 @@
 			this.addQuestion = function(question){
 				var questionContainerDIV = document.createElement('div');
          		questionContainerDIV.className = "questionContainerDIV";
-				newQuestionView = new questionView(question, this, loopAllowed);
+				newQuestionView = new questionView(question, this, inLoop);
 				questionViews.push(newQuestionView);
 				var newQuestionDIV = newQuestionView.getView();
 				var eraseQuestionButton = new button("remove", "", "Erase question");
@@ -336,7 +336,7 @@
 			var div = document.createElement('div');
 			div.className = "answersContainerDIV";
 			var answersArrayContainer = document.createElement('div');
-			answersArrayContainer.className = "answersContainerDIV";
+			answersArrayContainer.className = "answersArrayContainerDIV";
 			var addAnswerButton = new button("add", "", "Add answer");
 			var that = this;
 			addAnswerButton.onclick = function(){
@@ -472,10 +472,10 @@
 				parentView.contentChanged();
 			};
 		}
-		function questionView(question, parentView, loopAllowed) {
+		function questionView(question, parentView, inLoop) {
 			this.question = question;
 			this.parentView = parentView;
-			this.questionKinds = new questionKind(loopAllowed);
+			this.questionKinds = new questionKind(inLoop);
 			this.answerArrayView = null;
 			this.questionArrayView = null;
 			this.otherCheckbox = null;
@@ -516,7 +516,7 @@
 					that.contentChanged();
 				};
 
-				jumpCheckbox = new checkbox("", "jumpEnabled");
+				jumpCheckbox = new checkbox("", "Jump", "jumpEnabled");
 				jumpCheckbox.getView().checked = false;
 				jumpCheckbox.getView().onchange = function(){
 					that.toggleJumpOption();
@@ -630,7 +630,7 @@
 			}
 			this.addOtherOption = function(){
 				if (this.otherCheckbox == null){
-					this.otherCheckbox = new checkbox("", "otherEnabled");
+					this.otherCheckbox = new checkbox("", "Other", "otherEnabled");
 					var that = this;
 					this.otherCheckbox.getView().onchange = function(){
 						that.contentChanged();
@@ -742,9 +742,9 @@
   				return questionJSON;
   			}
 		};
-		function questionKind(loopAllowed){
+		function questionKind(inLoop){
 			// Object to list the question kinds possible to add to a question array
-			this.loopAllowed = loopAllowed;
+			this.inLoop = inLoop;
 			this.MULTIPLE_CHOICE = {
 				jsonName:"MC",
 				name:"Multiple choice"
@@ -781,7 +781,7 @@
 				jsonNames.push(this.CHECKBOX["jsonName"]);
 				jsonNames.push(this.ORDERED["jsonName"]);
 				jsonNames.push(this.IMAGE["jsonName"]);
-				if(loopAllowed){
+				if(inLoop){
 					jsonNames.push(this.LOOP["jsonName"]);
 				};
 				return jsonNames;
@@ -794,7 +794,7 @@
 				names.push(this.CHECKBOX["name"]);
 				names.push(this.ORDERED["name"]);
 				names.push(this.IMAGE["name"]);
-				if(loopAllowed){
+				if(inLoop){
 					names.push(this.LOOP["name"]);
 				}
 				return names;
