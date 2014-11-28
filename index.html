@@ -163,7 +163,7 @@
     		this.addTo = function(div){
     			var that = this;
     			div.appendChild(this.checkbox);
-    			$(this.checkbox).bootstrapSwitch('indeterminate', true);
+    			$(this.checkbox).bootstrapSwitch('indeterminate', false);
     		};
     		this.removeFrom = function(div){
     			this.checkbox.name = "switch-to-remove";
@@ -509,14 +509,14 @@
 			};
 
 
-			this.jumpCheckbox = new checkbox("", "jumpEnabled");
-			this.jumpCheckbox.getView().onchange = function(){
-				that.contentChanged();
+			var jumpCheckbox = new checkbox("", "jumpEnabled");
+			jumpCheckbox.getView().onchange = function(){
+				that.toggleJumpOption();
 			};
 
 			div.appendChild(IDInput);
 			div.appendChild(questionInput);	
-			this.jumpCheckbox.addTo(div);
+			jumpCheckbox.addTo(div);
 			div.appendChild(jumpInput);	
 			div.appendChild(questionKindDropDown);	
 			this.getView = function(){
@@ -549,10 +549,10 @@
 				return question;
 			}
 			this.toggleJumpOption = function(){
-				if(jumpInput.style.display == "none"){
-					this.jumpInput.style.display = "inherit";
+				if(jumpCheckbox.isChecked()){
+					jumpInput.style.display = "inherit";
 				} else {
-					this.jumnpInput.style.display = "none";
+					jumpInput.style.display = "none";
 				}
 
 			}
