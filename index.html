@@ -509,6 +509,7 @@
 
 				questionKindDropDown = new select("", "", this.questionKinds.getNames(), this.questionKinds.getJsonNames());
 				questionKindDropDown.onchange = function(){
+					that.updateQuestionKind(this.options[questionKindDropDown.selectedIndex].value);
 					that.contentChanged();
 				};
 
@@ -545,7 +546,6 @@
 				} else{
 					this.question.setjumpID(jumpInput.value);
 				}
-				this.updateQuestionKind(questionKindDropDown.options[questionKindDropDown.selectedIndex].value);
 				if (this.answerArrayView != null){
 					this.question.setAnswers(this.answerArrayView.getAnswers());
 				} else{	
@@ -616,6 +616,7 @@
 				}				
 			}
 			this.addAnswerArray = function(){
+				this.removeAnswerArray();
 				if (this.answerArrayView == null){
 					var canHaveJump = false;
 					if(questionKindDropDown.options[questionKindDropDown.selectedIndex].value == this.questionKinds.MULTIPLE_CHOICE["jsonName"]){
