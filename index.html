@@ -331,7 +331,8 @@
 			};
 		};
 
-		function answerArrayView(questionArray, parentView){
+		function answerArrayView(questionArray, parentView, canHaveJumps){
+			this.canHaveJumps = canHaveJumps;
 			var answerViews = []; //Array of question Views objects
 			var div = document.createElement('div');
 			div.className = "answersContainerDIV";
@@ -347,7 +348,7 @@
 			this.addAnswer = function(answer){
 				var answerContainerDIV = document.createElement('div');
          		answerContainerDIV.className = "answerContainerDIV";
-				newAnswerView = new answerView(answer, this);
+				newAnswerView = new answerView(answer, this, this.canHaveJumps);
 				answerViews.push(newAnswerView);
 				var newAnswerDIV = newAnswerView.getView();
 				var eraseAnswerButton = new button("remove", "", "Erase answer");
@@ -385,10 +386,10 @@
 				return answers;
 			}
 		}
-		function answerView(answer, parentView){
+		function answerView(answer, parentView, canHaveJump){
+			this.canHaveJump = canHaveJump;
 			this.answer = answer;
 			this.parentView = parentView;
-			//var questionKind = new questionKind();
 			var div = document.createElement('div');
 			div.className = "answer";
 			var answerInput = document.createElement("input");
@@ -406,8 +407,10 @@
 				that.contentChanged();
 			};
 			div.appendChild(answerInput);
-			div.appendChild(jumpInput);	
-
+			if(canHaveJump){
+				div.appendChild(jumpInput);	
+			}
+			
 			this.getView = function(){
 				return div;
 			};
@@ -476,7 +479,6 @@
 			this.question = question;
 			this.parentView = parentView;
 			this.inLoop = inLoop;
-			window.alert(this.inLoop);	
 			this.questionKinds = new questionKind(this.inLoop);
 			this.answerArrayView = null;
 			this.questionArrayView = null;
@@ -616,7 +618,11 @@
 			this.addAnswerArray = function(){
 				if (this.answerArrayView == null){
 					answers = this.question.getAnswers();
-					this.answerArrayView = new answerArrayView(this.question.getAnswers(), this);
+					var canHaveJump = false;
+					if(questionKindDropDown.options[questionKindDropDown.selectedIndex].value == this.questionKinds.MULTIPLE_CHOICE["jsonName"]){
+						canHaveJump = true;
+					}
+					this.answerArrayView = new answerArrayView(this.question.getAnswers(), this, canHaveJump);
 					div.appendChild(this.answerArrayView.getView());
 				}
 			}
