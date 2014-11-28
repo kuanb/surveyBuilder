@@ -642,7 +642,7 @@
 				this.removeAnswerArray();
 				if (this.answerArrayView == null){
 					var canHaveJump = false;
-					if(questionKindDropDown.options[questionKindDropDown.selectedIndex].value == this.questionKinds.MULTIPLE_CHOICE["jsonName"]){
+					if((questionKindDropDown.options[questionKindDropDown.selectedIndex].value == this.questionKinds.MULTIPLE_CHOICE["jsonName"]) && !this.inLoop){
 						canHaveJump = true;
 					}
 					this.answerArrayView = new answerArrayView(this.question.getAnswers(), this, canHaveJump);
