@@ -617,7 +617,6 @@
 			}
 			this.addAnswerArray = function(){
 				if (this.answerArrayView == null){
-					answers = this.question.getAnswers();
 					var canHaveJump = false;
 					if(questionKindDropDown.options[questionKindDropDown.selectedIndex].value == this.questionKinds.MULTIPLE_CHOICE["jsonName"]){
 						canHaveJump = true;
@@ -932,7 +931,7 @@
 			}
 		}
 	</script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script src="js/jquery-1.11.1.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
 	<script src="js/bootstrap-switch.min.js"></script>
 </html>
