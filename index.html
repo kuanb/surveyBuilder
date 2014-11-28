@@ -348,7 +348,7 @@
 			this.addAnswer = function(answer){
 				var answerContainerDIV = document.createElement('div');
          		answerContainerDIV.className = "answerContainerDIV";
-				newAnswerView = new answerView(answer, this, this.canHaveJumps);
+				var newAnswerView = new answerView(answer, this, this.canHaveJumps);
 				answerViews.push(newAnswerView);
 				var newAnswerDIV = newAnswerView.getView();
 				var eraseAnswerButton = new button("remove", "", "Erase answer");
@@ -356,6 +356,7 @@
 				answerContainerDIV.appendChild(eraseAnswerButton);
 				answerContainerDIV.appendChild(newAnswerDIV);
 				answersArrayContainer.appendChild(answerContainerDIV);
+				newAnswerView.initialize();
 				eraseAnswerButton.onclick = function(){
             		that.eraseAnswer(answerContainerDIV);
             	};
@@ -391,36 +392,38 @@
 			this.answer = answer;
 			this.parentView = parentView;
 			var jumpCheckbox = null;
+			var answerInput = null;
+			var jumpInput = null;
 			var div = document.createElement('div');
 			div.className = "answer";
-			var answerInput = document.createElement("input");
-			answerInput.type = "text";
-			answerInput.className = "form-control";
 			var that = this;
-			answerInput.oninput=function(){
-				that.contentChanged();
-			};
-			var jumpInput = document.createElement("input");
-			jumpInput.type = "text";
-			jumpInput.className = "form-control";
-			jumpInput.style.display = "none";
-			var that = this;
-			jumpInput.oninput=function(){
-				that.contentChanged();
-			};
+			this.initialize = function(){
+				answerInput = document.createElement("input");
+				answerInput.type = "text";
+				answerInput.className = "form-control";
+				answerInput.oninput=function(){
+					that.contentChanged();
+				};
+				jumpInput = document.createElement("input");
+				jumpInput.type = "text";
+				jumpInput.className = "form-control";
+				jumpInput.style.display = "none";
+				jumpInput.oninput=function(){
+					that.contentChanged();
+				};
 
-			jumpCheckbox = new checkbox("", "Jump", "jumpEnabled");
-			jumpCheckbox.getView().checked = false;
-			jumpCheckbox.getView().onchange = function(){
-				that.toggleJumpOption();
-			};
+				jumpCheckbox = new checkbox("", "Jump", "jumpEnabled");
+				jumpCheckbox.getView().checked = false;
+				jumpCheckbox.getView().onchange = function(){
+					that.toggleJumpOption();
+				};
 
-			div.appendChild(answerInput);
-			if(canHaveJump){
-				jumpCheckbox.addTo(div);
-				div.appendChild(jumpInput);	
-			}
-			
+				div.appendChild(answerInput);
+				if(canHaveJump){
+					jumpCheckbox.addTo(div);
+					div.appendChild(jumpInput);	
+				};
+			};
 			this.getView = function(){
 				return div;
 			};
@@ -448,10 +451,10 @@
 			this.chapter = chapter;
 		  	var div = document.createElement('div');
 			div.className = "chapter";
+			var that = this;
 			var titleInput = document.createElement("input");
 			titleInput.type = "text";
 			titleInput.className = "form-control"
-			var that = this;
 			titleInput.oninput=function(){
 				that.contentChanged();
 			};
