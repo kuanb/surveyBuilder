@@ -163,11 +163,11 @@
     		this.addTo = function(div){
     			var that = this;
     			div.appendChild(this.checkbox);
-    			$(this.checkbox).bootstrapSwitch('state', true);
+    			$(this.checkbox).bootstrapSwitch('indeterminate', true);
     		};
     		this.removeFrom = function(div){
     			this.checkbox.name = "switch-to-remove";
-    			$("[name='switch-to-remove']").bootstrapSwitch('destroy');
+    			$(this.checkbox).bootstrapSwitch('destroy');
     			this.checkbox.name = "";
     			div.removeChild(this.checkbox);
     		}
@@ -479,6 +479,49 @@
 			this.questionArrayView = null;
 			this.otherCheckbox = null;
 			this.jumpCheckbox = null;
+			var div = document.createElement('div');
+			div.className = "question";
+			var that = this;
+			var IDInput = document.createElement("input");
+			IDInput.type = "text";
+			IDInput.className = "form-control"
+			IDInput.oninput=function(){
+				that.contentChanged();
+			};
+			var questionInput = document.createElement("input");
+			questionInput.type = "text";
+			questionInput.className = "form-control"
+			questionInput.oninput = function(){
+				that.contentChanged();
+			};
+
+			var questionKindDropDown = new select("", "", this.questionKinds.getNames(), this.questionKinds.getJsonNames());
+			questionKindDropDown.onchange = function(){
+				that.contentChanged();
+			};
+
+			var jumpInput = document.createElement("input");
+			jumpInput.type = "text";
+			jumpInput.className = "form-control"
+			jumpInput.style.display = "none";
+			jumpInput.oninput = function(){
+				that.contentChanged();
+			};
+
+
+			this.jumpCheckbox = new checkbox("", "jumpEnabled");
+			this.jumpCheckbox.getView().onchange = function(){
+				that.contentChanged();
+			};
+
+			div.appendChild(IDInput);
+			div.appendChild(questionInput);	
+			this.jumpCheckbox.addTo(div);
+			div.appendChild(jumpInput);	
+			div.appendChild(questionKindDropDown);	
+			this.getView = function(){
+				return div;
+			}			
 			this.contentChanged = function(){
 				this.question.setQuestionText(questionInput.value); 
 				this.question.setQuestionID(IDInput.value);	
@@ -584,49 +627,6 @@
 					this.otherCheckbox.removeFrom(div);
 					this.otherCheckbox = null;
 				}
-			}
-			var div = document.createElement('div');
-			div.className = "question";
-			var that = this;
-			var IDInput = document.createElement("input");
-			IDInput.type = "text";
-			IDInput.className = "form-control"
-			IDInput.oninput=function(){
-				that.contentChanged();
-			};
-			var questionInput = document.createElement("input");
-			questionInput.type = "text";
-			questionInput.className = "form-control"
-			questionInput.oninput = function(){
-				that.contentChanged();
-			};
-
-			var questionKindDropDown = new select("", "", this.questionKinds.getNames(), this.questionKinds.getJsonNames());
-			questionKindDropDown.onchange = function(){
-				that.contentChanged();
-			};
-
-			var jumpInput = document.createElement("input");
-			jumpInput.type = "text";
-			jumpInput.className = "form-control"
-			jumpInput.style.display = "none";
-			jumpInput.oninput = function(){
-				that.contentChanged();
-			};
-
-
-			this.jumpCheckbox = new checkbox("", "jumpEnabled");
-			this.jumpCheckbox.getView().onchange = function(){
-				that.contentChanged();
-			};
-
-			div.appendChild(IDInput);
-			div.appendChild(questionInput);	
-			this.jumpCheckbox.addTo(div);
-			div.appendChild(jumpInput);	
-			div.appendChild(questionKindDropDown);	
-			this.getView = function(){
-				return div;
 			}			
 		};
 
