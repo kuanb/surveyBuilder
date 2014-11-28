@@ -432,7 +432,7 @@
 				that.contentChanged();
 			};
 			div.appendChild(titleInput);
-			this.questionArrayView = new questionArrayView(chapter.getQuestions(), this, true);
+			this.questionArrayView = new questionArrayView(chapter.getQuestions(), this, false);
 			div.appendChild(this.questionArrayView.getView());
 			this.getView = function(){
 				return div;
@@ -450,7 +450,7 @@
 			this.tracker = tracker;
 			var div = document.createElement('div');
 			div.className = "tracker";
-			this.questionArrayView = new questionArrayView(tracker.getQuestions(), this, true);
+			this.questionArrayView = new questionArrayView(tracker.getQuestions(), this, false);
 			var that = this;
 			var fusionTableIDInput = document.createElement("input");
 			fusionTableIDInput.type = "text";
@@ -475,7 +475,9 @@
 		function questionView(question, parentView, inLoop) {
 			this.question = question;
 			this.parentView = parentView;
-			this.questionKinds = new questionKind(inLoop);
+			this.inLoop = inLoop;
+			window.alert(this.inLoop);	
+			this.questionKinds = new questionKind(this.inLoop);
 			this.answerArrayView = null;
 			this.questionArrayView = null;
 			this.otherCheckbox = null;
@@ -524,7 +526,9 @@
 
 				div.appendChild(IDInput);
 				div.appendChild(questionInput);	
-				jumpCheckbox.addTo(div);
+				if (!this.inLoop){
+					jumpCheckbox.addTo(div);
+				}
 				div.appendChild(jumpInput);	
 				div.appendChild(questionKindDropDown);	
 			}
@@ -605,7 +609,7 @@
 			this.addQuestionArray = function(){
 				if (this.questionArrayView == null){
 					loopQuestions = this.question.getLoopQuestions();
-					this.questionArrayView = new questionArrayView(this.question.getLoopQuestions(), this, false);
+					this.questionArrayView = new questionArrayView(this.question.getLoopQuestions(), this, true);
 					div.appendChild(this.questionArrayView.getView());
 				}				
 			}
@@ -781,7 +785,7 @@
 				jsonNames.push(this.CHECKBOX["jsonName"]);
 				jsonNames.push(this.ORDERED["jsonName"]);
 				jsonNames.push(this.IMAGE["jsonName"]);
-				if(inLoop){
+				if(!this.inLoop){
 					jsonNames.push(this.LOOP["jsonName"]);
 				};
 				return jsonNames;
@@ -794,7 +798,7 @@
 				names.push(this.CHECKBOX["name"]);
 				names.push(this.ORDERED["name"]);
 				names.push(this.IMAGE["name"]);
-				if(inLoop){
+				if(!this.inLoop){
 					names.push(this.LOOP["name"]);
 				}
 				return names;
