@@ -390,6 +390,7 @@
 			this.canHaveJump = canHaveJump;
 			this.answer = answer;
 			this.parentView = parentView;
+			var jumpCheckbox = null;
 			var div = document.createElement('div');
 			div.className = "answer";
 			var answerInput = document.createElement("input");
@@ -401,13 +402,22 @@
 			};
 			var jumpInput = document.createElement("input");
 			jumpInput.type = "text";
-			jumpInput.className = "form-control"
+			jumpInput.className = "form-control";
+			jumpInput.style.display = "none";
 			var that = this;
 			jumpInput.oninput=function(){
 				that.contentChanged();
 			};
+
+			jumpCheckbox = new checkbox("", "Jump", "jumpEnabled");
+			jumpCheckbox.getView().checked = false;
+			jumpCheckbox.getView().onchange = function(){
+				that.toggleJumpOption();
+			};
+
 			div.appendChild(answerInput);
 			if(canHaveJump){
+				jumpCheckbox.addTo(div);
 				div.appendChild(jumpInput);	
 			}
 			
@@ -422,6 +432,17 @@
 			this.getAnswer = function(){
 				return answer;
 			};
+			this.toggleJumpOption = function(){
+				if(jumpCheckbox.isChecked()){
+					jumpInput.style.display = "inherit";
+				} else {
+					jumpInput.style.display = "none";
+					if (jumpInput.value != ""){
+						jumpInput.value = "";
+						this.contentChanged();
+					}
+				}
+			}
 		};
 		function chapterView(chapter, parentView) {
 			this.chapter = chapter;
@@ -483,7 +504,6 @@
 			this.answerArrayView = null;
 			this.questionArrayView = null;
 			this.otherCheckbox = null;
-			this.jumpCheckbox = null;
 			var IDInput = null;
 			var questionInput = null;
 			var questionKindDropDown = null;
