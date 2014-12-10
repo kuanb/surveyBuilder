@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    	<link href="css/bootstrap.min.css" rel="stylesheet">
+    	<link href="css/bootstrap-switch.min.css" rel="stylesheet">
+        <title>
+            Dynamically build FT survey
+        </title>
+    	<style>
+		    html, body {
+		        height: 100%;
+		        margin: 0px;	
+		        padding: 0px;
+		        text-align: left;
+		    }
+		    .project{
+		    	position: relative;
+	      		overflow: hidden;
+	      		padding-top: 10px;
+	      		width: 64%;
+	      		min-width: 400px; 
+	      		float: right;
+	      		display: inline-block;
+	      		text-align: left;
+		    }
+	      	.survey {
+	      		background: rgba(31, 61, 122, .2);
+	      		border-radius: 5px;
+	      		overflow: hidden;
+	      		padding: 10px;		
+	      	}
+	      	.tracker {
+	      		background: rgba(31, 61, 122, .2);
+	      		border-radius: 5px;
+	      		overflow: hidden;
+	      		padding: 10px;	
+	      	}      	
+	      	.chapter {
+	      		background: rgba(31, 61, 122, .2);
+	      		border-radius: 5px;
+	        	min-height: 100px;
+	      		margin: 10px;
+		        padding: 10px
+	      	}	
+	      	.question{
+	      		background: rgba(31, 61, 122, .2);
+	      		border-radius: 5px;
+	      		margin: 10px;
+		        padding: 10px
+	      	}
+	      	.questionsContainerDIV{
+	      		background: rgba(31, 61, 122, .2);
+	      		border-radius: 5px;
+	      		overflow: hidden;
+	      		padding: 10px
+	      	}
+	      	.chaptersContainerDIV{
+	      		background: rgba(31, 61, 122, .2);
+	      		border-radius: 5px;
+	      		overflow: hidden;
+	      		padding: 10px
+	      	}
+	      	.chapterContainerDIV{
+	      		background: rgba(31, 61, 122, .2);
+	      		border-radius: 5px;
+	      		margin: 2px;
+		        padding: 2px;
+		        position: relative;
+		        width: 100%;
+	   			float: left;
+	      	}
+	      	.questionContainerDIV{
+	      		background: rgba(31, 61, 122, .2);
+	      		border-radius: 5px;
+	      		margin: 2px;
+		        padding: 2px;
+	      	}
+	      	.answersContainerDIV{
+	      		background: rgba(31, 61, 122, .2);
+	      		border-radius: 5px;
+	      		overflow: hidden;
+	      		padding: 10px
+	      	}
+	      	.answerContainerDIV{
+	      		background: rgba(31, 61, 122, .2);
+	      		border-radius: 5px;
+	      		margin: 2px;
+		        padding: 2px;
+	      	}
+	      	.jsonFloat{
+	      		position: fixed;
+	      		background: rgba(31, 61, 122, .2);
+	      		padding: 20px;
+	      		top: 100px;
+	      		text-align: left;
+	      		white-space: pre-wrap; 
+	      		width: 35%;
+	      		height: 90%;
+	      		overflow:hidden;
+	      		word-wrap: break-word;
+	      		border-radius: 5px
+	      	}
+	      	.h4{
+	      		position: fixed;
+	      		padding-left: 10px;
+	      		padding-top:10px;
+	      		padding-bottom: 10px;
+	      		text-align: center;
+	      		width: 35%;
+	      		color: #333;
+	      		background: rgba(31, 61, 122, .2);
+	      		border-radius: 5px
+	      	}
+    	</style>
+	</head>
+    <body>
+    	<div id="project_container">
+    		<div class="h4">Flocktracker JSON Builder</div>
+    		<button class="btn btn-success btn-md" style="width:35%; margin-top:58px;position:fixed;" onclick="console.log('working')">Submit Survey</button>
+    		<div id="JsonGoesHere" class="jsonFloat"></div>
+    		<div id="survey_container"></div>
+    	</div>
+  	</body>
+    <script language="javascript">
+    	var projectView = new projectView(new project());
+    	var container = document.getElementById("project_container");
+    	container.appendChild(projectView.getView());
+    	// Here we put the ux elements
+    	// Only constructors to apply the bootstrap classes and to change the format quickly.
+    	function button(kind, nodeClass, text){
+    		var button = document.createElement("button");;
+    		if(kind == "add"){
+    			button.className =  "btn btn-primary btn-sm" + " " + nodeClass;
+    			button.innerHTML = '<span class="glyphicon glyphicon-plus"></span> ' + text;
+    		} else if (kind == "remove"){
+    			button.className =  "btn btn-danger btn-xs" + " " + nodeClass;
+    			button.innerHTML = '<span class="glyphicon glyphicon-remove"></span> ' + text;
+    		} else {
+    			button.className =  "btn btn-default btn-sm"+ " " + nodeClass;
+    			button.innerHTML = " " + text + "XX";
+    		}
+    		return button;
+    	}
+    	function select(kind, nodeClass, dropdownTextArray, dropdownValueArray){
+    		this.kind = kind;
+    		this.nodeClass = nodeClass;
+    		this.dropdownTextArray = dropdownTextArray;
+    		var select = document.createElement("select");
+    		select.className = "form-control" + " " + nodeClass;
+    		for (var i=0; i < dropdownTextArray.length; i++){
+    			option = document.createElement("option");
+    			option.value = dropdownValueArray[i];
+    			option.innerHTML = dropdownTextArray[i];
+    			select.appendChild(option);
+    		}
+    		return select;
+    	}
+    	function checkbox(kind, labelText, nodeClass){
+    		this.checkbox = document.createElement("input");
+			this.checkbox.type = "checkbox";
+			this.checkbox.className = "bootstrap-switch" + " " + nodeClass;
+    		this.addTo = function(div){
+    			var that = this;
+    			div.appendChild(this.checkbox);
+    			$(this.checkbox).bootstrapSwitch("labelText", labelText);
+    		};
+    		this.removeFrom = function(div){
+    			this.checkbox.name = "switch-to-remove";
+    			$(this.checkbox).bootstrapSwitch('destroy');
+    			this.checkbox.name = "";
+    			div.removeChild(this.checkbox);
+    		}
+    		this.isChecked = function(){
+    			return this.checkbox.checked;
+    		}
+    		this.getView = function(){
+    			return this.checkbox;
+    		}
+
+    	}
+    	// Here be the Views
+    	// !!/!T(&"#("/!(/T#")(/!=)/"=)(!)(YEU!")/H)"(UWE=")!"(!=)(!=#)(=))))
+		function projectView(project){
+			this.project = project;
+			this.surveyView = new surveyView(new survey(), this);
+			this.trackerView = new trackerView(new tracker(), this);
+			var div = document.createElement('div');
+			div.className = "project";
+			div.id = "project";
+			div.appendChild(this.surveyView.getView());
+			div.appendChild(this.trackerView.getView());
+			var p = document.createElement("p")
+			var floatDiv = document.getElementById('JsonGoesHere');
+			var jsonText = document.createElement("div");
+            	jsonText.style.cssText = 'font-size:0.75em';
+            floatDiv.appendChild(jsonText)
+
+			this.getView = function(){
+				return div;
+			};
+			var contentChanges = 0;
+			this.contentChanged = function(){
+				var survey = this.surveyView.getSurvey();
+				var tracker = this.trackerView.getTracker();
+				project.setSurvey(survey);
+				project.setTracker(tracker);
+				contentChanges++;
+				jsonText.innerHTML = "<b>Input Modification Count:</b> " + contentChanges + " <br><br><b>JSON Output:</b><br>" + JSON.stringify(project.generateJSON());
+			};
+			this.contentChanged();
+		}
+		function surveyView(survey, parentView){
+			this.survey = survey;
+			var chapterViews = []; // Instances of chapters
+			var div = document.createElement('div');
+			div.className = "survey";
+			var that = this;
+			var addChapterButton = new button("add", "", "Add chapter");
+			addChapterButton.onclick = function(){
+            	that.addChapter(new chapter());
+        	};
+			var fusionTableIDInput = document.createElement("input");
+			fusionTableIDInput.type = "text";
+			fusionTableIDInput.className = "form-control"
+			fusionTableIDInput.oninput=function(){
+				that.contentChanged();
+			};
+			var chaptersArrayContainerDiV = document.createElement('div');
+         	chaptersArrayContainerDiV.className = "chaptersArrayContainerDiV";
+			var chaptersContainerDIV = document.createElement('div');
+         	chaptersContainerDIV.className = "chaptersContainerDIV";
+         	chaptersContainerDIV.appendChild(chaptersArrayContainerDiV);
+         	chaptersContainerDIV.appendChild(addChapterButton);
+         	div.appendChild(fusionTableIDInput);
+         	div.appendChild(chaptersContainerDIV);
+			this.getView = function(){
+				return div;
+			}
+			this.addChapter = function(chapter){	
+				var chapterContainerDIV = document.createElement('div');
+         		chapterContainerDIV.className = "chapterContainerDIV";
+				var newChapterView = new chapterView(chapter, this);
+				chapterViews.push(newChapterView);
+				var newChapterDIV = newChapterView.getView();
+				var eraseChapterButton = new button("remove", "", "Erase chapter");
+				var that = this;
+				chapterContainerDIV.appendChild(eraseChapterButton);
+				chapterContainerDIV.appendChild(newChapterDIV);
+				chaptersArrayContainerDiV.appendChild(chapterContainerDIV);
+				eraseChapterButton.onclick = function(){
+            		that.eraseChapter(chapterContainerDIV);
+        		}
+        		this.contentChanged();
+			};
+			this.eraseChapter = function(chapterDIV){
+				var parentChilds = chapterDIV.parentNode.childNodes;
+				for (var i=0; i < parentChilds.length; i++){
+					if (parentChilds[i] == chapterDIV){
+						chapterViews.splice(i,1);
+						break
+					}
+				}
+				chaptersArrayContainerDiV.removeChild(chapterDIV);
+				this.contentChanged();
+			}
+			this.contentChanged = function(){
+				var changedChapters = [];
+				for(i=0; i<chapterViews.length; i++){
+					changedChapters[i] = chapterViews[i].getChapter();
+				}
+				survey.setChapters(changedChapters);
+				this.survey.setfusionTableID(fusionTableIDInput.value);
+				parentView.contentChanged();
+			};	
+			this.getSurvey = function(){
+				return survey;
+			}
+		}
+		function questionArrayView(questionArray, parentView, inLoop){
+			this.inLoop = inLoop;
+			var questionViews = []; //Array of question Views objects
+			var div = document.createElement('div');
+			div.className = "questionsContainerDIV";
+			var questionsArrayContainer = document.createElement('div');
+			questionsArrayContainer.className = "questionsArrayContainer";
+			var addQuestionButton = new button("add", "", "Add question");
+			var that = this;
+			addQuestionButton.onclick = function(){
+				that.addQuestion(new question());
+         	};
+         	div.appendChild(questionsArrayContainer);
+         	div.appendChild(addQuestionButton);
+			this.addQuestion = function(question){
+				var questionContainerDIV = document.createElement('div');
+         		questionContainerDIV.className = "questionContainerDIV";
+				newQuestionView = new questionView(question, this, inLoop);
+				questionViews.push(newQuestionView);
+				var newQuestionDIV = newQuestionView.getView();
+				var eraseQuestionButton = new button("remove", "", "Erase question");
+				var that = this;
+				questionContainerDIV.appendChild(eraseQuestionButton);
+				questionContainerDIV.appendChild(newQuestionDIV);
+				questionsArrayContainer.appendChild(questionContainerDIV);
+				newQuestionView.initialize();
+				eraseQuestionButton.onclick = function(){
+            		that.eraseQuestion(questionContainerDIV);
+            	};
+            	this.contentChanged();
+			};
+			this.eraseQuestion = function(questionDIV){
+				var parentChilds = questionDIV.parentNode.childNodes;
+				for (var i=0; i < parentChilds.length; i++){
+					if (parentChilds[i] == questionDIV){
+						questionViews.splice(i,1);
+						break
+					};
+				};
+				questionsArrayContainer.removeChild(questionDIV);
+				this.contentChanged();
+			};
+			this.contentChanged = function(){
+				parentView.contentChanged();
+			};	
+			this.getView = function(){
+				return div;
+			}
+			this.getQuestions = function(){
+				var questions = [];
+				for(i=0; i<questionViews.length; i++){
+					questions[i] = questionViews[i].getQuestion();
+				};
+				return questions;
+			};
+		};
+
+		function answerArrayView(questionArray, parentView, canHaveJumps){
+			this.canHaveJumps = canHaveJumps;
+			var answerViews = []; //Array of question Views objects
+			var div = document.createElement('div');
+			div.className = "answersContainerDIV";
+			var answersArrayContainer = document.createElement('div');
+			answersArrayContainer.className = "answersArrayContainerDIV";
+			var addAnswerButton = new button("add", "", "Add answer");
+			var that = this;
+			addAnswerButton.onclick = function(){
+				that.addAnswer(new answer());
+         	};
+         	div.appendChild(answersArrayContainer);
+         	div.appendChild(addAnswerButton);
+			this.addAnswer = function(answer){
+				var answerContainerDIV = document.createElement('div');
+         		answerContainerDIV.className = "answerContainerDIV";
+				var newAnswerView = new answerView(answer, this, this.canHaveJumps);
+				answerViews.push(newAnswerView);
+				var newAnswerDIV = newAnswerView.getView();
+				var eraseAnswerButton = new button("remove", "", "Erase answer");
+				var that = this;
+				answerContainerDIV.appendChild(eraseAnswerButton);
+				answerContainerDIV.appendChild(newAnswerDIV);
+				answersArrayContainer.appendChild(answerContainerDIV);
+				newAnswerView.initialize();
+				eraseAnswerButton.onclick = function(){
+            		that.eraseAnswer(answerContainerDIV);
+            	};
+            	this.contentChanged();
+			};
+			this.eraseAnswer = function(answerDIV){
+				var parentChilds = answerDIV.parentNode.childNodes;
+				for (var i=0; i < parentChilds.length; i++){
+					if (parentChilds[i] == answerDIV){
+						answerViews.splice(i,1);
+						break
+					}
+				}
+				answersArrayContainer.removeChild(answerDIV);
+				this.contentChanged();
+			};
+			this.contentChanged = function(){
+				parentView.contentChanged();
+			};	
+			this.getView = function(){
+				return div;
+			}
+			this.getAnswers = function(){
+				var answers = [];
+				for(i=0; i<answerViews.length; i++){
+					answers[i] = answerViews[i].getAnswer();
+				}
+				return answers;
+			}
+		}
+		function answerView(answer, parentView, canHaveJump){
+			this.canHaveJump = canHaveJump;
+			this.answer = answer;
+			this.parentView = parentView;
+			var jumpCheckbox = null;
+			var answerInput = null;
+			var jumpInput = null;
+			var div = document.createElement('div');
+			div.className = "answer";
+			var that = this;
+			this.initialize = function(){
+				answerInput = document.createElement("input");
+				answerInput.type = "text";
+				answerInput.className = "form-control";
+				answerInput.oninput=function(){
+					that.contentChanged();
+				};
+				jumpInput = document.createElement("input");
+				jumpInput.type = "text";
+				jumpInput.className = "form-control";
+				jumpInput.style.display = "none";
+				jumpInput.oninput=function(){
+					that.contentChanged();
+				};
+
+				jumpCheckbox = new checkbox("", "Jump", "jumpEnabled");
+				jumpCheckbox.getView().checked = false;
+				jumpCheckbox.getView().onchange = function(){
+					that.toggleJumpOption();
+				};
+
+				div.appendChild(answerInput);
+				if(canHaveJump){
+					jumpCheckbox.addTo(div);
+					div.appendChild(jumpInput);	
+				};
+			};
+			this.getView = function(){
+				return div;
+			};
+			this.contentChanged = function(){
+				this.answer.setAnswerText(answerInput.value); 
+				this.answer.setjumpID(jumpInput.value);	
+				parentView.contentChanged();
+			};
+			this.getAnswer = function(){
+				return answer;
+			};
+			this.toggleJumpOption = function(){
+				if(jumpCheckbox.isChecked()){
+					jumpInput.style.display = "inherit";
+				} else {
+					jumpInput.style.display = "none";
+					if (jumpInput.value != ""){
+						jumpInput.value = "";
+						this.contentChanged();
+					}
+				}
+			}
+		};
+		function chapterView(chapter, parentView) {
+			this.chapter = chapter;
+		  	var div = document.createElement('div');
+			div.className = "chapter";
+			var that = this;
+			var titleInput = document.createElement("input");
+			titleInput.type = "text";
+			titleInput.className = "form-control"
+			titleInput.oninput=function(){
+				that.contentChanged();
+			};
+			div.appendChild(titleInput);
+			this.questionArrayView = new questionArrayView(chapter.getQuestions(), this, false);
+			div.appendChild(this.questionArrayView.getView());
+			this.getView = function(){
+				return div;
+			}
+			this.getChapter = function(){
+				return chapter;
+			}
+			this.contentChanged = function(){
+				this.chapter.setQuestions(this.questionArrayView.getQuestions());
+				this.chapter.setTitle(titleInput.value); 
+				parentView.contentChanged();
+			};
+		};
+		function trackerView(tracker, parentView){
+			this.tracker = tracker;
+			var div = document.createElement('div');
+			div.className = "tracker";
+			this.questionArrayView = new questionArrayView(tracker.getQuestions(), this, false);
+			var that = this;
+			var fusionTableIDInput = document.createElement("input");
+			fusionTableIDInput.type = "text";
+			fusionTableIDInput.className = "form-control"
+			fusionTableIDInput.oninput=function(){
+				that.contentChanged();
+			};			
+			div.appendChild(fusionTableIDInput);
+			div.appendChild(this.questionArrayView.getView());
+			this.getView = function(){
+				return div;
+			}
+			this.getTracker = function(){
+				return tracker;
+			}
+			this.contentChanged = function(){
+				this.tracker.setQuestions(this.questionArrayView.getQuestions());
+				this.tracker.setfusionTableID(fusionTableIDInput.value);
+				parentView.contentChanged();
+			};
+		}
+		function questionView(question, parentView, inLoop) {
+			this.question = question;
+			this.parentView = parentView;
+			this.inLoop = inLoop;
+			this.questionKinds = new questionKind(this.inLoop);
+			this.answerArrayView = null;
+			this.questionArrayView = null;
+			this.otherCheckbox = null;
+			var IDInput = null;
+			var questionInput = null;
+			var questionKindDropDown = null;
+			var jumpInput = null;
+			var jumpCheckbox = null;
+
+			var div = document.createElement('div');
+			div.className = "question";
+			var that = this;
+			this.initialize = function(){
+				IDInput = document.createElement("input");
+				IDInput.type = "text";
+				IDInput.className = "form-control"
+				IDInput.oninput=function(){
+					that.contentChanged();
+				};
+				questionInput = document.createElement("input");
+				questionInput.type = "text";
+				questionInput.className = "form-control"
+				questionInput.oninput = function(){
+					that.contentChanged();
+				};
+
+				questionKindDropDown = new select("", "", this.questionKinds.getNames(), this.questionKinds.getJsonNames());
+				questionKindDropDown.onchange = function(){
+					that.updateQuestionKind(this.options[questionKindDropDown.selectedIndex].value);
+					that.contentChanged();
+				};
+
+				jumpInput = document.createElement("input");
+				jumpInput.type = "text";
+				jumpInput.className = "form-control"
+				jumpInput.style.display = "none";
+				jumpInput.oninput = function(){
+					that.contentChanged();
+				};
+
+				jumpCheckbox = new checkbox("", "Jump", "jumpEnabled");
+				jumpCheckbox.getView().checked = false;
+				jumpCheckbox.getView().onchange = function(){
+					that.toggleJumpOption();
+				};
+
+				div.appendChild(IDInput);
+				div.appendChild(questionInput);	
+				if (!this.inLoop){
+					jumpCheckbox.addTo(div);
+				}
+				div.appendChild(jumpInput);	
+				div.appendChild(questionKindDropDown);	
+			}
+			this.getView = function(){
+				return div;
+			}			
+			this.contentChanged = function(){
+				this.question.setQuestionText(questionInput.value); 
+				this.question.setQuestionID(IDInput.value);	
+				if (jumpInput.value == ""){
+					this.question.setjumpID(null);
+				} else{
+					this.question.setjumpID(jumpInput.value);
+				}
+				if (this.answerArrayView != null){
+					this.question.setAnswers(this.answerArrayView.getAnswers());
+				} else{	
+					this.question.setAnswers(null);
+				}
+				if (this.questionArrayView != null){
+					this.question.setLoopQuestions(this.questionArrayView.getQuestions());
+				} else{
+					this.question.setLoopQuestions(null);
+				}
+				if (this.otherCheckbox != null){
+					this.question.setOtherEnabled(this.otherCheckbox.isChecked());
+				} else{
+					this.question.setOtherEnabled(null);
+				}
+				this.question.setKind(questionKindDropDown.options[questionKindDropDown.selectedIndex].value);
+				parentView.contentChanged();
+			};
+			this.getQuestion = function(){
+				return question;
+			}
+			this.toggleJumpOption = function(){
+				if(jumpCheckbox.isChecked()){
+					jumpInput.style.display = "inherit";
+				} else {
+					jumpInput.style.display = "none";
+					if (jumpInput.value != ""){
+						jumpInput.value = "";
+						this.contentChanged();
+					}
+				}
+			}
+			this.updateQuestionKind = function(newQuestionKind){
+				switch(newQuestionKind){
+					// We don't need arrays
+					case this.questionKinds.OPEN_TEXT["jsonName"]:
+					case this.questionKinds.OPEN_NUMBER["jsonName"]: 
+					case this.questionKinds.IMAGE["jsonName"]:
+						this.removeOtherOption();
+						this.removeAnswerArray();
+						this.removeQuestionArray();
+						break;
+					// We need an answers array
+					case this.questionKinds.ORDERED["jsonName"]:
+						this.removeQuestionArray();
+						this.removeOtherOption();
+						this.addAnswerArray();	
+						break;					
+					case this.questionKinds.MULTIPLE_CHOICE["jsonName"]:
+					case this.questionKinds.CHECKBOX["jsonName"]:
+						this.addOtherOption();
+						this.removeQuestionArray();
+						this.addAnswerArray();	
+						break;
+					// We need a question array
+					case this.questionKinds.LOOP["jsonName"]:
+						this.removeOtherOption();
+						this.removeAnswerArray();
+						this.addQuestionArray();
+						break;	
+				}
+			}
+			this.addQuestionArray = function(){
+				if (this.questionArrayView == null){
+					loopQuestions = this.question.getLoopQuestions();
+					this.questionArrayView = new questionArrayView(this.question.getLoopQuestions(), this, true);
+					div.appendChild(this.questionArrayView.getView());
+				}				
+			}
+			this.addAnswerArray = function(){
+				this.removeAnswerArray();
+				if (this.answerArrayView == null){
+					var canHaveJump = false;
+					if((questionKindDropDown.options[questionKindDropDown.selectedIndex].value == this.questionKinds.MULTIPLE_CHOICE["jsonName"]) && !this.inLoop){
+						canHaveJump = true;
+					}
+					this.answerArrayView = new answerArrayView(this.question.getAnswers(), this, canHaveJump);
+					div.appendChild(this.answerArrayView.getView());
+				}
+			}
+			this.removeQuestionArray = function(){
+				if (this.questionArrayView != null){
+					div.removeChild(this.questionArrayView.getView());
+					this.questionArrayView = null;
+				}
+			}
+			this.removeAnswerArray = function(){
+				if (this.answerArrayView != null){
+					div.removeChild(this.answerArrayView.getView());
+					this.answerArrayView = null;
+				}
+			}
+			this.addOtherOption = function(){
+				if (this.otherCheckbox == null){
+					this.otherCheckbox = new checkbox("", "Other", "otherEnabled");
+					var that = this;
+					this.otherCheckbox.getView().onchange = function(){
+						that.contentChanged();
+					};
+					this.otherCheckbox.addTo(div);
+				}
+			}
+			this.removeOtherOption = function(){
+				if (this.otherCheckbox != null){
+					this.otherCheckbox.removeFrom(div);
+					this.otherCheckbox = null;
+				}
+			}			
+		};
+
+		///"&)(!/=)"!/=)/"!?/((/&(&%"!(&/=")/)"!(??"!)"=)?/")!=/!&"/!&?#&*)
+		function answer() {
+			var answerText = null; // String
+			var jumpID = null; // String
+			this.getAnswerText = function() {
+				return answerText;
+			};
+			this.setAnswerText = function(answerText) {
+				this.answerText = answerText;
+			};
+			this.getJumpID = function() {
+				return this.jumpID;
+			};
+			this.setjumpID = function(jumpID) {
+				this.jumpID = jumpID;
+			};
+			this.generateJSON = function(){  				
+				var answerJSON = {};
+  				answerJSON["Answer"] = this.answerText;
+  				questionJSON["Jump"] = this.jumpID;
+  				return answerJSON;
+  			}
+		};
+
+		function question() {
+			this.kind = null;
+			this.loopQuestions = []; // Question instances inside this question.
+			this.questionText = null; // String
+			this.answers = []; // Answer instances
+			this.questionID = null; // String
+			this.otherEnabled = null; // Boolean 
+			this.jumpID = null; // String
+			this.getKind = function() {
+				return this.kind;
+			};
+			this.setKind = function(kind) {
+				this.kind = kind;
+			};
+			this.getQuestionText = function() {
+				return this.questionText;
+			};
+			this.setQuestionText = function(questionText) {
+				this.questionText = questionText;
+			};
+			this.getAnswers = function() {
+				return this.answers;
+			};
+			this.setAnswers = function(answers) {
+				this.answers = answers;
+			};
+			this.getJumpID = function() {
+				return this.jumpID;
+			};
+			this.setjumpID = function(jumpID) {
+				this.jumpID = jumpID;
+			};
+			this.getQuestionID = function() {
+				return this.questionID;
+			};
+			this.setQuestionID = function(questionID) {
+				this.questionID = questionID;
+			};
+			this.isOtherEnabled = function() {
+				return otherEnabled;
+			};
+			this.setOtherEnabled = function(otherEnabled) {
+				this.otherEnabled = otherEnabled;
+			};
+			this.getLoopQuestions = function() {
+				return this.loopQuestions;	
+			};
+			this.setLoopQuestions = function(loopQuestions) {
+				this.loopQuestions = loopQuestions;
+			};
+			this.generateJSON = function(){  				
+				var questionJSON = {};
+  				questionJSON["Question"] = this.questionText;
+  				questionJSON["id"] = this.questionID;
+  				questionJSON["Kind"] = this.kind;
+  				questionJSON["Jump"] = this.jumpID;
+  				if (this.otherEnabled != null){
+  					questionJSON["Other"] = this.otherEnabled;
+  				}
+  				if (this.answers != null){
+  					questionJSON["Answers"] = this.answers;	
+  				}
+  				if(this.loopQuestions != null){
+  					questionsJSONArray = [];
+  					for(var i=0; i < this.loopQuestions.length; i++){
+						questionsJSONArray.push(this.loopQuestions[i].generateJSON());
+					}
+					questionJSON["Questions"] = questionsJSONArray;
+  				}
+  				return questionJSON;
+  			}
+		};
+		function questionKind(inLoop){
+			// Object to list the question kinds possible to add to a question array
+			this.inLoop = inLoop;
+			this.MULTIPLE_CHOICE = {
+				jsonName:"MC",
+				name:"Multiple choice"
+			};
+			this.OPEN_NUMBER = {
+				jsonName:"ON",
+				name:"Open number"
+			};
+			this.OPEN_TEXT = {
+				jsonName:"OT",
+				name:"Open text"
+			};
+			this.IMAGE = {
+				jsonName:"IM",
+				name:"Picture"
+			};
+			this.CHECKBOX = {
+				jsonName:"CB",
+				name:"Checkbox"
+			};
+			this.ORDERED = {
+				jsonName:"OL",
+				name:"Ordered list"
+			};
+			this.LOOP = {
+				jsonName:"LP",
+				name:"Loop"
+			};
+			this.getJsonNames = function(){
+				var jsonNames = [];
+				jsonNames.push(this.OPEN_TEXT["jsonName"]);
+				jsonNames.push(this.OPEN_NUMBER["jsonName"]);				
+				jsonNames.push(this.MULTIPLE_CHOICE["jsonName"]);
+				jsonNames.push(this.CHECKBOX["jsonName"]);
+				jsonNames.push(this.ORDERED["jsonName"]);
+				jsonNames.push(this.IMAGE["jsonName"]);
+				if(!this.inLoop){
+					jsonNames.push(this.LOOP["jsonName"]);
+				};
+				return jsonNames;
+			};
+			this.getNames = function(){
+				var names = [];
+				names.push(this.OPEN_TEXT["name"]);
+				names.push(this.OPEN_NUMBER["name"]);				
+				names.push(this.MULTIPLE_CHOICE["name"]);
+				names.push(this.CHECKBOX["name"]);
+				names.push(this.ORDERED["name"]);
+				names.push(this.IMAGE["name"]);
+				if(!this.inLoop){
+					names.push(this.LOOP["name"]);
+				}
+				return names;
+			};
+		};
+		function chapter() {
+		  	this.title = null; // String
+		  	this.questions = []; //Array of question objects
+		  	this.getTitle = function() {
+		    	return title;
+			};
+			this.setTitle = function(title) {
+				this.title = title;
+			};
+			this.getQuestions = function() {
+				return this.questions;
+			};
+			this.setQuestions = function(questions) {
+				this.questions = questions;
+			};
+			this.addQuestion = function(newQuestion){
+				questions.push(newQuestion);
+			};
+			this.getQuestionCount = function() {
+				if (questions == null){
+					return 0
+				} else {
+					return questions.length;
+				}
+  			};
+  			this.generateJSON = function(){
+  				var chapterJSON = {};
+				questionsJSONArray = [];
+				for(var i=0; i < this.questions.length; i++){
+					questionsJSONArray.push(this.questions[i].generateJSON());
+				}
+				chapterJSON["Chapter"] = this.title;
+				chapterJSON["Questions"] = questionsJSONArray;
+				return chapterJSON;
+  			}
+		};
+		function survey(){
+			this.chapters = []; // Instances of chapters
+			this.fusionTableID = null; // String
+
+			this.getfusionTableID= function() {
+				return fusionTableID;
+			};
+			this.setfusionTableID = function(fusionTableID) {
+				this.fusionTableID = fusionTableID;
+			};
+			this.getChapters = function() {
+				return chapters;
+			};
+			this.setChapters = function(chapters) {
+				this.chapters = chapters;
+			};
+			this.addChapter = function(newChapter){
+				chapters.push(newChapter);3
+			}
+			this.getChapterCount = function() {
+				if (chapters == null){
+					return 0
+				} else {
+					return chapters.length;
+				}
+  			}
+  			this.generateJSON = function(){
+				var surveyJSON = {};
+				var chaptersJSONArray = [];
+				for(var i=0; i < this.chapters.length; i++){
+					chaptersJSONArray.push(this.chapters[i].generateJSON());
+				}
+				surveyJSON["Chapters"] = chaptersJSONArray;
+				surveyJSON["TableID"] = this.fusionTableID;
+				return surveyJSON;
+			}
+		};
+		function tracker(){
+			this.questions = []; // Instances of questions
+			this.fusionTableID = null; // String
+			this.getfusionTableID = function() {
+				return fusionTableID;
+			};
+			this.setfusionTableID = function(fusionTableID) {
+				this.fusionTableID = fusionTableID;
+			};
+			this.getQuestions = function() {
+			    return this.questions;
+			};
+			this.setQuestions = function(questions) {
+				this.questions = questions;
+			};
+			this.generateJSON = function(){
+				var trackerJSON = {};
+				var questionsJSONArray = [];
+				for(var i=0; i < this.questions.length; i++){
+					questionsJSONArray.push(this.questions[i].generateJSON());
+				}
+				trackerJSON["Questions"] = questionsJSONArray;
+				trackerJSON["TableID"] = this.fusionTableID;
+				return trackerJSON;
+			}
+		};
+		function project(){
+			this.survey;
+			this.tracker;
+			this.getSurvey = function(){
+				return survey;
+			}
+			this.setSurvey = function(survey){	
+				this.survey = survey;
+			}
+			this.getTracker = function(){
+				return tracker;
+			}
+			this.setTracker = function(tracker){
+				this.tracker = tracker;
+			}
+			this.generateJSON = function(){
+				var projectJSON = {};
+				projectJSON["Survey"] = this.survey.generateJSON();
+				projectJSON["Tracker"] = this.tracker.generateJSON();
+				return projectJSON;
+			}
+		}
+	</script>
+	<script src="js/jquery-1.11.1.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/bootstrap-switch.min.js"></script>
+</html>
