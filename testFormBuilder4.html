@@ -41,6 +41,8 @@
             var globalChapCount = 0
 
             var createChap = function(chapName) {
+            	if(!chapName)
+            		return false;
                 chapNameBasic = globalChapCount + chapName.replace(/\W/g, '').toLowerCase();
                 chapObj[chapNameBasic] = new instChap(chapName);
                 globalChapCount += 1;
@@ -55,11 +57,16 @@
                 this.quesArray = {};
                 var internalQuesCount = 0
                 this.addQues = function(quesTextInput) {
+                	if (!quesTextInput)
+                		return false;
                     quesTextInputBasic = internalQuesCount + quesTextInput.replace(/\W/g, '').toLowerCase();
                     this.quesArray[quesTextInputBasic] = {
                         quesText: quesTextInput,
                         ansArray: [],
-                        addAns: function(ansText) { this.ansArray.push(ansText); },
+                        addAns: function(ansText) {
+                         if(!ansText)
+                         	return false;	
+                         this.ansArray.push(ansText); },
                         delAns: function(index)   { this.ansArray.splice(index, 1); },
                     };
                     internalQuesCount += 1;
