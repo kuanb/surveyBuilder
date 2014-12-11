@@ -141,7 +141,7 @@
                 var newChapInputBox = "<input type='text' id='addChapInput' class='form-control' placeholder='Enter new chapter name.'>";
                 var newChapInputButton = "<button type='button' class='btn btn-xs btn-success' onclick='runButton(createChap(document.getElementById(" + '"' + "addChapInput" + '"' + ").value))'>Add Chapter</button>";
                 var newChapToAppend = document.createElement("dl");
-                newChapToAppend.innerHTML = "<br><br>" + newChapInputBox + " " + newChapInputButton;
+                newChapToAppend.innerHTML = newChapInputBox + " " + newChapInputButton;
                 document.getElementById("starterSpan").appendChild(newChapToAppend);
             };
 
