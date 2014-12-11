@@ -96,7 +96,7 @@
                     // define input boxes and buttons for chapter level
                     var delChapButton = "<button type='button' class='btn btn-xs btn-danger' onclick='runButton(delChap(" + '"' + sortable[chapterTitle] + '"' + "))'>Delete Chapter</button>";
                     var questionInputId = "chapter" + sortable[chapterTitle] + "question" + Object.keys(key.quesArray).length;
-                    var addQuesInput = "<input type='text' class='form-control' id='" + questionInputId + "' value='Enter question phrase.'>";
+                    var addQuesInput = "<input type='text' class='form-control' id='" + questionInputId + "' placeholder='Enter question phrase.'>";
                     var addQuesButton = "<button type='button' class='btn btn-xs btn-success' onclick='runButton(chapObj[" + '"' +  sortable[chapterTitle] + '"' + "].addQues(" + questionInputId + ".value))'>Add Ques.</button>";
 
                     // put text, buttons, and input boxes into dom
@@ -108,7 +108,7 @@
                         // define input boxes and buttons for question level
                         var delQuesButton = "<button type='button' class='btn btn-xs btn-danger' onclick='runButton(chapObj[" + '"' +  sortable[chapterTitle] + '"' + "].delQues(" + '"' +  ques + '"' + "))'>Delete Question</button>";
                         var answerInputId = "chapter" + sortable[chapterTitle] + "question" + ques + "answer";
-                        var addAnswerInput = "<input type='text' class='form-control' id='" + answerInputId + "' value='Enter answer phrase.'>";
+                        var addAnswerInput = "<input type='text' class='form-control' id='" + answerInputId + "' placeholder='Enter answer phrase.'>";
                         var addAnswerButton = "<button type='button' class='btn btn-xs btn-success' onclick='runButton(chapObj[" + '"' +  sortable[chapterTitle] + '"' + "].quesArray[" + '"' + ques + '"' + "].addAns(" + answerInputId + ".value))'>Add Answer</button>";
 
                         // put text, buttons, and input boxes into dom
@@ -131,7 +131,7 @@
                 }
 
                 // add a new chapter at base
-                var newChapInputBox = "<input type='text' id='addChapInput' class='form-control' value='Enter new chapter name.'>";
+                var newChapInputBox = "<input type='text' id='addChapInput' class='form-control' placeholder='Enter new chapter name.'>";
                 var newChapInputButton = "<button type='button' class='btn btn-xs btn-success' onclick='runButton(createChap(document.getElementById(" + '"' + "addChapInput" + '"' + ").value))'>Add Chapter</button>";
                 var newChapToAppend = document.createElement("dl");
                 newChapToAppend.innerHTML = "<br><br>" + newChapInputBox + " " + newChapInputButton;
