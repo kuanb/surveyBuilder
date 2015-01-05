@@ -14,12 +14,12 @@
 		        text-align: left;
 		    }
 		    .project{
-		    	left: 37%;
 		    	position: relative;
 	      		overflow: hidden;
-	      		padding: 10px;
-	      		width: 60%;
-	      		min-width: 400px;
+	      		padding-top: 10px;
+	      		width: 64%;
+	      		min-width: 400px; 
+	      		float: right;
 	      		display: inline-block;
 	      		text-align: left;
 		    }
@@ -89,35 +89,34 @@
 	      	}
 	      	.jsonFloat{
 	      		position: fixed;
-	      		top: 60px;
 	      		background: rgba(31, 61, 122, .2);
 	      		padding: 20px;
+	      		top: 100px;
 	      		text-align: left;
 	      		white-space: pre-wrap; 
 	      		width: 35%;
-	      		height: 100%;
+	      		height: 90%;
 	      		overflow:hidden;
-	      		word-wrap: break-word
+	      		word-wrap: break-word;
+	      		border-radius: 5px
 	      	}
-	      	.floatHeader{
+	      	.h4{
 	      		position: fixed;
-	      		height: 60px;
-	      		background: rgba(31, 61, 122, 1);
-	      		padding: 10px;
-	      		padding-left: 20px;
-	      		text-align: left;
-	      		white-space: pre-wrap; 
+	      		padding-left: 10px;
+	      		padding-top:10px;
+	      		padding-bottom: 10px;
+	      		text-align: center;
 	      		width: 35%;
-	      		overflow:hidden;
-	      		font-weight: 900;
-	      		font-size: 1.75em;
-	      		color: #FFFFFF;
+	      		color: #333;
+	      		background: rgba(31, 61, 122, .2);
+	      		border-radius: 5px
 	      	}
     	</style>
 	</head>
     <body>
     	<div id="project_container">
-    		<div class="floatHeader">Flocktracker JSON Builder</div>
+    		<div class="h4">Flocktracker JSON Builder</div>
+    		<button class="btn btn-success btn-md" style="width:35%; margin-top:58px;position:fixed;" onclick="console.log('working')">Submit Survey</button>
     		<div id="JsonGoesHere" class="jsonFloat"></div>
     		<div id="survey_container"></div>
     	</div>
@@ -187,12 +186,15 @@
 			this.trackerView = new trackerView(new tracker(), this);
 			var div = document.createElement('div');
 			div.className = "project";
+			div.id = "project";
 			div.appendChild(this.surveyView.getView());
 			div.appendChild(this.trackerView.getView());
 			var p = document.createElement("p")
 			var floatDiv = document.getElementById('JsonGoesHere');
-			var jsonText = document.createTextNode("jTxt");
-			floatDiv.appendChild(jsonText)
+			var jsonText = document.createElement("div");
+            	jsonText.style.cssText = 'font-size:0.75em';
+            floatDiv.appendChild(jsonText)
+
 			this.getView = function(){
 				return div;
 			};
@@ -203,7 +205,7 @@
 				project.setSurvey(survey);
 				project.setTracker(tracker);
 				contentChanges++;
-				jsonText.nodeValue = "Change count: " + contentChanges + " Cut-and-paste this JSON: " + JSON.stringify(project.generateJSON());
+				jsonText.innerHTML = "<b>Input Modification Count:</b> " + contentChanges + " <br><br><b>JSON Output:</b><br>" + JSON.stringify(project.generateJSON());
 			};
 			this.contentChanged();
 		}
