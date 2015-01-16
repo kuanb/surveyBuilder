@@ -450,7 +450,7 @@
 				that.contentChanged();
 			};
 			div.appendChild(titleInput);
-			this.questionArrayView = new questionArrayView(chapter.getQuestions(), this, false);
+			this.questionArrayView = new questionArrayView(this.chapter.getQuestions(), this, false);
 			div.appendChild(this.questionArrayView.getView());
 			this.getView = function(){
 				return div;
@@ -482,7 +482,7 @@
 				return div;
 			}
 			this.getTracker = function(){
-				return tracker;
+				return this.tracker;
 			}
 			this.contentChanged = function(){
 				this.tracker.setQuestions(this.questionArrayView.getQuestions());
@@ -744,7 +744,7 @@
 			this.setLoopQuestions = function(loopQuestions) {
 				this.loopQuestions = loopQuestions;
 			};
-			this.generateJSON = function(){  				
+			this.generateJSON = function(){				
 				var questionJSON = {};
   				questionJSON["Question"] = this.questionText;
   				questionJSON["id"] = this.questionID;
@@ -851,7 +851,7 @@
   			};
   			this.generateJSON = function(){
   				var chapterJSON = {};
-				questionsJSONArray = [];
+				var questionsJSONArray = [];
 				for(var i=0; i < this.questions.length; i++){
 					questionsJSONArray.push(this.questions[i].generateJSON());
 				}
