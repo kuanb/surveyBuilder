@@ -424,7 +424,7 @@
 				parentView.contentChanged();
 			};
 			this.getAnswer = function(){
-				return answer;
+				return this.answer;
 			};
 			this.toggleJumpOption = function(){
 				if(jumpCheckbox.isChecked()){
@@ -672,8 +672,8 @@
 
 		///"&)(!/=)"!/=)/"!?/((/&(&%"!(&/=")/)"!(??"!)"=)?/")!=/!&"/!&?#&*)
 		function answer() {
-			var answerText = null; // String
-			var jumpID = null; // String
+			this.answerText = null; // String
+			this.jumpID = null; // String
 			this.getAnswerText = function() {
 				return answerText;
 			};
@@ -686,10 +686,14 @@
 			this.setjumpID = function(jumpID) {
 				this.jumpID = jumpID;
 			};
-			this.generateJSON = function(){  				
+			this.generateJSON = function(){  		
 				var answerJSON = {};
-  				answerJSON["Answer"] = this.answerText;
-  				questionJSON["Jump"] = this.jumpID;
+				if (this.answerText != null){
+					answerJSON["Answer"] = this.answerText;
+				}
+				if (this.jumpID != null){
+					answerJSON["Jump"] = this.jumpID;
+				}
   				return answerJSON;
   			}
 		};
@@ -753,8 +757,13 @@
   				if (this.otherEnabled != null){
   					questionJSON["Other"] = this.otherEnabled;
   				}
-  				if (this.answers != null){
-  					questionJSON["Answers"] = this.answers;	
+ 				if ((this.answers !== null) && (this.answers.length >0)){
+  					var length = this.answers.length;
+  					var answersArray = [];
+  					for (var i = 0; i < length; i++) {
+  						answersArray.push(this.answers[i].generateJSON());
+  					};
+  					questionJSON["Answers"] = answersArray;
   				}
   				if(this.loopQuestions != null){
   					questionsJSONArray = [];
