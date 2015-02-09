@@ -187,8 +187,6 @@
 				this.div = document.createElement('div');
 				this.div.className = "project";
 				this.div.id = "project";
-				this.div.appendChild(this.surveyView.getView());
-				this.div.appendChild(this.trackerView.getView());
 				this.floatDiv = document.getElementById('JsonGoesHere');
 				this.jsonText = document.createElement("div");
 				this.jsonText.style.cssText = 'font-size:0.75em';
@@ -196,16 +194,21 @@
 			}
 			this.updateContent = function(project){
 				this.project = project;
-				if(this.project.getSurvey() != null){
-					if(this.surveyView.getSurvey() != this.project.getSurvey()){
-						this.surveyView.updateContent(this.project.getSurvey());
-					}
+				if (this.project.getSurvey() != null){
+					this.surveyView = new surveyView(this.project.getSurvey(), this);
+				} else {
+					this.surveyView = new surveyView(new survey(), this);
 				}
-				if(this.project.getTracker() != null){
-					if(this.trackerView.getTracker() != this.project.getTracker()){
-						this.trackerView.updateContent(this.project.getTracker());
-					}
+				if (this.project.getTracker() != null){
+					this.trackerView = new trackerView(this.project.getTracker(), this);
+				} else {
+					this.trackerView = new trackerView(new tracker(), this);
+				}
+				while (this.div.firstChild){
+					this.div.removeChild(this.div.firstChild);
 				}				
+				this.div.appendChild(this.surveyView.getView());
+				this.div.appendChild(this.trackerView.getView());			
 			}
 			this.getView = function(){
 				return this.div;
@@ -217,8 +220,6 @@
 				this.jsonText.innerHTML = "<b>Input Modification Count:</b> " + this.contentChanges + " <br><br><b>JSON Output:</b><br>" + JSON.stringify(project.generateJSON());
 			};
 			this.project = project;
-			this.surveyView = new surveyView(new survey(), this);
-			this.trackerView = new trackerView(new tracker(), this);
 			this.contentChanges = -1;
 			this.initializeView();
 			this.updateContent(this.project);
@@ -530,33 +531,48 @@
 			};
 		};
 		function trackerView(tracker, parentView){
-			this.tracker = tracker;
-			var div = document.createElement('div');
-			div.className = "tracker";
-			this.questionArrayView = new questionArrayView(tracker.getQuestions(), this, false);
-			var that = this;
-			var fusionTableIDInput = document.createElement("input");
-			fusionTableIDInput.type = "text";
-			fusionTableIDInput.className = "form-control"
-			fusionTableIDInput.oninput=function(){
-				that.contentChanged();
-			};			
-			div.appendChild(fusionTableIDInput);
-			div.appendChild(this.questionArrayView.getView());
-         	this.updateContent = function(tracker){
-	
+			this.initializeView = function(){
+				this.div = document.createElement('div');
+				this.div.className = "tracker";
+				var that = this;
+				this.fusionTableIDInput = document.createElement("input");
+				this.fusionTableIDInput.type = "text";
+				this.fusionTableIDInput.className = "form-control"
+				this.fusionTableIDInput.oninput=function(){
+					that.contentChanged();
+				};			
+				this.div.appendChild(this.fusionTableIDInput);
+			}
+			this.updateContent = function(tracker){
+				this.tracker = tracker;
+         		if (this.fusionTableIDInput.value != this.tracker.getfusionTableID()){
+         			this.fusionTableIDInput.value = this.tracker.getfusionTableID();
+         		}
+         		if (this.questionArrayView != null){
+         			if(this.tracker.getQuestions() != this.questionArrayView.getQuestions()){
+         				this.questionArrayView.updateContent(this.tracker.getQuestions);
+         			}
+         		} else {
+         			this.questionArrayView = new questionArrayView(this.tracker.getQuestions(), this, false);
+         			this.div.appendChild(this.questionArrayView.getView());
+         		}
 			} 			
 			this.getView = function(){
-				return div;
+				return this.div;
 			}
 			this.getTracker = function(){
 				return this.tracker;
 			}
 			this.contentChanged = function(){
 				this.tracker.setQuestions(this.questionArrayView.getQuestions());
-				this.tracker.setfusionTableID(fusionTableIDInput.value);
-				parentView.contentChanged();
+				this.tracker.setfusionTableID(this.fusionTableIDInput.value);
+				this.parentView.contentChanged();
 			};
+			this.tracker = tracker;
+			this.parentView = parentView;
+			
+			this.initializeView();
+			this.updateContent(this.tracker);
 		}
 		function questionView(question, parentView, inLoop) {
 			this.question = question;
@@ -1103,7 +1119,7 @@
 			this.questions = []; // Instances of questions
 			this.fusionTableID = null; // String
 			this.getfusionTableID = function() {
-				return fusionTableID;
+				return this.fusionTableID;
 			};
 			this.setfusionTableID = function(fusionTableID) {
 				this.fusionTableID = fusionTableID;
