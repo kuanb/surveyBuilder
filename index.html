@@ -127,9 +127,6 @@
     	var container = document.getElementById("project_container");
     	container.appendChild(projectView.getView());
 
-
-
-
     	// Here we put the ux elements
     	// Only constructors to apply the bootstrap classes and to change the format quickly.
     	function button(kind, nodeClass, text){
@@ -337,7 +334,6 @@
 				this.div.appendChild(this.addQuestionButton);
 			}
 			this.updateContent = function(questionArray){
-
          		if (questionArray != this.getQuestions()){	
          			this.QuestionViews = [];
          			while (this.questionsArrayContainer.firstChild){
@@ -361,7 +357,6 @@
 				questionContainerDIV.appendChild(eraseQuestionButton);
 				questionContainerDIV.appendChild(newQuestionDIV);
 				this.questionsArrayContainer.appendChild(questionContainerDIV);
-				newQuestionView.initialize();
 				eraseQuestionButton.onclick = function(){
 					that.eraseQuestion(questionContainerDIV);
 				};
@@ -595,36 +590,22 @@
 			this.updateContent(this.tracker);
 		}
 		function questionView(question, parentView, inLoop) {
-			this.question = question;
-			this.parentView = parentView;
-			this.inLoop = inLoop;
-			this.questionKinds = new questionKind(this.inLoop);
-			this.answerArrayView = null;
-			this.questionArrayView = null;
-			this.otherCheckbox = null;
-			var IDInput = null;
-			var questionInput = null;
-			var questionKindDropDown = null;
-			var jumpInput = null;
-			var jumpCheckbox = null;
-
-			var div = document.createElement('div');
-			div.className = "question";
-			var that = this;
-         	this.updateContent = function(question){
+			this.updateContent = function(question){
 				
 			} 			
-			this.initialize = function(){
-				IDInput = document.createElement("input");
-				IDInput.type = "text";
-				IDInput.className = "form-control"
-				IDInput.oninput=function(){
+			this.initializeView = function(){
+				this.div = document.createElement('div');
+				this.div.className = "question";
+				this.IDInput = document.createElement("input");
+				this.IDInput.type = "text";
+				this.IDInput.className = "form-control"
+				this.IDInput.oninput=function(){
 					that.contentChanged();
 				};
-				questionInput = document.createElement("input");
-				questionInput.type = "text";
-				questionInput.className = "form-control"
-				questionInput.oninput = function(){
+				this.questionInput = document.createElement("input");
+				this.questionInput.type = "text";
+				this.questionInput.className = "form-control"
+				this.questionInput.oninput = function(){
 					that.contentChanged();
 				};
 
@@ -634,38 +615,38 @@
 					that.contentChanged();
 				};
 
-				jumpInput = document.createElement("input");
-				jumpInput.type = "text";
-				jumpInput.className = "form-control"
-				jumpInput.style.display = "none";
-				jumpInput.oninput = function(){
+				this.jumpInput = document.createElement("input");
+				this.jumpInput.type = "text";
+				this.jumpInput.className = "form-control"
+				this.jumpInput.style.display = "none";
+				this.jumpInput.oninput = function(){
 					that.contentChanged();
 				};
 
-				jumpCheckbox = new checkbox("", "Jump", "jumpEnabled");
-				jumpCheckbox.getView().checked = false;
-				jumpCheckbox.getView().onchange = function(){
+				this.jumpCheckbox = new checkbox("", "Jump", "jumpEnabled");
+				this.jumpCheckbox.getView().checked = false;
+				this.jumpCheckbox.getView().onchange = function(){
 					that.toggleJumpOption();
 				};
 
-				div.appendChild(IDInput);
-				div.appendChild(questionInput);	
+				this.div.appendChild(this.IDInput);
+				this.div.appendChild(this.questionInput);	
 				if (!this.inLoop){
-					jumpCheckbox.addTo(div);
+					this.jumpCheckbox.addTo(this.div);
 				}
-				div.appendChild(jumpInput);	
-				div.appendChild(questionKindDropDown);	
+				this.div.appendChild(this.jumpInput);	
+				this.div.appendChild(questionKindDropDown);	
 			}
 			this.getView = function(){
-				return div;
+				return this.div;
 			}			
 			this.contentChanged = function(){
-				this.question.setQuestionText(questionInput.value); 
-				this.question.setQuestionID(IDInput.value);	
-				if (jumpInput.value == ""){
+				this.question.setQuestionText(this.questionInput.value); 
+				this.question.setQuestionID(this.IDInput.value);	
+				if (this.jumpInput.value == ""){
 					this.question.setjumpID(null);
 				} else{
-					this.question.setjumpID(jumpInput.value);
+					this.question.setjumpID(this.jumpInput.value);
 				}
 				if (this.answerArrayView != null){
 					this.question.setAnswers(this.answerArrayView.getAnswers());
@@ -686,15 +667,15 @@
 				parentView.contentChanged();
 			};
 			this.getQuestion = function(){
-				return question;
+				return this.question;
 			}
 			this.toggleJumpOption = function(){
-				if(jumpCheckbox.isChecked()){
-					jumpInput.style.display = "inherit";
+				if(this.jumpCheckbox.isChecked()){
+					this.jumpInput.style.display = "inherit";
 				} else {
-					jumpInput.style.display = "none";
-					if (jumpInput.value != ""){
-						jumpInput.value = "";
+					this.jumpInput.style.display = "none";
+					if (this.jumpInput.value != ""){
+						this.jumpInput.value = "";
 						this.contentChanged();
 					}
 				}
@@ -705,35 +686,35 @@
 					case this.questionKinds.OPEN_TEXT["jsonName"]:
 					case this.questionKinds.OPEN_NUMBER["jsonName"]: 
 					case this.questionKinds.IMAGE["jsonName"]:
-						this.removeOtherOption();
-						this.removeAnswerArray();
-						this.removeQuestionArray();
-						break;
+					this.removeOtherOption();
+					this.removeAnswerArray();
+					this.removeQuestionArray();
+					break;
 					// We need an answers array
 					case this.questionKinds.ORDERED["jsonName"]:
-						this.removeQuestionArray();
-						this.removeOtherOption();
-						this.addAnswerArray();	
-						break;					
+					this.removeQuestionArray();
+					this.removeOtherOption();
+					this.addAnswerArray();	
+					break;					
 					case this.questionKinds.MULTIPLE_CHOICE["jsonName"]:
 					case this.questionKinds.CHECKBOX["jsonName"]:
-						this.addOtherOption();
-						this.removeQuestionArray();
-						this.addAnswerArray();	
-						break;
+					this.addOtherOption();
+					this.removeQuestionArray();
+					this.addAnswerArray();	
+					break;
 					// We need a question array
 					case this.questionKinds.LOOP["jsonName"]:
-						this.removeOtherOption();
-						this.removeAnswerArray();
-						this.addQuestionArray();
-						break;	
+					this.removeOtherOption();
+					this.removeAnswerArray();
+					this.addQuestionArray();
+					break;	
 				}
 			}
 			this.addQuestionArray = function(){
 				if (this.questionArrayView == null){
 					loopQuestions = this.question.getLoopQuestions();
 					this.questionArrayView = new questionArrayView(this.question.getLoopQuestions(), this, true);
-					div.appendChild(this.questionArrayView.getView());
+					this.div.appendChild(this.questionArrayView.getView());
 				}				
 			}
 			this.addAnswerArray = function(){
@@ -744,18 +725,18 @@
 						canHaveJump = true;
 					}
 					this.answerArrayView = new answerArrayView(this.question.getAnswers(), this, canHaveJump);
-					div.appendChild(this.answerArrayView.getView());
+					this.div.appendChild(this.answerArrayView.getView());
 				}
 			}
 			this.removeQuestionArray = function(){
 				if (this.questionArrayView != null){
-					div.removeChild(this.questionArrayView.getView());
+					this.div.removeChild(this.questionArrayView.getView());
 					this.questionArrayView = null;
 				}
 			}
 			this.removeAnswerArray = function(){
 				if (this.answerArrayView != null){
-					div.removeChild(this.answerArrayView.getView());
+					this.div.removeChild(this.answerArrayView.getView());
 					this.answerArrayView = null;
 				}
 			}
@@ -766,15 +747,30 @@
 					this.otherCheckbox.getView().onchange = function(){
 						that.contentChanged();
 					};
-					this.otherCheckbox.addTo(div);
+					this.otherCheckbox.addTo(this.div);
 				}
 			}
 			this.removeOtherOption = function(){
 				if (this.otherCheckbox != null){
-					this.otherCheckbox.removeFrom(div);
+					this.otherCheckbox.removeFrom(this.div);
 					this.otherCheckbox = null;
 				}
 			}			
+
+			this.question = question;
+			this.parentView = parentView;
+			this.inLoop = inLoop;
+			this.questionKinds = new questionKind(this.inLoop);
+			this.answerArrayView = null;
+			this.questionArrayView = null;
+			this.otherCheckbox = null;
+			this.IDInput = null;
+			this.questionInput = null;
+			questionKindDropDown = null;
+			this.jumpInput = null;
+			this.jumpCheckbox = null;
+			this.initializeView();
+			this.updateContent(this.question);
 		};
 
 		// Part of the code for the models of the data
