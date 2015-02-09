@@ -319,63 +319,69 @@
 			this.updateContent(this.survey);
 		}
 		function questionArrayView(questionArray, parentView, inLoop){
-			this.inLoop = inLoop;
-			var questionViews = []; //Array of question Views objects
-			var div = document.createElement('div');
-			div.className = "questionsContainerDIV";
-			var questionsArrayContainer = document.createElement('div');
-			questionsArrayContainer.className = "questionsArrayContainer";
-			var addQuestionButton = new button("add", "", "Add question");
-			var that = this;
-			addQuestionButton.onclick = function(){
-				that.addQuestion(new question(that.inLoop));
-         	};
-         	div.appendChild(questionsArrayContainer);
-         	div.appendChild(addQuestionButton);
-         	this.updateContent = function(questionArray){
-	
+			this.initializeView = function(){
+				this.div = document.createElement('div');
+				this.div.className = "questionsContainerDIV";
+				this.questionsArrayContainer = document.createElement('div');
+				this.questionsArrayContainer.className = "questionsArrayContainer";
+				this.addQuestionButton = new button("add", "", "Add question");
+				var that = this;
+				this.addQuestionButton.onclick = function(){
+					that.addQuestion(new question(that.inLoop));
+				};
+				this.div.appendChild(this.questionsArrayContainer);
+				this.div.appendChild(this.addQuestionButton);
+			}
+			this.updateContent = function(questionArray){
+				
 			}
 			this.addQuestion = function(question){
 				var questionContainerDIV = document.createElement('div');
-         		questionContainerDIV.className = "questionContainerDIV";
+				questionContainerDIV.className = "questionContainerDIV";
 				newQuestionView = new questionView(question, this, inLoop);
-				questionViews.push(newQuestionView);
+				this.questionViews.push(newQuestionView);
 				var newQuestionDIV = newQuestionView.getView();
 				var eraseQuestionButton = new button("remove", "", "Erase question");
 				var that = this;
 				questionContainerDIV.appendChild(eraseQuestionButton);
 				questionContainerDIV.appendChild(newQuestionDIV);
-				questionsArrayContainer.appendChild(questionContainerDIV);
+				this.questionsArrayContainer.appendChild(questionContainerDIV);
 				newQuestionView.initialize();
 				eraseQuestionButton.onclick = function(){
-            		that.eraseQuestion(questionContainerDIV);
-            	};
-            	this.contentChanged();
+					that.eraseQuestion(questionContainerDIV);
+				};
+				this.contentChanged();
 			};
 			this.eraseQuestion = function(questionDIV){
 				var parentChilds = questionDIV.parentNode.childNodes;
 				for (var i=0; i < parentChilds.length; i++){
 					if (parentChilds[i] == questionDIV){
-						questionViews.splice(i,1);
+						this.questionViews.splice(i,1);
 						break
 					};
 				};
-				questionsArrayContainer.removeChild(questionDIV);
+				this.questionsArrayContainer.removeChild(questionDIV);
 				this.contentChanged();
 			};
 			this.contentChanged = function(){
-				parentView.contentChanged();
+				this.parentView.contentChanged();
 			};	
 			this.getView = function(){
-				return div;
+				return this.div;
 			}
 			this.getQuestions = function(){
-				var questions = [];
-				for(i=0; i<questionViews.length; i++){
-					questions[i] = questionViews[i].getQuestion();
+				this.questionArray = [];
+				for(i=0; i<this.questionViews.length; i++){
+					this.questionArray[i] = this.questionViews[i].getQuestion();
 				};
-				return questions;
+				return this.questionArray;
 			};
+			this.inLoop = inLoop;
+			this.questionArray = questionArray;
+			this.parentView = parentView;
+			this.questionViews = []; //Array of question Views objects
+			this.initializeView();
+			this.updateContent(this.questionArray);	
 		};
 
 		function answerArrayView(answerArray, parentView, canHaveJumps){
