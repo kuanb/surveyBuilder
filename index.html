@@ -211,10 +211,6 @@
 			this.contentChanged();
 		}
 		function surveyView(survey, parentView){
-			this.addChapterButton = null;
-			this.fusionTableIDInput = null;
-			this.chaptersContainerDIV = null;
-			this.chaptersArrayContainerDiV = null;
          	this.initializeView = function(){
          		this.div = document.createElement('div');
          		this.div.className = "survey";
@@ -285,6 +281,10 @@
 			this.chapterViews = []; // Instances of chapters
 			this.div = null;
 			this.initializeView();
+			this.addChapterButton = null;
+			this.fusionTableIDInput = null;
+			this.chaptersContainerDIV = null;
+			this.chaptersArrayContainerDiV = null;
 		}
 		function questionArrayView(questionArray, parentView, inLoop){
 			this.inLoop = inLoop;
