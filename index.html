@@ -201,10 +201,11 @@
 						this.surveyView.updateContent(this.project.getSurvey());
 					}
 				}
-
-/*				if(this.trackerView.getTracker() != this.project.getTracker()){
-					this.trackerView.updateContent(this.project.getTracker());
-				}*/
+				if(this.project.getTracker() != null){
+					if(this.trackerView.getTracker() != this.project.getTracker()){
+						this.trackerView.updateContent(this.project.getTracker());
+					}
+				}				
 			}
 			this.getView = function(){
 				return this.div;
@@ -330,6 +331,9 @@
          	};
          	div.appendChild(questionsArrayContainer);
          	div.appendChild(addQuestionButton);
+         	this.updateContent = function(questionArray){
+	
+			}
 			this.addQuestion = function(question){
 				var questionContainerDIV = document.createElement('div');
          		questionContainerDIV.className = "questionContainerDIV";
@@ -373,7 +377,7 @@
 			};
 		};
 
-		function answerArrayView(questionArray, parentView, canHaveJumps){
+		function answerArrayView(answerArray, parentView, canHaveJumps){
 			this.canHaveJumps = canHaveJumps;
 			var answerViews = []; //Array of question Views objects
 			var div = document.createElement('div');
@@ -387,6 +391,9 @@
          	};
          	div.appendChild(answersArrayContainer);
          	div.appendChild(addAnswerButton);
+         	this.updateContent = function(answerArray){
+	
+			}         	
 			this.addAnswer = function(answer){
 				var answerContainerDIV = document.createElement('div');
          		answerContainerDIV.className = "answerContainerDIV";
@@ -466,6 +473,9 @@
 					div.appendChild(jumpInput);	
 				};
 			};
+         	this.updateContent = function(answer){
+	
+			}  			
 			this.getView = function(){
 				return div;
 			};
@@ -503,6 +513,10 @@
 			div.appendChild(titleInput);
 			this.questionArrayView = new questionArrayView(this.chapter.getQuestions(), this, false);
 			div.appendChild(this.questionArrayView.getView());
+
+         	this.updateContent = function(chapter){
+	
+			}  				
 			this.getView = function(){
 				return div;
 			}
@@ -529,6 +543,9 @@
 			};			
 			div.appendChild(fusionTableIDInput);
 			div.appendChild(this.questionArrayView.getView());
+         	this.updateContent = function(tracker){
+	
+			} 			
 			this.getView = function(){
 				return div;
 			}
@@ -558,6 +575,9 @@
 			var div = document.createElement('div');
 			div.className = "question";
 			var that = this;
+         	this.updateContent = function(question){
+				
+			} 			
 			this.initialize = function(){
 				IDInput = document.createElement("input");
 				IDInput.type = "text";
