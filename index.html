@@ -182,20 +182,6 @@
     	// Here be the Views
     	// !!/!T(&"#("/!(/T#")(/!=)/"=)(!)(YEU!")/H)"(UWE=")!"(!=)(!=#)(=))))
 		function projectView(project){
-			this.project = project;
-			this.surveyView = new surveyView(new survey(), this);
-			this.trackerView = new trackerView(new tracker(), this);
-			var div = document.createElement('div');
-			div.className = "project";
-			div.id = "project";
-			div.appendChild(this.surveyView.getView());
-			div.appendChild(this.trackerView.getView());
-			var p = document.createElement("p")
-			var floatDiv = document.getElementById('JsonGoesHere');
-			var jsonText = document.createElement("div");
-            	jsonText.style.cssText = 'font-size:0.75em';
-            floatDiv.appendChild(jsonText)
-
 			this.getView = function(){
 				return div;
 			};
@@ -208,6 +194,27 @@
 				contentChanges++;
 				jsonText.innerHTML = "<b>Input Modification Count:</b> " + contentChanges + " <br><br><b>JSON Output:</b><br>" + JSON.stringify(project.generateJSON());
 			};
+			this.project = project;
+
+
+			var seeeSurvey = new survey();
+			seeeSurvey.addChapter(new chapter());
+			seeeSurvey.addChapter(new chapter());
+			seeeSurvey.addChapter(new chapter());
+			seeeSurvey.setfusionTableID("SAJsdasdasdaISA");
+
+			this.surveyView = new surveyView(seeeSurvey, this);
+			this.trackerView = new trackerView(new tracker(), this);
+			var div = document.createElement('div');
+			div.className = "project";
+			div.id = "project";
+			div.appendChild(this.surveyView.getView());
+			div.appendChild(this.trackerView.getView());
+			var p = document.createElement("p")
+			var floatDiv = document.getElementById('JsonGoesHere');
+			var jsonText = document.createElement("div");
+			jsonText.style.cssText = 'font-size:0.75em';
+			floatDiv.appendChild(jsonText)
 			this.contentChanged();
 		}
 		function surveyView(survey, parentView){
@@ -218,6 +225,7 @@
          		this.addChapterButton = new button("add", "", "Add chapter");
          		this.addChapterButton.onclick = function(){
          			that.addChapter(new chapter());
+         			that.contentChanged();
          		};
          		this.fusionTableIDInput = document.createElement("input");
          		this.fusionTableIDInput.type = "text";
@@ -234,6 +242,22 @@
          		this.div.appendChild(this.fusionTableIDInput);
          		this.div.appendChild(this.chaptersContainerDIV);
          	}
+         	this.updateContent = function(survey){
+         		this.survey = survey;
+         		if (!(this.fusionTableIDInput.value == this.survey.getfusionTableID())){
+         			this.fusionTableIDInput.value = this.survey.getfusionTableID();
+         		}
+         		if (!(this.chapters == survey.getChapters())){	
+         			this.chapterViews = [];
+         			while (this.chaptersArrayContainerDiV.firstChild){
+         				this.chaptersArrayContainerDiV.removeChild(this.chaptersArrayContainerDiV.firstChild);
+         			}
+         			this.chapters = this.survey.getChapters();
+         			for (var i = 0; i < this.chapters.length; i++) {
+         				this.addChapter(this.chapters[i]);
+         			};
+         		}
+         	}	
 			this.getView = function(){
 				return this.div;
 			}
@@ -251,7 +275,6 @@
 				eraseChapterButton.onclick = function(){
             		that.eraseChapter(chapterContainerDIV);
         		}
-        		this.contentChanged();
 			}
 			this.eraseChapter = function(chapterDIV){
 				var parentChilds = chapterDIV.parentNode.childNodes;
@@ -280,11 +303,12 @@
 			this.survey = survey;
 			this.chapterViews = []; // Instances of chapters
 			this.div = null;
-			this.initializeView();
 			this.addChapterButton = null;
 			this.fusionTableIDInput = null;
 			this.chaptersContainerDIV = null;
 			this.chaptersArrayContainerDiV = null;
+			this.initializeView();
+			this.updateContent(this.survey);
 		}
 		function questionArrayView(questionArray, parentView, inLoop){
 			this.inLoop = inLoop;
@@ -995,23 +1019,23 @@
 			this.chapters = []; // Instances of chapters
 			this.fusionTableID = null; // String
 
-			this.getfusionTableID= function() {
-				return fusionTableID;
+			this.getfusionTableID = function() {
+				return this.fusionTableID;
 			};
 			this.setfusionTableID = function(fusionTableID) {
 				this.fusionTableID = fusionTableID;
 			};
 			this.getChapters = function() {
-				return chapters;
+				return this.chapters;
 			};
 			this.setChapters = function(chapters) {
 				this.chapters = chapters;
 			};
 			this.addChapter = function(newChapter){
-				chapters.push(newChapter);3
+				this.chapters.push(newChapter);
 			}
 			this.getChapterCount = function() {
-				if (chapters == null){
+				if (this.chapters == null){
 					return 0
 				} else {
 					return chapters.length;
