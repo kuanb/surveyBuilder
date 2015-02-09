@@ -112,9 +112,7 @@
     	</div>
   	</body>
     <script language="javascript">
-    	var projectView = new projectView(new project());
-    	var container = document.getElementById("project_container");
-    	container.appendChild(projectView.getView());
+
 
 
     	var superString = '{"Survey":{"Chapters":[{"Chapter":"Chapter 2","Questions":[{"Question":"How many children do you have?","id":"q11","Kind":"LP","Jump":null,"Questions":[]},{"Question":"Order the elements of this list in order of importance for his or her well being","id":"q16","Kind":"OL","Jump":null,"Questions":[]},{"Question":"How many children do you have?","id":"q17","Kind":"LP","Jump":null,"Questions":[]},{"Question":"Order the elements of this list in order of importance for his or her well being","id":"q19","Kind":"OL","Jump":null,"Questions":[]},{"Question":"How many children do you have?","id":"q20","Kind":"LP","Jump":null,"Questions":[]},{"Question":"Order the elements of this list in order of importance for his or her well being","id":"q22","Kind":"OL","Jump":null,"Questions":[]}]}],"TableID":"11lGsm8B2SNNGmEsTmuGVrAy1gcJF9TQBo3G1Vw0"},"Tracker":{"Questions":[{"Question":"Bus","id":"q1","Kind":"MC","Jump":null,"Questions":[]},{"Question":"Passenger total","id":"q2","Kind":"ON","Jump":null,"Questions":[]}],"TableID":"1Q2mr8ni5LTxtZRRi3PNSYxAYS8HWikWqlfoIUK4"}}'
@@ -122,6 +120,9 @@
     	projectTest.constructFromString(superString);
     	console.log(JSON.stringify(projectTest.generateJSON()));
 
+    	var projectView = new projectView(projectTest);
+    	var container = document.getElementById("project_container");
+    	container.appendChild(projectView.getView());
 
 
 
@@ -193,6 +194,18 @@
 				this.jsonText.style.cssText = 'font-size:0.75em';
 				this.floatDiv.appendChild(this.jsonText)
 			}
+			this.updateContent = function(project){
+				this.project = project;
+				if(this.project.getSurvey() != null){
+					if(this.surveyView.getSurvey() != this.project.getSurvey()){
+						this.surveyView.updateContent(this.project.getSurvey());
+					}
+				}
+
+/*				if(this.trackerView.getTracker() != this.project.getTracker()){
+					this.trackerView.updateContent(this.project.getTracker());
+				}*/
+			}
 			this.getView = function(){
 				return this.div;
 			};
@@ -205,8 +218,10 @@
 			this.project = project;
 			this.surveyView = new surveyView(new survey(), this);
 			this.trackerView = new trackerView(new tracker(), this);
-			this.contentChanges = 0;
+			this.contentChanges = -1;
 			this.initializeView();
+			this.updateContent(this.project);
+			this.contentChanged();
 		}
 		function surveyView(survey, parentView){
          	this.initializeView = function(){
@@ -235,10 +250,10 @@
          	}
          	this.updateContent = function(survey){
          		this.survey = survey;
-         		if (!(this.fusionTableIDInput.value == this.survey.getfusionTableID())){
+         		if (this.fusionTableIDInput.value != this.survey.getfusionTableID()){
          			this.fusionTableIDInput.value = this.survey.getfusionTableID();
          		}
-         		if (!(this.chapters == survey.getChapters())){	
+         		if (this.chapters != this.survey.getChapters()){	
          			this.chapterViews = [];
          			while (this.chaptersArrayContainerDiV.firstChild){
          				this.chaptersArrayContainerDiV.removeChild(this.chaptersArrayContainerDiV.firstChild);
@@ -283,12 +298,12 @@
 				for(i=0; i<this.chapterViews.length; i++){
 					changedChapters[i] = this.chapterViews[i].getChapter();
 				}
-				survey.setChapters(changedChapters);
+				this.survey.setChapters(changedChapters);
 				this.survey.setfusionTableID(this.fusionTableIDInput.value);
 				this.parentView.contentChanged();
 			};	
 			this.getSurvey = function(){
-				return survey;
+				return this.survey;
 			}
 			this.parentView = parentView;
 			this.survey = survey;
@@ -1115,13 +1130,13 @@
 			this.survey = null;
 			this.tracker = null;
 			this.getSurvey = function(){
-				return survey;
+				return this.survey;
 			}
 			this.setSurvey = function(survey){	
 				this.survey = survey;
 			}
 			this.getTracker = function(){
-				return tracker;
+				return this.tracker;
 			}
 			this.setTracker = function(tracker){
 				this.tracker = tracker;
