@@ -111,6 +111,9 @@
     		<div id="survey_container"></div>
     	</div>
   	</body>
+  	<script src="js/jquery-1.11.1.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/bootstrap-switch.min.js"></script>
     <script language="javascript">
 
 
@@ -328,12 +331,24 @@
 				var that = this;
 				this.addQuestionButton.onclick = function(){
 					that.addQuestion(new question(that.inLoop));
+					that.contentChanged();
 				};
 				this.div.appendChild(this.questionsArrayContainer);
 				this.div.appendChild(this.addQuestionButton);
 			}
 			this.updateContent = function(questionArray){
-				
+
+         		if (questionArray != this.getQuestions()){	
+         			this.QuestionViews = [];
+         			while (this.questionsArrayContainer.firstChild){
+         				this.questionsArrayContainer.removeChild(this.questionsArrayContainer.firstChild);
+         			}
+         			this.questionArray = questionArray;
+         			for (var i = 0; i < this.questionArray.length; i++) {
+         				this.addQuestion(this.questionArray[i]);
+         			};
+         		}
+
 			}
 			this.addQuestion = function(question){
 				var questionContainerDIV = document.createElement('div');
@@ -350,7 +365,6 @@
 				eraseQuestionButton.onclick = function(){
 					that.eraseQuestion(questionContainerDIV);
 				};
-				this.contentChanged();
 			};
 			this.eraseQuestion = function(questionDIV){
 				var parentChilds = questionDIV.parentNode.childNodes;
@@ -1213,7 +1227,4 @@
 			}
 		}
 	</script>
-	<script src="js/jquery-1.11.1.min.js"></script>
-	<script src="js/bootstrap.min.js"></script>
-	<script src="js/bootstrap-switch.min.js"></script>
 </html>
