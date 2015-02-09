@@ -211,31 +211,35 @@
 			this.contentChanged();
 		}
 		function surveyView(survey, parentView){
-			this.survey = survey;
-			var chapterViews = []; // Instances of chapters
-			var div = document.createElement('div');
-			div.className = "survey";
-			var that = this;
-			var addChapterButton = new button("add", "", "Add chapter");
-			addChapterButton.onclick = function(){
-            	that.addChapter(new chapter());
-        	};
-			var fusionTableIDInput = document.createElement("input");
-			fusionTableIDInput.type = "text";
-			fusionTableIDInput.className = "form-control"
-			fusionTableIDInput.oninput=function(){
-				that.contentChanged();
-			};
-			var chaptersArrayContainerDiV = document.createElement('div');
-         	chaptersArrayContainerDiV.className = "chaptersArrayContainerDiV";
-			var chaptersContainerDIV = document.createElement('div');
-         	chaptersContainerDIV.className = "chaptersContainerDIV";
-         	chaptersContainerDIV.appendChild(chaptersArrayContainerDiV);
-         	chaptersContainerDIV.appendChild(addChapterButton);
-         	div.appendChild(fusionTableIDInput);
-         	div.appendChild(chaptersContainerDIV);
+			this.addChapterButton = null;
+			this.fusionTableIDInput = null;
+			this.chaptersContainerDIV = null;
+			this.chaptersArrayContainerDiV = null;
+         	this.initializeView = function(){
+         		this.div = document.createElement('div');
+         		this.div.className = "survey";
+         		var that = this;
+         		this.addChapterButton = new button("add", "", "Add chapter");
+         		this.addChapterButton.onclick = function(){
+         			that.addChapter(new chapter());
+         		};
+         		this.fusionTableIDInput = document.createElement("input");
+         		this.fusionTableIDInput.type = "text";
+         		this.fusionTableIDInput.className = "form-control"
+         		this.fusionTableIDInput.oninput=function(){
+         			that.contentChanged();
+         		};
+         		this.chaptersArrayContainerDiV = document.createElement('div');
+         		this.chaptersArrayContainerDiV.className = "chaptersArrayContainerDiV";
+         		this.chaptersContainerDIV = document.createElement('div');
+         		this.chaptersContainerDIV.className = "chaptersContainerDIV";
+         		this.chaptersContainerDIV.appendChild(this.chaptersArrayContainerDiV);
+         		this.chaptersContainerDIV.appendChild(this.addChapterButton);
+         		this.div.appendChild(this.fusionTableIDInput);
+         		this.div.appendChild(this.chaptersContainerDIV);
+         	}
 			this.getView = function(){
-				return div;
+				return this.div;
 			}
 			this.addChapter = function(chapter){	
 				var chapterContainerDIV = document.createElement('div');
@@ -247,12 +251,12 @@
 				var that = this;
 				chapterContainerDIV.appendChild(eraseChapterButton);
 				chapterContainerDIV.appendChild(newChapterDIV);
-				chaptersArrayContainerDiV.appendChild(chapterContainerDIV);
+				this.chaptersArrayContainerDiV.appendChild(chapterContainerDIV);
 				eraseChapterButton.onclick = function(){
             		that.eraseChapter(chapterContainerDIV);
         		}
         		this.contentChanged();
-			};
+			}
 			this.eraseChapter = function(chapterDIV){
 				var parentChilds = chapterDIV.parentNode.childNodes;
 				for (var i=0; i < parentChilds.length; i++){
@@ -261,7 +265,7 @@
 						break
 					}
 				}
-				chaptersArrayContainerDiV.removeChild(chapterDIV);
+				this.chaptersArrayContainerDiV.removeChild(chapterDIV);
 				this.contentChanged();
 			}
 			this.contentChanged = function(){
@@ -270,12 +274,17 @@
 					changedChapters[i] = chapterViews[i].getChapter();
 				}
 				survey.setChapters(changedChapters);
-				this.survey.setfusionTableID(fusionTableIDInput.value);
-				parentView.contentChanged();
+				this.survey.setfusionTableID(this.fusionTableIDInput.value);
+				this.parentView.contentChanged();
 			};	
 			this.getSurvey = function(){
 				return survey;
 			}
+			this.parentView = parentView;
+			this.survey = survey;
+			var chapterViews = []; // Instances of chapters
+			this.div = null;
+			this.initializeView();
 		}
 		function questionArrayView(questionArray, parentView, inLoop){
 			this.inLoop = inLoop;
