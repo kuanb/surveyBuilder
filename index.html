@@ -181,41 +181,32 @@
     	}
     	// Here be the Views
     	// !!/!T(&"#("/!(/T#")(/!=)/"=)(!)(YEU!")/H)"(UWE=")!"(!=)(!=#)(=))))
-		function projectView(project){
+		function projectView(project){			
+			this.initializeView = function(){
+				this.div = document.createElement('div');
+				this.div.className = "project";
+				this.div.id = "project";
+				this.div.appendChild(this.surveyView.getView());
+				this.div.appendChild(this.trackerView.getView());
+				this.floatDiv = document.getElementById('JsonGoesHere');
+				this.jsonText = document.createElement("div");
+				this.jsonText.style.cssText = 'font-size:0.75em';
+				this.floatDiv.appendChild(this.jsonText)
+			}
 			this.getView = function(){
-				return div;
+				return this.div;
 			};
-			var contentChanges = 0;
 			this.contentChanged = function(){
-				var survey = this.surveyView.getSurvey();
-				var tracker = this.trackerView.getTracker();
-				project.setSurvey(survey);
-				project.setTracker(tracker);
-				contentChanges++;
-				jsonText.innerHTML = "<b>Input Modification Count:</b> " + contentChanges + " <br><br><b>JSON Output:</b><br>" + JSON.stringify(project.generateJSON());
+				this.project.setSurvey(this.surveyView.getSurvey());
+				this.project.setTracker(this.trackerView.getTracker());
+				this.contentChanges++;
+				this.jsonText.innerHTML = "<b>Input Modification Count:</b> " + this.contentChanges + " <br><br><b>JSON Output:</b><br>" + JSON.stringify(project.generateJSON());
 			};
 			this.project = project;
-
-
-			var seeeSurvey = new survey();
-			seeeSurvey.addChapter(new chapter());
-			seeeSurvey.addChapter(new chapter());
-			seeeSurvey.addChapter(new chapter());
-			seeeSurvey.setfusionTableID("SAJsdasdasdaISA");
-
-			this.surveyView = new surveyView(seeeSurvey, this);
+			this.surveyView = new surveyView(new survey(), this);
 			this.trackerView = new trackerView(new tracker(), this);
-			var div = document.createElement('div');
-			div.className = "project";
-			div.id = "project";
-			div.appendChild(this.surveyView.getView());
-			div.appendChild(this.trackerView.getView());
-			var p = document.createElement("p")
-			var floatDiv = document.getElementById('JsonGoesHere');
-			var jsonText = document.createElement("div");
-			jsonText.style.cssText = 'font-size:0.75em';
-			floatDiv.appendChild(jsonText)
-			this.contentChanged();
+			this.contentChanges = 0;
+			this.initializeView();
 		}
 		function surveyView(survey, parentView){
          	this.initializeView = function(){
