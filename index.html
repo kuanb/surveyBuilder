@@ -245,7 +245,7 @@
 				var chapterContainerDIV = document.createElement('div');
          		chapterContainerDIV.className = "chapterContainerDIV";
 				var newChapterView = new chapterView(chapter, this);
-				chapterViews.push(newChapterView);
+				this.chapterViews.push(newChapterView);
 				var newChapterDIV = newChapterView.getView();
 				var eraseChapterButton = new button("remove", "", "Erase chapter");
 				var that = this;
@@ -261,7 +261,7 @@
 				var parentChilds = chapterDIV.parentNode.childNodes;
 				for (var i=0; i < parentChilds.length; i++){
 					if (parentChilds[i] == chapterDIV){
-						chapterViews.splice(i,1);
+						this.chapterViews.splice(i,1);
 						break
 					}
 				}
@@ -270,8 +270,8 @@
 			}
 			this.contentChanged = function(){
 				var changedChapters = [];
-				for(i=0; i<chapterViews.length; i++){
-					changedChapters[i] = chapterViews[i].getChapter();
+				for(i=0; i<this.chapterViews.length; i++){
+					changedChapters[i] = this.chapterViews[i].getChapter();
 				}
 				survey.setChapters(changedChapters);
 				this.survey.setfusionTableID(this.fusionTableIDInput.value);
@@ -282,7 +282,7 @@
 			}
 			this.parentView = parentView;
 			this.survey = survey;
-			var chapterViews = []; // Instances of chapters
+			this.chapterViews = []; // Instances of chapters
 			this.div = null;
 			this.initializeView();
 		}
