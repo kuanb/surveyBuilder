@@ -391,63 +391,78 @@
 		};
 
 		function answerArrayView(answerArray, parentView, canHaveJumps){
-			this.canHaveJumps = canHaveJumps;
-			var answerViews = []; //Array of question Views objects
-			var div = document.createElement('div');
-			div.className = "answersContainerDIV";
-			var answersArrayContainer = document.createElement('div');
-			answersArrayContainer.className = "answersArrayContainerDIV";
-			var addAnswerButton = new button("add", "", "Add answer");
-			var that = this;
-			addAnswerButton.onclick = function(){
-				that.addAnswer(new answer());
-         	};
-         	div.appendChild(answersArrayContainer);
-         	div.appendChild(addAnswerButton);
-         	this.updateContent = function(answerArray){
-	
+			this.initializeView = function(){
+         		this.answerViews = []; //Array of question Views objects
+				this.div = document.createElement('div');
+				this.div.className = "answersContainerDIV";
+				this.answersArrayContainer = document.createElement('div');
+				this.answersArrayContainer.className = "this.answersArrayContainerDIV";
+				this.addAnswerButton = new button("add", "", "Add answer");
+				var that = this;
+				this.addAnswerButton.onclick = function(){
+					that.addAnswer(new answer());
+					that.contentChanged();
+	         	};
+	         	this.div.appendChild(this.answersArrayContainer);
+	         	this.div.appendChild(this.addAnswerButton);
+	        }
+	        this.updateContent = function(answerArray){
+	        	if (answerArray != this.getAnswers()){	
+         			this.AnswerViews = [];
+         			while (this.answersArrayContainer.firstChild){
+         				this.answersArrayContainer.removeChild(this.answersArrayContainer.firstChild);
+         			}
+         			this.answerArray = answerArray;
+         			for (var i = 0; i < this.answerArray.length; i++) {
+         				this.addAnswer(this.answerArray[i]);
+         			};
+         		}
 			}         	
 			this.addAnswer = function(answer){
 				var answerContainerDIV = document.createElement('div');
          		answerContainerDIV.className = "answerContainerDIV";
 				var newAnswerView = new answerView(answer, this, this.canHaveJumps);
-				answerViews.push(newAnswerView);
+				this.answerViews.push(newAnswerView);
 				var newAnswerDIV = newAnswerView.getView();
 				var eraseAnswerButton = new button("remove", "", "Erase answer");
-				var that = this;
 				answerContainerDIV.appendChild(eraseAnswerButton);
 				answerContainerDIV.appendChild(newAnswerDIV);
-				answersArrayContainer.appendChild(answerContainerDIV);
+				this.answersArrayContainer.appendChild(answerContainerDIV);
 				newAnswerView.initialize();
+				var that = this;
 				eraseAnswerButton.onclick = function(){
             		that.eraseAnswer(answerContainerDIV);
             	};
-            	this.contentChanged();
 			};
 			this.eraseAnswer = function(answerDIV){
 				var parentChilds = answerDIV.parentNode.childNodes;
 				for (var i=0; i < parentChilds.length; i++){
 					if (parentChilds[i] == answerDIV){
-						answerViews.splice(i,1);
+						this.answerViews.splice(i,1);
 						break
 					}
 				}
-				answersArrayContainer.removeChild(answerDIV);
+				this.answersArrayContainer.removeChild(answerDIV);
 				this.contentChanged();
 			};
 			this.contentChanged = function(){
 				parentView.contentChanged();
 			};	
 			this.getView = function(){
-				return div;
+				return this.div;
 			}
 			this.getAnswers = function(){
 				var answers = [];
-				for(i=0; i<answerViews.length; i++){
-					answers[i] = answerViews[i].getAnswer();
+				for(i=0; i<this.answerViews.length; i++){
+					answers[i] = this.answerViews[i].getAnswer();
 				}
 				return answers;
 			}
+			this.answerArray = answerArray;
+			this.parentView = parentView;
+			this.canHaveJumps = canHaveJumps;
+			this.initializeView();
+			this.updateContent(this.answerArray);
 		}
 		function answerView(answer, parentView, canHaveJump){
 			this.canHaveJump = canHaveJump;
@@ -546,7 +561,7 @@
 			}
 			this.contentChanged = function(){
 				this.chapter.setQuestions(this.questionArrayView.getQuestions());
-				this.chapter.setTitle(titleInput.value); 
+				this.chapter.setTitle(this.titleInput.value); 
 				this.parentView.contentChanged();
 			};
 			this.chapter = chapter;
@@ -745,7 +760,6 @@
 				}				
 			}
 			this.addAnswerArray = function(){
-				this.removeAnswerArray();
 				if (this.answerArrayView == null){
 					var canHaveJump = false;
 					if((this.questionKindDropDown.options[this.questionKindDropDown.selectedIndex].value == this.questionKinds.MULTIPLE_CHOICE["jsonName"]) && !this.inLoop){
