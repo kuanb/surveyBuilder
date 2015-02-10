@@ -115,7 +115,7 @@
 	<script src="js/bootstrap.min.js"></script>
 	<script src="js/bootstrap-switch.min.js"></script>
     <script language="javascript">
-    	var superString = '{"Survey":{"Chapters":[{"Chapter":"Chapter 2","Questions":[{"Question":"How many children do you have?","id":"q11","Kind":"LP","Jump":null,"Questions":[]},{"Question":"Order the elements of this list in order of importance for his or her well being","id":"q16","Kind":"OL","Jump":null,"Questions":[]},{"Question":"How many children do you have?","id":"q17","Kind":"LP","Jump":null,"Questions":[]},{"Question":"Order the elements of this list in order of importance for his or her well being","id":"q19","Kind":"OL","Jump":null,"Questions":[]},{"Question":"How many children do you have?","id":"q20","Kind":"LP","Jump":null,"Questions":[]},{"Question":"Order the elements of this list in order of importance for his or her well being","id":"q22","Kind":"OL","Jump":null,"Questions":[]}]}],"TableID":"11lGsm8B2SNNGmEsTmuGVrAy1gcJF9TQBo3G1Vw0"},"Tracker":{"Questions":[{"Question":"Bus","id":"q1","Kind":"MC","Jump":null,"Questions":[]},{"Question":"Passenger total","id":"q2","Kind":"ON","Jump":null,"Questions":[]}],"TableID":"1Q2mr8ni5LTxtZRRi3PNSYxAYS8HWikWqlfoIUK4"}}'
+    	var superString = '{"Survey":{"Chapters":[{"Chapter":"Chapter 2","Questions":[{"id":"q11","Question":"How many children do you have?","Kind":"LP","Questions":[{"id":"q12","Question":"Does he or she live with you?","Kind":"MC","Other":true,"Answers":[{"Answer":"Yes"},{"Answer":"No"}]},{"id":"q13","Question":"What’s his or her age?","Kind":"ON"},{"id":"q14","Question":"Take a picture of him or her.","Kind":"IM"},{"id":"q15","Question":"What cartoon does he or she like?","Kind":"CB","Other":true,"Answers":[{"Answer":"Pokémon"},{"Answer":"Spirited Away"},{"Answer":"My Little Pony"}]}]},{"id":"q16","Question":"Order the elements of this list in order of importance for his or her well being","Kind":"OL","Answers":[{"Answer":"Nutrition"},{"Answer":"Education"},{"Answer":"Leisure time"}]},{"id":"q17","Question":"How many children do you have?","Kind":"LP","Questions":[{"id":"q18","Question":"SEEEEE?","Kind":"MC","Other":true,"Answers":[{"Answer":"Yes"},{"Answer":"No"}]}]},{"id":"q19","Question":"Order the elements of this list in order of importance for his or her well being","Kind":"OL","Answers":[{"Answer":"Nutrition"},{"Answer":"Education"},{"Answer":"Leisure time"}]},{"id":"q20","Question":"How many children do you have?","Kind":"LP","Questions":[{"id":"q21","Question":"SEEEEE?","Kind":"CB","Other":true,"Answers":[{"Answer":"Yes"},{"Answer":"No"}]}]},{"id":"q22","Question":"Order the elements of this list in order of importance for his or her well being","Kind":"OL","Answers":[{"Answer":"Nutrition"},{"Answer":"Education"},{"Answer":"Leisure time"}]}]}],"TableID":"11lGsm8B2SNNGmEsTmuGVrAy1gcJF9TQBo3G1Vw0"},"Tracker":{"Questions":[{"id":"q1","Question":"Bus","Kind":"MC","Other":true,"Answers":[{"Answer":"Route 15"},{"Answer":"Route 64"}]},{"id":"q2","Question":"Passenger total","Kind":"ON"}],"TableID":"1Q2mr8ni5LTxtZRRi3PNSYxAYS8HWikWqlfoIUK4"}}'
     	var projectTest = new project();
     	projectTest.constructFromString(superString);
     	console.log(JSON.stringify(projectTest.generateJSON()));
@@ -619,6 +619,7 @@
          			this.updateQuestionKind(this.question.getKind());
          		}
 			} 			
+
 			this.initializeView = function(){
 				this.div = document.createElement('div');
 				this.div.className = "question";
@@ -691,7 +692,7 @@
 					this.question.setOtherEnabled(null);
 				}
 				this.question.setKind(this.questionKindDropDown.options[this.questionKindDropDown.selectedIndex].value);
-				parentView.contentChanged();
+				this.parentView.contentChanged();
 			};
 			this.getQuestion = function(){
 				return this.question;
@@ -731,7 +732,6 @@
 						break;
 					// We need a question array
 					case this.questionKinds.LOOP["jsonName"]:
-						console.log("wasap")
 						this.removeOtherOption();
 						this.removeAnswerArray();
 						this.addQuestionArray();
@@ -740,8 +740,6 @@
 			}
 			this.addQuestionArray = function(){
 				if (this.questionArrayView == null){
-					console.log("sadsadsaf")
-					loopQuestions = this.question.getLoopQuestions();
 					this.questionArrayView = new questionArrayView(this.question.getLoopQuestions(), this, true);
 					this.div.appendChild(this.questionArrayView.getView());
 				}				
@@ -908,11 +906,13 @@
   					questionJSON["Answers"] = answersArray;
   				}
   				if(this.loopQuestions != null){
-  					questionsJSONArray = [];
+  					var questionsJSONArray = [];
   					for(var i=0; i < this.loopQuestions.length; i++){
 						questionsJSONArray.push(this.loopQuestions[i].generateJSON());
 					}
-					questionJSON["Questions"] = questionsJSONArray;
+					if (questionsJSONArray.length > 0){
+						questionJSON["Questions"] = questionsJSONArray;
+					}
   				}
   				return questionJSON;
   			}
@@ -947,20 +947,20 @@
   				if("id" in object){
   					this.questionID = object["id"];
   				}
-  				if((this.questionKind === qK.MULTIPLE_CHOICE.jsonName) || (this.questionKind === qK.CHECKBOX.jsonName)){
+  				if((this.kind === qK.MULTIPLE_CHOICE.jsonName) || (this.questionKind === qK.CHECKBOX.jsonName)){
   					if("Other" in object){
   						this.otherEnabled = (object["Other"] == "true");
   					} else {
   						this.otherEnabled = false;
   					}
   				}
-  				if(((this.questionKind === qK.MULTIPLE_CHOICE.jsonName) || (this.questionKind === qK.CHECKBOX.jsonName)) || (this.questionKind === qK.ORDERED.jsonName)){
+  				if(((this.kind === qK.MULTIPLE_CHOICE.jsonName) || (this.questionKind === qK.CHECKBOX.jsonName)) || (this.kind === qK.ORDERED.jsonName)){
   					if("Answers" in object){
   						var objectAnswers = object["Answers"];
   						if(Array.isArray(objectAnswers)){
   							this.answers = [];
   							for(var i=0; i < objectAnswers.length; i++){
-  								this.answers.push(new Answer());
+  								this.answers.push(new answer());
   								this.answers[i].constructFromJSON(objectAnswers[i]);
   							}
   						}  else {
@@ -970,14 +970,14 @@
   						console.log("No answers in question object :-(");
   					}
   				}
-  				if((this.questionKind === qK.LOOP.jsonName) && (this.inLoop == false)){
+  				if((this.kind === qK.LOOP.jsonName) && (this.inLoop == false)){
   					if("Questions" in object){
   						var objectQuestions = object["Questions"];
   						if(Array.isArray(objectQuestions)){
   							this.loopQuestions = [];
   							for(var i=0; i < objectQuestions.length; i++){
-  								this.loopQuestions.push(new Question(true));
-  								this.questions[i].constructFromJSON(objectQuestions[i]);
+  								this.loopQuestions.push(new question(true));
+  								this.loopQuestions[i].constructFromJSON(objectQuestions[i]);
   							}
   						}  else {
   							console.log("Questions in loop questions is not an Array :-(");
@@ -1078,7 +1078,9 @@
 					questionsJSONArray.push(this.questions[i].generateJSON());
 				}
 				chapterJSON["Chapter"] = this.title;
-				chapterJSON["Questions"] = questionsJSONArray;
+				if (questionsJSONArray.length > 0){
+					chapterJSON["Questions"] = questionsJSONArray;
+				}
 				return chapterJSON;
   			}
   			this.constructFromJSON = function(object){
