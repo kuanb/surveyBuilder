@@ -617,8 +617,8 @@
 			this.updateContent(this.tracker);
 		}
 		function questionView(question, parentView, inLoop) {
-			this.question = question;
 			this.updateContent = function(question){
+				this.question = question;
 				if (this.questionInput.value != this.question.getQuestionText()){
          			this.questionInput.value = this.question.getQuestionText();
          		}
@@ -636,6 +636,13 @@
          			this.questionKindDropDown.selectedIndex = indexToSelect;
          			this.updateQuestionKind(this.question.getKind());
          		}
+/*         		console.log(this.question.getJumpID());
+         		if (this.question.getJumpID() != null){
+         			this.jumpCheckbox.getView().checked = true;
+         		} else {
+         			this.jumpCheckbox.getView().checked = false;
+         		}
+         		this.toggleJumpOption();*/
 			} 			
 
 			this.initializeView = function(){
