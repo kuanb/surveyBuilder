@@ -337,11 +337,12 @@
          				this.questionsArrayContainer.removeChild(this.questionsArrayContainer.firstChild);
          			}
          			this.questionArray = questionArray;
-         			for (var i = 0; i < this.questionArray.length; i++) {
-         				this.addQuestion(this.questionArray[i]);
-         			};
+         			if(this.questionArray != null){
+                  		for (var i = 0; i < this.questionArray.length; i++) {
+         					this.addQuestion(this.questionArray[i]);
+         				};				
+         			}
          		}
-
 			}
 			this.addQuestion = function(question){
 				var questionContainerDIV = document.createElement('div');
@@ -413,9 +414,11 @@
          				this.answersArrayContainer.removeChild(this.answersArrayContainer.firstChild);
          			}
          			this.answerArray = answerArray;
-         			for (var i = 0; i < this.answerArray.length; i++) {
-         				this.addAnswer(this.answerArray[i]);
-         			};
+         			if(answerArray != null){
+         				for (var i = 0; i < this.answerArray.length; i++) {
+         					this.addAnswer(this.answerArray[i]);
+         				};
+         			}
          		}
 			}         	
 			this.addAnswer = function(answer){
