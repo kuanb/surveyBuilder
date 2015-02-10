@@ -365,6 +365,8 @@
 				questionContainerDIV.appendChild(eraseQuestionButton);
 				questionContainerDIV.appendChild(newQuestionDIV);
 				this.questionsArrayContainer.appendChild(questionContainerDIV);
+				newQuestionView.initializeView();
+				newQuestionView.updateContent(newQuestionView.getQuestion());
 				eraseQuestionButton.onclick = function(){
 					that.eraseQuestion(questionContainerDIV);
 				};
@@ -656,7 +658,6 @@
 			} 			
 
 			this.initializeView = function(){
-				this.div = document.createElement('div');
 				this.div.className = "question";
 				this.IDInput = document.createElement("input");
 				this.IDInput.type = "text";
@@ -687,6 +688,7 @@
 				};
 
 				this.jumpCheckbox = new checkbox("", "Jump", "jumpEnabled");
+				this.jumpCheckbox.getView.checked
 				this.jumpCheckbox.getView().onchange = function(){
 					that.toggleJumpOption();
 				};
@@ -695,7 +697,6 @@
 				this.div.appendChild(this.questionInput);	
 				if (!this.inLoop){
 					this.jumpCheckbox.addTo(this.div);
-					this.jumpCheckbox.setCheckedState(false);
 				}
 				this.div.appendChild(this.jumpInput);	
 				this.div.appendChild(this.questionKindDropDown);	
@@ -831,8 +832,9 @@
 			this.questionKindDropDown = null;
 			this.jumpInput = null;
 			this.jumpCheckbox = null;
-			this.initializeView();
-			this.updateContent(this.question);
+			this.div = document.createElement('div');
+			//this.initializeView();
+			//this.updateContent(this.question);
 		};
 
 		// Part of the code for the models of the data
