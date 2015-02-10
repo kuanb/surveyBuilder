@@ -968,7 +968,8 @@
   						this.otherEnabled = false;
   					}
   				}
-  				if(((this.kind === qK.MULTIPLE_CHOICE.jsonName) || (this.questionKind === qK.CHECKBOX.jsonName)) || (this.kind === qK.ORDERED.jsonName)){
+  				if(((this.kind === qK.MULTIPLE_CHOICE.jsonName) || (this.kind === qK.CHECKBOX.jsonName)) || (this.kind === qK.ORDERED.jsonName)){
+  					console.log("After " + this.kind);
   					if("Answers" in object){
   						var objectAnswers = object["Answers"];
   						if(Array.isArray(objectAnswers)){
