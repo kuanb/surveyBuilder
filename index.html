@@ -115,9 +115,6 @@
 	<script src="js/bootstrap.min.js"></script>
 	<script src="js/bootstrap-switch.min.js"></script>
     <script language="javascript">
-
-
-
     	var superString = '{"Survey":{"Chapters":[{"Chapter":"Chapter 2","Questions":[{"Question":"How many children do you have?","id":"q11","Kind":"LP","Jump":null,"Questions":[]},{"Question":"Order the elements of this list in order of importance for his or her well being","id":"q16","Kind":"OL","Jump":null,"Questions":[]},{"Question":"How many children do you have?","id":"q17","Kind":"LP","Jump":null,"Questions":[]},{"Question":"Order the elements of this list in order of importance for his or her well being","id":"q19","Kind":"OL","Jump":null,"Questions":[]},{"Question":"How many children do you have?","id":"q20","Kind":"LP","Jump":null,"Questions":[]},{"Question":"Order the elements of this list in order of importance for his or her well being","id":"q22","Kind":"OL","Jump":null,"Questions":[]}]}],"TableID":"11lGsm8B2SNNGmEsTmuGVrAy1gcJF9TQBo3G1Vw0"},"Tracker":{"Questions":[{"Question":"Bus","id":"q1","Kind":"MC","Jump":null,"Questions":[]},{"Question":"Passenger total","id":"q2","Kind":"ON","Jump":null,"Questions":[]}],"TableID":"1Q2mr8ni5LTxtZRRi3PNSYxAYS8HWikWqlfoIUK4"}}'
     	var projectTest = new project();
     	projectTest.constructFromString(superString);
@@ -611,6 +608,14 @@
          			this.IDInput.value = this.question.getQuestionID();
          		}         
          		if (this.questionKindDropDown.options[this.questionKindDropDown.selectedIndex].value != this.question.getKind()){
+         			var indexToSelect;
+         			for (var i = this.questionKindDropDown.options.length - 1; i >= 0; i--) {
+         				if (this.questionKindDropDown.options[i].value == this.question.getKind()){
+         					indexToSelect = i;
+         					break;
+         				}
+         			};
+         			this.questionKindDropDown.selectedIndex = indexToSelect;
          			this.updateQuestionKind(this.question.getKind());
          		}
 			} 			
@@ -633,7 +638,7 @@
 
 				this.questionKindDropDown = new select("", "", this.questionKinds.getNames(), this.questionKinds.getJsonNames());
 				this.questionKindDropDown.onchange = function(){
-					that.updateQuestionKind(this.options[this.questionKindDropDown.selectedIndex].value);
+					that.updateQuestionKind(this.options[this.selectedIndex].value);
 					that.contentChanged();
 				};
 
@@ -708,32 +713,34 @@
 					case this.questionKinds.OPEN_TEXT["jsonName"]:
 					case this.questionKinds.OPEN_NUMBER["jsonName"]: 
 					case this.questionKinds.IMAGE["jsonName"]:
-					this.removeOtherOption();
-					this.removeAnswerArray();
-					this.removeQuestionArray();
-					break;
+						this.removeOtherOption();
+						this.removeAnswerArray();
+						this.removeQuestionArray();
+						break;
 					// We need an answers array
 					case this.questionKinds.ORDERED["jsonName"]:
-					this.removeQuestionArray();
-					this.removeOtherOption();
-					this.addAnswerArray();	
-					break;					
+						this.removeQuestionArray();
+						this.removeOtherOption();
+						this.addAnswerArray();	
+						break;					
 					case this.questionKinds.MULTIPLE_CHOICE["jsonName"]:
 					case this.questionKinds.CHECKBOX["jsonName"]:
-					this.addOtherOption();
-					this.removeQuestionArray();
-					this.addAnswerArray();	
-					break;
+						this.addOtherOption();
+						this.removeQuestionArray();
+						this.addAnswerArray();	
+						break;
 					// We need a question array
 					case this.questionKinds.LOOP["jsonName"]:
-					this.removeOtherOption();
-					this.removeAnswerArray();
-					this.addQuestionArray();
-					break;	
+						console.log("wasap")
+						this.removeOtherOption();
+						this.removeAnswerArray();
+						this.addQuestionArray();
+						break;	
 				}
 			}
 			this.addQuestionArray = function(){
 				if (this.questionArrayView == null){
+					console.log("sadsadsaf")
 					loopQuestions = this.question.getLoopQuestions();
 					this.questionArrayView = new questionArrayView(this.question.getLoopQuestions(), this, true);
 					this.div.appendChild(this.questionArrayView.getView());
@@ -785,6 +792,7 @@
 			this.questionKinds = new questionKind(this.inLoop);
 			this.answerArrayView = null;
 			this.questionArrayView = null;
+			this.questionKindDropDown = null;
 			this.otherCheckbox = null;
 			this.IDInput = null;
 			this.questionInput = null;
