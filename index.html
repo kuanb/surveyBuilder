@@ -175,6 +175,16 @@
     		this.getView = function(){
     			return this.checkbox;
     		}
+    		this.toggleState = function(){
+    			console.log("before" + this.checkbox.checked);
+    			$(this.checkbox).bootstrapSwitch('toggleState');
+    			console.log("after" + this.checkbox.checked);
+    		}
+    		this.setCheckedState = function(state){
+    			if(this.checkbox.checked != state){
+    				this.toggleState();
+    			}
+    		}
 
     	}
     	// Here be the Views
@@ -636,7 +646,7 @@
          			this.questionKindDropDown.selectedIndex = indexToSelect;
          			this.updateQuestionKind(this.question.getKind());
          		}
-/*         		console.log(this.question.getJumpID());
+        		/*console.log(this.question.getJumpID());
          		if (this.question.getJumpID() != null){
          			this.jumpCheckbox.getView().checked = true;
          		} else {
@@ -677,7 +687,6 @@
 				};
 
 				this.jumpCheckbox = new checkbox("", "Jump", "jumpEnabled");
-				this.jumpCheckbox.getView().checked = false;
 				this.jumpCheckbox.getView().onchange = function(){
 					that.toggleJumpOption();
 				};
@@ -686,6 +695,7 @@
 				this.div.appendChild(this.questionInput);	
 				if (!this.inLoop){
 					this.jumpCheckbox.addTo(this.div);
+					this.jumpCheckbox.setCheckedState(false);
 				}
 				this.div.appendChild(this.jumpInput);	
 				this.div.appendChild(this.questionKindDropDown);	
@@ -979,7 +989,6 @@
   					}
   				}
   				if(((this.kind === qK.MULTIPLE_CHOICE.jsonName) || (this.kind === qK.CHECKBOX.jsonName)) || (this.kind === qK.ORDERED.jsonName)){
-  					console.log("After " + this.kind);
   					if("Answers" in object){
   						var objectAnswers = object["Answers"];
   						if(Array.isArray(objectAnswers)){
