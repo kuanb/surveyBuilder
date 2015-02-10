@@ -516,34 +516,46 @@
 			}
 		};
 		function chapterView(chapter, parentView) {
-			this.chapter = chapter;
-		  	var div = document.createElement('div');
-			div.className = "chapter";
-			var that = this;
-			var titleInput = document.createElement("input");
-			titleInput.type = "text";
-			titleInput.className = "form-control"
-			titleInput.oninput=function(){
-				that.contentChanged();
-			};
-			div.appendChild(titleInput);
-			this.questionArrayView = new questionArrayView(this.chapter.getQuestions(), this, false);
-			div.appendChild(this.questionArrayView.getView());
-
-         	this.updateContent = function(chapter){
-	
-			}  				
+			this.updateContent = function(chapter){
+         		if (this.titleInput.value != this.chapter.getTitle()){
+         			this.titleInput.value = this.chapter.getTitle();
+         		}				
+				if (this.questionArrayView != null){
+					if(this.chapter.getQuestions() != this.questionArrayView.getQuestions()){
+						this.questionArrayView.updateContent(this.chapter.getQuestions);
+					}
+				} else {
+					this.questionArrayView = new questionArrayView(this.chapter.getQuestions(), this, false);
+					this.div.appendChild(this.questionArrayView.getView());
+				}
+			}  			
+			this.initializeView = function(){
+				this.div = document.createElement('div');
+				this.div.className = "chapter";
+				var that = this;
+				this.titleInput = document.createElement("input");
+				this.titleInput.type = "text";
+				this.titleInput.className = "form-control"
+				this.titleInput.oninput=function(){
+					that.contentChanged();
+				};
+				this.div.appendChild(this.titleInput);
+			}	
 			this.getView = function(){
-				return div;
+				return this.div;
 			}
 			this.getChapter = function(){
-				return chapter;
+				return this.chapter;
 			}
 			this.contentChanged = function(){
 				this.chapter.setQuestions(this.questionArrayView.getQuestions());
 				this.chapter.setTitle(titleInput.value); 
-				parentView.contentChanged();
+				this.parentView.contentChanged();
 			};
+			this.chapter = chapter;
+			this.parentView = parentView;
+			this.initializeView();
+			this.updateContent(this.chapter);
 		};
 		function trackerView(tracker, parentView){
 			this.initializeView = function(){
@@ -590,8 +602,17 @@
 			this.updateContent(this.tracker);
 		}
 		function questionView(question, parentView, inLoop) {
+			this.question = question;
 			this.updateContent = function(question){
-				
+				if (this.questionInput.value != this.question.getQuestionText()){
+         			this.questionInput.value = this.question.getQuestionText();
+         		}
+				if (this.IDInput.value != this.question.getQuestionID()){
+         			this.IDInput.value = this.question.getQuestionID();
+         		}         
+         		if (this.questionKindDropDown.options[this.questionKindDropDown.selectedIndex].value != this.question.getKind()){
+         			this.updateQuestionKind(this.question.getKind());
+         		}
 			} 			
 			this.initializeView = function(){
 				this.div = document.createElement('div');
@@ -599,6 +620,7 @@
 				this.IDInput = document.createElement("input");
 				this.IDInput.type = "text";
 				this.IDInput.className = "form-control"
+				var that = this;
 				this.IDInput.oninput=function(){
 					that.contentChanged();
 				};
@@ -609,9 +631,9 @@
 					that.contentChanged();
 				};
 
-				questionKindDropDown = new select("", "", this.questionKinds.getNames(), this.questionKinds.getJsonNames());
-				questionKindDropDown.onchange = function(){
-					that.updateQuestionKind(this.options[questionKindDropDown.selectedIndex].value);
+				this.questionKindDropDown = new select("", "", this.questionKinds.getNames(), this.questionKinds.getJsonNames());
+				this.questionKindDropDown.onchange = function(){
+					that.updateQuestionKind(this.options[this.questionKindDropDown.selectedIndex].value);
 					that.contentChanged();
 				};
 
@@ -635,7 +657,7 @@
 					this.jumpCheckbox.addTo(this.div);
 				}
 				this.div.appendChild(this.jumpInput);	
-				this.div.appendChild(questionKindDropDown);	
+				this.div.appendChild(this.questionKindDropDown);	
 			}
 			this.getView = function(){
 				return this.div;
@@ -663,7 +685,7 @@
 				} else{
 					this.question.setOtherEnabled(null);
 				}
-				this.question.setKind(questionKindDropDown.options[questionKindDropDown.selectedIndex].value);
+				this.question.setKind(this.questionKindDropDown.options[this.questionKindDropDown.selectedIndex].value);
 				parentView.contentChanged();
 			};
 			this.getQuestion = function(){
@@ -721,7 +743,7 @@
 				this.removeAnswerArray();
 				if (this.answerArrayView == null){
 					var canHaveJump = false;
-					if((questionKindDropDown.options[questionKindDropDown.selectedIndex].value == this.questionKinds.MULTIPLE_CHOICE["jsonName"]) && !this.inLoop){
+					if((this.questionKindDropDown.options[this.questionKindDropDown.selectedIndex].value == this.questionKinds.MULTIPLE_CHOICE["jsonName"]) && !this.inLoop){
 						canHaveJump = true;
 					}
 					this.answerArrayView = new answerArrayView(this.question.getAnswers(), this, canHaveJump);
@@ -766,7 +788,7 @@
 			this.otherCheckbox = null;
 			this.IDInput = null;
 			this.questionInput = null;
-			questionKindDropDown = null;
+			this.questionKindDropDown = null;
 			this.jumpInput = null;
 			this.jumpCheckbox = null;
 			this.initializeView();
@@ -1020,7 +1042,7 @@
 		  	this.title = null; // String
 		  	this.questions = []; //Array of question objects
 		  	this.getTitle = function() {
-		    	return title;
+		    	return this.title;
 			};
 			this.setTitle = function(title) {
 				this.title = title;
@@ -1032,13 +1054,13 @@
 				this.questions = questions;
 			};
 			this.addQuestion = function(newQuestion){
-				questions.push(newQuestion);
+				this.questions.push(newQuestion);
 			};
 			this.getQuestionCount = function() {
-				if (questions == null){
+				if (this.questions == null){
 					return 0
 				} else {
-					return questions.length;
+					return this.questions.length;
 				}
   			};
   			this.generateJSON = function(){
