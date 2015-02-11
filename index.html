@@ -443,7 +443,6 @@
 				answerContainerDIV.appendChild(eraseAnswerButton);
 				answerContainerDIV.appendChild(newAnswerDIV);
 				this.answersArrayContainer.appendChild(answerContainerDIV);
-				newAnswerView.initialize();
 				var that = this;
 				eraseAnswerButton.onclick = function(){
             		that.eraseAnswer(answerContainerDIV);
@@ -480,67 +479,72 @@
 			this.updateContent(this.answerArray);
 		}
 		function answerView(answer, parentView, canHaveJump){
-			this.canHaveJump = canHaveJump;
-			this.answer = answer;
-			this.parentView = parentView;
-			var jumpCheckbox = null;
-			var answerInput = null;
-			var jumpInput = null;
-			var div = document.createElement('div');
-			div.className = "answer";
-			var that = this;
-			this.initialize = function(){
-				answerInput = document.createElement("input");
-				answerInput.type = "text";
-				answerInput.className = "form-control";
-				answerInput.oninput=function(){
+			this.initializeView = function(){
+				this.div = document.createElement('div');
+				this.div.className = "answer";
+				var that = this;
+				this.answerInput = document.createElement("input");
+				this.answerInput.type = "text";
+				this.answerInput.className = "form-control";
+				this.answerInput.oninput=function(){
 					that.contentChanged();
 				};
-				jumpInput = document.createElement("input");
-				jumpInput.type = "text";
-				jumpInput.className = "form-control";
-				jumpInput.style.display = "none";
-				jumpInput.oninput=function(){
+				this.jumpInput = document.createElement("input");
+				this.jumpInput.type = "text";
+				this.jumpInput.className = "form-control";
+				this.jumpInput.style.display = "none";
+				this.jumpInput.oninput=function(){
 					that.contentChanged();
 				};
 
-				jumpCheckbox = new checkbox("", "Jump", "jumpEnabled");
-				jumpCheckbox.getView().checked = false;
-				jumpCheckbox.getView().onchange = function(){
+				this.jumpCheckbox = new checkbox("", "Jump", "jumpEnabled");
+				this.jumpCheckbox.getView().checked = false;
+				this.jumpCheckbox.getView().onchange = function(){
 					that.toggleJumpOption();
 				};
 
-				div.appendChild(answerInput);
+				this.div.appendChild(this.answerInput);
 				if(canHaveJump){
-					jumpCheckbox.addTo(div);
-					div.appendChild(jumpInput);	
+					this.jumpCheckbox.addTo(this.div);
+					this.div.appendChild(this.jumpInput);	
 				};
 			};
          	this.updateContent = function(answer){
-	
+         		this.answer = answer;
+         		if (this.answerInput.value != this.answer.getAnswerText()){
+         			this.answerInput.value = this.answer.getAnswerText();
+         		}	
 			}  			
 			this.getView = function(){
-				return div;
+				return this.div;
 			};
 			this.contentChanged = function(){
-				this.answer.setAnswerText(answerInput.value); 
-				this.answer.setjumpID(jumpInput.value);	
+				this.answer.setAnswerText(this.answerInput.value); 
+				this.answer.setjumpID(this.jumpInput.value);	
 				parentView.contentChanged();
 			};
 			this.getAnswer = function(){
 				return this.answer;
 			};
 			this.toggleJumpOption = function(){
-				if(jumpCheckbox.isChecked()){
-					jumpInput.style.display = "inherit";
+				if(this.jumpCheckbox.isChecked()){
+					this.jumpInput.style.display = "inherit";
 				} else {
-					jumpInput.style.display = "none";
-					if (jumpInput.value != ""){
-						jumpInput.value = "";
+					this.jumpInput.style.display = "none";
+					if (this.jumpInput.value != ""){
+						this.jumpInput.value = "";
 						this.contentChanged();
 					}
 				}
 			}
+			this.canHaveJump = canHaveJump;
+			this.answer = answer;
+			this.parentView = parentView;
+			this.jumpCheckbox = null;
+			this.answerInput = null;
+			this.jumpInput = null;
+			this.initializeView();
+			this.updateContent(this.answer);
 		};
 		function chapterView(chapter, parentView) {
 			this.updateContent = function(chapter){
@@ -843,7 +847,7 @@
 			this.answerText = null; // String
 			this.jumpID = null; // String
 			this.getAnswerText = function() {
-				return answerText;
+				return this.answerText;
 			};
 			this.setAnswerText = function(answerText) {
 				this.answerText = answerText;
