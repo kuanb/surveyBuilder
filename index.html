@@ -703,7 +703,6 @@
 				};
 
 				this.jumpCheckbox = new checkbox("", "Jump", "jumpEnabled");
-				this.jumpCheckbox.getView.checked
 				this.jumpCheckbox.getView().onchange = function(){
 					that.toggleJumpOption();
 				};
@@ -948,7 +947,9 @@
   				questionJSON["Question"] = this.questionText;
   				questionJSON["id"] = this.questionID;
   				questionJSON["Kind"] = this.kind;
-  				questionJSON["Jump"] = this.jumpID;
+  				if (this.jumpID != null){
+  					questionJSON["Jump"] = this.jumpID;
+  				}
   				if (this.otherEnabled != null){
   					questionJSON["Other"] = this.otherEnabled;
   				}
