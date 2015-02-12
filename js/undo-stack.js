@@ -22,7 +22,7 @@ function undoStack(){
 	}
 	this.undo = function(){
 		this.stackIndex--;
-		//console.log(this.UStack.length);
+		console.log("undo lenght " + this.UStack.length + " index " + this.stackIndex);
 		return this.UStack[this.stackIndex];
 	}
 	this.redo = function(){
@@ -37,7 +37,8 @@ function undoStack(){
 		}
 	}
 	this.isUndoPossible = function(){
-		if(this.stackIndex < this.UStack.length){
+		console.log("is possible lenght " + this.UStack.length + " index " + this.stackIndex);
+		if((this.UStack.length > 1) && (this.stackIndex > 0)){
 			return true
 		} else {
 			return false

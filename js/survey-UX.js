@@ -103,6 +103,7 @@ function projectView(pr){
 		//console.log(newStackElement);
 		this.uStack.addToStack(newStackElement);
 		this.jsonText.innerHTML = "<b>Input Modification Count:</b> " + this.contentChanges + " <br><br><b>JSON Output:</b><br>" + JSON.stringify(this.pr.generateJSON());
+		this.undo.disabled = !that.uStack.isUndoPossible();
 	};
 	this.pr = pr;
 	this.contentChanges = -1;
@@ -117,7 +118,9 @@ function projectView(pr){
 		that.pr.constructFromString(JSON.stringify(undoStackElement.objectState.generateJSON()));
 		undoStackElement.view.updateContent(that.pr);
 		that.jsonText.innerHTML = "<b>Input Modification Count:</b> " + that.contentChanges + " <br><br><b>JSON Output:</b><br>" + JSON.stringify(that.pr.generateJSON());
+		that.undo.disabled = !that.uStack.isUndoPossible();
 	}
+	this.undo.disabled = true;
 	this.redo = document.getElementById("redo");
 	this.contentChanged();
 }
