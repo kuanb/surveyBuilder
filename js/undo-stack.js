@@ -30,7 +30,7 @@ function undoStack(){
 		return this.UStack[this.stackIndex];
 	}
 	this.isRedoPossible = function(){
-		if(this.stackIndex < this.UStack.length){
+		if(this.stackIndex < this.UStack.length - 1){
 			return true
 		} else {
 			return false

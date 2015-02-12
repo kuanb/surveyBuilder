@@ -104,6 +104,7 @@ function projectView(pr){
 		this.uStack.addToStack(newStackElement);
 		this.jsonText.innerHTML = "<b>Input Modification Count:</b> " + this.contentChanges + " <br><br><b>JSON Output:</b><br>" + JSON.stringify(this.pr.generateJSON());
 		this.undo.disabled = !that.uStack.isUndoPossible();
+		this.redo.disabled = !that.uStack.isRedoPossible();
 	};
 	this.pr = pr;
 	this.contentChanges = -1;
@@ -119,9 +120,19 @@ function projectView(pr){
 		undoStackElement.view.updateContent(that.pr);
 		that.jsonText.innerHTML = "<b>Input Modification Count:</b> " + that.contentChanges + " <br><br><b>JSON Output:</b><br>" + JSON.stringify(that.pr.generateJSON());
 		that.undo.disabled = !that.uStack.isUndoPossible();
+		that.redo.disabled = !that.uStack.isRedoPossible();
 	}
 	this.undo.disabled = true;
 	this.redo = document.getElementById("redo");
+	this.redo.onclick = function(){
+		var redoStackElement = that.uStack.redo();
+		that.pr = new project();
+		that.pr.constructFromString(JSON.stringify(redoStackElement.objectState.generateJSON()));
+		redoStackElement.view.updateContent(that.pr);
+		that.jsonText.innerHTML = "<b>Input Modification Count:</b> " + that.contentChanges + " <br><br><b>JSON Output:</b><br>" + JSON.stringify(that.pr.generateJSON());
+		that.undo.disabled = !that.uStack.isUndoPossible();
+		that.redo.disabled = !that.uStack.isRedoPossible();		
+	}
 	this.contentChanged();
 }
 function surveyView(survey, parentView){
