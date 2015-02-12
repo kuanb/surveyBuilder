@@ -116,6 +116,7 @@ function projectView(pr){
 		that.pr = new project();
 		that.pr.constructFromString(JSON.stringify(undoStackElement.objectState.generateJSON()));
 		undoStackElement.view.updateContent(that.pr);
+		that.contentChanges--;
 		that.jsonText.innerHTML = "<b>Input Modification Count:</b> " + that.contentChanges + " <br><br><b>JSON Output:</b><br>" + JSON.stringify(that.pr.generateJSON());
 		that.undo.disabled = !that.uStack.isUndoPossible();
 		that.redo.disabled = !that.uStack.isRedoPossible();
@@ -127,6 +128,7 @@ function projectView(pr){
 		that.pr = new project();
 		that.pr.constructFromString(JSON.stringify(redoStackElement.objectState.generateJSON()));
 		redoStackElement.view.updateContent(that.pr);
+		that.contentChanges++;
 		that.jsonText.innerHTML = "<b>Input Modification Count:</b> " + that.contentChanges + " <br><br><b>JSON Output:</b><br>" + JSON.stringify(that.pr.generateJSON());
 		that.undo.disabled = !that.uStack.isUndoPossible();
 		that.redo.disabled = !that.uStack.isRedoPossible();		
