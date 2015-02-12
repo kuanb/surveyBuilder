@@ -2,14 +2,11 @@ function undoStack(){
 	this.UStack = [];
 	this.stackIndex;
 	this.updateCall;
-	this.stackElement = function(view, object){
-		this.view = view;
-		this.object = object;
-	}
-	this.addToStack = function(stacKElement){
+	this.addToStack = function(sElement){
 		this.cleanForwardStack(this.stackIndex);
-		this.UStack.push(stackElement);
-		this.stackIndex = this.UStack.length;
+		this.UStack.push(sElement);
+		this.stackIndex = this.UStack.length -1;
+		//console.log(this.UStack.length);
 	}
 	this.cleanForwardStack = function(index){
 		for (var i = index + 1; i < this.UStack.length; i++) {
@@ -23,6 +20,7 @@ function undoStack(){
 	}
 	this.undo = function(){
 		this.stackIndex--
+		//console.log(this.UStack.length);
 		return this.UStack[this.stackIndex];
 	}
 	this.redo = function(){
@@ -36,4 +34,15 @@ function undoStack(){
 			return false
 		}
 	}
+	this.isUndoPossible = function(){
+		if(this.stacKIndex < this.UStack.length){
+			return true
+		} else {
+			return false
+		}		
+	}
 }
+function stackElement(view, objectState){
+		this.view = view;
+		this.objectState = objectState;
+	}

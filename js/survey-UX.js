@@ -61,7 +61,7 @@ function checkbox(kind, labelText, nodeClass){
 }
 // Here be the Views
 // !!/!T(&"#("/!(/T#")(/!=)/"=)(!)(YEU!")/H)"(UWE=")!"(!=)(!=#)(=))))
-function projectView(project){			
+function projectView(pr){			
 	this.initializeView = function(){
 		this.div = document.createElement('div');
 		this.div.className = "project";
@@ -71,15 +71,15 @@ function projectView(project){
 		this.jsonText.style.cssText = 'font-size:0.75em';
 		this.floatDiv.appendChild(this.jsonText)
 	}
-	this.updateContent = function(project){
-		this.project = project;
-		if (this.project.getSurvey() != null){
-			this.surveyView = new surveyView(this.project.getSurvey(), this);
+	this.updateContent = function(pr){
+		this.pr = pr;
+		if (this.pr.getSurvey() != null){
+			this.surveyView = new surveyView(this.pr.getSurvey(), this);
 		} else {
 			this.surveyView = new surveyView(new survey(), this);
 		}
-		if (this.project.getTracker() != null){
-			this.trackerView = new trackerView(this.project.getTracker(), this);
+		if (this.pr.getTracker() != null){
+			this.trackerView = new trackerView(this.pr.getTracker(), this);
 		} else {
 			this.trackerView = new trackerView(new tracker(), this);
 		}
@@ -93,17 +93,31 @@ function projectView(project){
 		return this.div;
 	};
 	this.contentChanged = function(){
-		this.project.setSurvey(this.surveyView.getSurvey());
-		this.project.setTracker(this.trackerView.getTracker());
+		this.pr.setSurvey(this.surveyView.getSurvey());
+		this.pr.setTracker(this.trackerView.getTracker());
 		this.contentChanges++;
-		this.jsonText.innerHTML = "<b>Input Modification Count:</b> " + this.contentChanges + " <br><br><b>JSON Output:</b><br>" + JSON.stringify(project.generateJSON());
+		var projectSnapShot = new project();
+		projectSnapShot.constructFromString(JSON.stringify(this.pr.generateJSON()));
+		var newStackElement = new stackElement(this, projectSnapShot);
+		//console.log(newStackElement);
+		this.uStack.addToStack(newStackElement);
+		this.jsonText.innerHTML = "<b>Input Modification Count:</b> " + this.contentChanges + " <br><br><b>JSON Output:</b><br>" + JSON.stringify(pr.generateJSON());
 	};
-	this.project = project;
+	this.pr = pr;
 	this.contentChanges = -1;
 	this.initializeView();
-	this.updateContent(this.project);
-	this.contentChanged();
+	this.updateContent(this.pr);
 	this.uStack = new undoStack(); 
+	this.undo = document.getElementById("undo");
+	that = this;
+	this.undo.onclick = function(){
+		undoStackElement = that.uStack.undo();
+		that.pr = undoStackElement.objectState;
+		undoStackElement.view.updateContent(that.pr);
+		that.jsonText.innerHTML = "<b>Input Modification Count:</b> " + that.contentChanges + " <br><br><b>JSON Output:</b><br>" + JSON.stringify(that.pr.generateJSON());
+	}
+	this.redo = document.getElementById("redo");
+	this.contentChanged();
 }
 function surveyView(survey, parentView){
 	this.initializeView = function(){
