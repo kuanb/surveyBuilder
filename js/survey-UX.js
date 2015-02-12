@@ -62,132 +62,133 @@ function checkbox(kind, labelText, nodeClass){
 // Here be the Views
 // !!/!T(&"#("/!(/T#")(/!=)/"=)(!)(YEU!")/H)"(UWE=")!"(!=)(!=#)(=))))
 function projectView(project){			
-this.initializeView = function(){
-	this.div = document.createElement('div');
-	this.div.className = "project";
-	this.div.id = "project";
-	this.floatDiv = document.getElementById('JsonGoesHere');
-	this.jsonText = document.createElement("div");
-	this.jsonText.style.cssText = 'font-size:0.75em';
-	this.floatDiv.appendChild(this.jsonText)
-}
-this.updateContent = function(project){
+	this.initializeView = function(){
+		this.div = document.createElement('div');
+		this.div.className = "project";
+		this.div.id = "project";
+		this.floatDiv = document.getElementById('JsonGoesHere');
+		this.jsonText = document.createElement("div");
+		this.jsonText.style.cssText = 'font-size:0.75em';
+		this.floatDiv.appendChild(this.jsonText)
+	}
+	this.updateContent = function(project){
+		this.project = project;
+		if (this.project.getSurvey() != null){
+			this.surveyView = new surveyView(this.project.getSurvey(), this);
+		} else {
+			this.surveyView = new surveyView(new survey(), this);
+		}
+		if (this.project.getTracker() != null){
+			this.trackerView = new trackerView(this.project.getTracker(), this);
+		} else {
+			this.trackerView = new trackerView(new tracker(), this);
+		}
+		while (this.div.firstChild){
+			this.div.removeChild(this.div.firstChild);
+		}				
+		this.div.appendChild(this.surveyView.getView());
+		this.div.appendChild(this.trackerView.getView());	
+	}
+	this.getView = function(){
+		return this.div;
+	};
+	this.contentChanged = function(){
+		this.project.setSurvey(this.surveyView.getSurvey());
+		this.project.setTracker(this.trackerView.getTracker());
+		this.contentChanges++;
+		this.jsonText.innerHTML = "<b>Input Modification Count:</b> " + this.contentChanges + " <br><br><b>JSON Output:</b><br>" + JSON.stringify(project.generateJSON());
+	};
 	this.project = project;
-	if (this.project.getSurvey() != null){
-		this.surveyView = new surveyView(this.project.getSurvey(), this);
-	} else {
-		this.surveyView = new surveyView(new survey(), this);
-	}
-	if (this.project.getTracker() != null){
-		this.trackerView = new trackerView(this.project.getTracker(), this);
-	} else {
-		this.trackerView = new trackerView(new tracker(), this);
-	}
-	while (this.div.firstChild){
-		this.div.removeChild(this.div.firstChild);
-	}				
-	this.div.appendChild(this.surveyView.getView());
-	this.div.appendChild(this.trackerView.getView());			
-}
-this.getView = function(){
-	return this.div;
-};
-this.contentChanged = function(){
-	this.project.setSurvey(this.surveyView.getSurvey());
-	this.project.setTracker(this.trackerView.getTracker());
-	this.contentChanges++;
-	this.jsonText.innerHTML = "<b>Input Modification Count:</b> " + this.contentChanges + " <br><br><b>JSON Output:</b><br>" + JSON.stringify(project.generateJSON());
-};
-this.project = project;
-this.contentChanges = -1;
-this.initializeView();
-this.updateContent(this.project);
-this.contentChanged();
+	this.contentChanges = -1;
+	this.initializeView();
+	this.updateContent(this.project);
+	this.contentChanged();
+	this.uStack = new undoStack(); 
 }
 function surveyView(survey, parentView){
-this.initializeView = function(){
-	this.div = document.createElement('div');
-	this.div.className = "survey";
-	var that = this;
-	this.addChapterButton = new button("add", "", "Add chapter");
-	this.addChapterButton.onclick = function(){
-		that.addChapter(new chapter());
-		that.contentChanged();
-	};
-	this.fusionTableIDInput = document.createElement("input");
-	this.fusionTableIDInput.type = "text";
-	this.fusionTableIDInput.className = "form-control"
-	this.fusionTableIDInput.oninput=function(){
-		that.contentChanged();
-	};
-	this.chaptersArrayContainerDiV = document.createElement('div');
-	this.chaptersArrayContainerDiV.className = "chaptersArrayContainerDiV";
-	this.chaptersContainerDIV = document.createElement('div');
-	this.chaptersContainerDIV.className = "chaptersContainerDIV";
-	this.chaptersContainerDIV.appendChild(this.chaptersArrayContainerDiV);
-	this.chaptersContainerDIV.appendChild(this.addChapterButton);
-	this.div.appendChild(this.fusionTableIDInput);
-	this.div.appendChild(this.chaptersContainerDIV);
-}
-this.updateContent = function(survey){
-	this.survey = survey;
-	if (this.fusionTableIDInput.value != this.survey.getfusionTableID()){
-		this.fusionTableIDInput.value = this.survey.getfusionTableID();
-	}
-	if (this.chapters != this.survey.getChapters()){	
-		this.chapterViews = [];
-		while (this.chaptersArrayContainerDiV.firstChild){
-			this.chaptersArrayContainerDiV.removeChild(this.chaptersArrayContainerDiV.firstChild);
-		}
-		this.chapters = this.survey.getChapters();
-		for (var i = 0; i < this.chapters.length; i++) {
-			this.addChapter(this.chapters[i]);
+	this.initializeView = function(){
+		this.div = document.createElement('div');
+		this.div.className = "survey";
+		var that = this;
+		this.addChapterButton = new button("add", "", "Add chapter");
+		this.addChapterButton.onclick = function(){
+			that.addChapter(new chapter());
+			that.contentChanged();
 		};
+		this.fusionTableIDInput = document.createElement("input");
+		this.fusionTableIDInput.type = "text";
+		this.fusionTableIDInput.className = "form-control"
+		this.fusionTableIDInput.oninput=function(){
+			that.contentChanged();
+		};
+		this.chaptersArrayContainerDiV = document.createElement('div');
+		this.chaptersArrayContainerDiV.className = "chaptersArrayContainerDiV";
+		this.chaptersContainerDIV = document.createElement('div');
+		this.chaptersContainerDIV.className = "chaptersContainerDIV";
+		this.chaptersContainerDIV.appendChild(this.chaptersArrayContainerDiV);
+		this.chaptersContainerDIV.appendChild(this.addChapterButton);
+		this.div.appendChild(this.fusionTableIDInput);
+		this.div.appendChild(this.chaptersContainerDIV);
 	}
-}	
-this.getView = function(){
-	return this.div;
-}
-this.addChapter = function(chapter){	
-	var chapterContainerDIV = document.createElement('div');
-	chapterContainerDIV.className = "chapterContainerDIV";
-	var newChapterView = new chapterView(chapter, this);
-	this.chapterViews.push(newChapterView);
-	var newChapterDIV = newChapterView.getView();
-	var eraseChapterButton = new button("remove", "", "Erase chapter");
-	var that = this;
-	chapterContainerDIV.appendChild(eraseChapterButton);
-	chapterContainerDIV.appendChild(newChapterDIV);
-	this.chaptersArrayContainerDiV.appendChild(chapterContainerDIV);
-	eraseChapterButton.onclick = function(){
-		that.eraseChapter(chapterContainerDIV);
+	this.updateContent = function(survey){
+		this.survey = survey;
+		if (this.fusionTableIDInput.value != this.survey.getfusionTableID()){
+			this.fusionTableIDInput.value = this.survey.getfusionTableID();
+		}
+		if (this.chapters != this.survey.getChapters()){	
+			this.chapterViews = [];
+			while (this.chaptersArrayContainerDiV.firstChild){
+				this.chaptersArrayContainerDiV.removeChild(this.chaptersArrayContainerDiV.firstChild);
+			}
+			this.chapters = this.survey.getChapters();
+			for (var i = 0; i < this.chapters.length; i++) {
+				this.addChapter(this.chapters[i]);
+			};
+		}
+	}	
+	this.getView = function(){
+		return this.div;
 	}
-}
-this.eraseChapter = function(chapterDIV){
-	var parentChilds = chapterDIV.parentNode.childNodes;
-	for (var i=0; i < parentChilds.length; i++){
-		if (parentChilds[i] == chapterDIV){
-			this.chapterViews.splice(i,1);
-			break
+	this.addChapter = function(chapter){	
+		var chapterContainerDIV = document.createElement('div');
+		chapterContainerDIV.className = "chapterContainerDIV";
+		var newChapterView = new chapterView(chapter, this);
+		this.chapterViews.push(newChapterView);
+		var newChapterDIV = newChapterView.getView();
+		var eraseChapterButton = new button("remove", "", "Erase chapter");
+		var that = this;
+		chapterContainerDIV.appendChild(eraseChapterButton);
+		chapterContainerDIV.appendChild(newChapterDIV);
+		this.chaptersArrayContainerDiV.appendChild(chapterContainerDIV);
+		eraseChapterButton.onclick = function(){
+			that.eraseChapter(chapterContainerDIV);
 		}
 	}
-	this.chaptersArrayContainerDiV.removeChild(chapterDIV);
-	this.contentChanged();
-}
-this.contentChanged = function(){
-	var changedChapters = [];
-	for(i=0; i<this.chapterViews.length; i++){
-		changedChapters[i] = this.chapterViews[i].getChapter();
+	this.eraseChapter = function(chapterDIV){
+		var parentChilds = chapterDIV.parentNode.childNodes;
+		for (var i=0; i < parentChilds.length; i++){
+			if (parentChilds[i] == chapterDIV){
+				this.chapterViews.splice(i,1);
+				break
+			}
+		}
+		this.chaptersArrayContainerDiV.removeChild(chapterDIV);
+		this.contentChanged();
 	}
-	this.survey.setChapters(changedChapters);
-	this.survey.setfusionTableID(this.fusionTableIDInput.value);
-	this.parentView.contentChanged();
-};	
-this.getSurvey = function(){
-	return this.survey;
-}
-this.parentView = parentView;
-this.survey = survey;
+	this.contentChanged = function(){
+		var changedChapters = [];
+		for(i=0; i<this.chapterViews.length; i++){
+			changedChapters[i] = this.chapterViews[i].getChapter();
+		}
+		this.survey.setChapters(changedChapters);
+		this.survey.setfusionTableID(this.fusionTableIDInput.value);
+		this.parentView.contentChanged();
+	};	
+	this.getSurvey = function(){
+		return this.survey;
+	}
+	this.parentView = parentView;
+	this.survey = survey;
 this.chapterViews = []; // Instances of chapters
 this.div = null;
 this.addChapterButton = null;
@@ -198,83 +199,83 @@ this.initializeView();
 this.updateContent(this.survey);
 }
 function questionArrayView(questionArray, parentView, inLoop){
-this.initializeView = function(){
-	this.div = document.createElement('div');
-	this.div.className = "questionsContainerDIV";
-	this.questionsArrayContainer = document.createElement('div');
-	this.questionsArrayContainer.className = "questionsArrayContainer";
-	this.addQuestionButton = new button("add", "", "Add question");
-	var that = this;
-	this.addQuestionButton.onclick = function(){
-		that.addQuestion(new question(that.inLoop));
-		that.contentChanged();
-	};
-	this.div.appendChild(this.questionsArrayContainer);
-	this.div.appendChild(this.addQuestionButton);
-}
-this.updateContent = function(questionArray){
-	if (questionArray != this.getQuestions()){	
-		this.QuestionViews = [];
-		while (this.questionsArrayContainer.firstChild){
-			this.questionsArrayContainer.removeChild(this.questionsArrayContainer.firstChild);
-		}
-		this.questionArray = questionArray;
-		if(this.questionArray != null){
-			for (var i = 0; i < this.questionArray.length; i++) {
-				this.addQuestion(this.questionArray[i]);
-			};				
+	this.initializeView = function(){
+		this.div = document.createElement('div');
+		this.div.className = "questionsContainerDIV";
+		this.questionsArrayContainer = document.createElement('div');
+		this.questionsArrayContainer.className = "questionsArrayContainer";
+		this.addQuestionButton = new button("add", "", "Add question");
+		var that = this;
+		this.addQuestionButton.onclick = function(){
+			that.addQuestion(new question(that.inLoop));
+			that.contentChanged();
+		};
+		this.div.appendChild(this.questionsArrayContainer);
+		this.div.appendChild(this.addQuestionButton);
+	}
+	this.updateContent = function(questionArray){
+		if (questionArray != this.getQuestions()){	
+			this.QuestionViews = [];
+			while (this.questionsArrayContainer.firstChild){
+				this.questionsArrayContainer.removeChild(this.questionsArrayContainer.firstChild);
+			}
+			this.questionArray = questionArray;
+			if(this.questionArray != null){
+				for (var i = 0; i < this.questionArray.length; i++) {
+					this.addQuestion(this.questionArray[i]);
+				};				
+			}
 		}
 	}
-}
-this.addQuestion = function(question){
-	var questionContainerDIV = document.createElement('div');
-	questionContainerDIV.className = "questionContainerDIV";
-	newQuestionView = new questionView(question, this, inLoop);
-	this.questionViews.push(newQuestionView);
-	var newQuestionDIV = newQuestionView.getView();
-	var eraseQuestionButton = new button("remove", "", "Erase question");
-	var that = this;
-	questionContainerDIV.appendChild(eraseQuestionButton);
-	questionContainerDIV.appendChild(newQuestionDIV);
-	this.questionsArrayContainer.appendChild(questionContainerDIV);
-	eraseQuestionButton.onclick = function(){
-		that.eraseQuestion(questionContainerDIV);
-	};
-};
-this.eraseQuestion = function(questionDIV){
-	var parentChilds = questionDIV.parentNode.childNodes;
-	for (var i=0; i < parentChilds.length; i++){
-		if (parentChilds[i] == questionDIV){
-			this.questionViews.splice(i,1);
-			break
+	this.addQuestion = function(question){
+		var questionContainerDIV = document.createElement('div');
+		questionContainerDIV.className = "questionContainerDIV";
+		newQuestionView = new questionView(question, this, inLoop);
+		this.questionViews.push(newQuestionView);
+		var newQuestionDIV = newQuestionView.getView();
+		var eraseQuestionButton = new button("remove", "", "Erase question");
+		var that = this;
+		questionContainerDIV.appendChild(eraseQuestionButton);
+		questionContainerDIV.appendChild(newQuestionDIV);
+		this.questionsArrayContainer.appendChild(questionContainerDIV);
+		eraseQuestionButton.onclick = function(){
+			that.eraseQuestion(questionContainerDIV);
 		};
 	};
-	this.questionsArrayContainer.removeChild(questionDIV);
-	this.contentChanged();
-};
-this.contentChanged = function(){
-	this.parentView.contentChanged();
-};	
-this.getView = function(){
-	return this.div;
-}
-this.getQuestions = function(){
-	this.questionArray = [];
-	for(i=0; i<this.questionViews.length; i++){
-		this.questionArray[i] = this.questionViews[i].getQuestion();
+	this.eraseQuestion = function(questionDIV){
+		var parentChilds = questionDIV.parentNode.childNodes;
+		for (var i=0; i < parentChilds.length; i++){
+			if (parentChilds[i] == questionDIV){
+				this.questionViews.splice(i,1);
+				break
+			};
+		};
+		this.questionsArrayContainer.removeChild(questionDIV);
+		this.contentChanged();
 	};
-	return this.questionArray;
-};
-this.inLoop = inLoop;
-this.questionArray = questionArray;
-this.parentView = parentView;
+	this.contentChanged = function(){
+		this.parentView.contentChanged();
+	};	
+	this.getView = function(){
+		return this.div;
+	}
+	this.getQuestions = function(){
+		this.questionArray = [];
+		for(i=0; i<this.questionViews.length; i++){
+			this.questionArray[i] = this.questionViews[i].getQuestion();
+		};
+		return this.questionArray;
+	};
+	this.inLoop = inLoop;
+	this.questionArray = questionArray;
+	this.parentView = parentView;
 this.questionViews = []; //Array of question Views objects
 this.initializeView();
 this.updateContent(this.questionArray);	
 };
 
 function answerArrayView(answerArray, parentView, canHaveJumps){
-this.initializeView = function(){
+	this.initializeView = function(){
 		this.answerViews = []; //Array of question Views objects
 		this.div = document.createElement('div');
 		this.div.className = "answersContainerDIV";
@@ -633,92 +634,92 @@ function questionView(question, parentView, inLoop) {
 	}
 	this.updateQuestionKind = function(newQuestionKind){
 		switch(newQuestionKind){
-		// We don't need arrays
-		case this.questionKinds.OPEN_TEXT["jsonName"]:
-		case this.questionKinds.OPEN_NUMBER["jsonName"]: 
-		case this.questionKinds.IMAGE["jsonName"]:
-		this.removeOtherOption();
-		this.removeAnswerArray();
-		this.removeQuestionArray();
-		break;
-		// We need an answers array
-		case this.questionKinds.ORDERED["jsonName"]:
-		this.removeQuestionArray();
-		this.removeOtherOption();
-		this.addAnswerArray();	
-		break;					
-		case this.questionKinds.MULTIPLE_CHOICE["jsonName"]:
-		case this.questionKinds.CHECKBOX["jsonName"]:
-		this.addOtherOption();
-		this.removeQuestionArray();
-		this.addAnswerArray();	
-		break;
-		// We need a question array
-		case this.questionKinds.LOOP["jsonName"]:
-		this.removeOtherOption();
-		this.removeAnswerArray();
-		this.addQuestionArray();
-		break;	
-	}
-}
-this.addQuestionArray = function(){
-	if (this.questionArrayView == null){
-		this.questionArrayView = new questionArrayView(this.question.getLoopQuestions(), this, true);
-		this.div.appendChild(this.questionArrayView.getView());
-	}				
-}
-this.addAnswerArray = function(){
-	if (this.answerArrayView == null){
-		var canHaveJump = false;
-		if((this.questionKindDropDown.options[this.questionKindDropDown.selectedIndex].value == this.questionKinds.MULTIPLE_CHOICE["jsonName"]) && !this.inLoop){
-			canHaveJump = true;
+			// We don't need arrays
+			case this.questionKinds.OPEN_TEXT["jsonName"]:
+			case this.questionKinds.OPEN_NUMBER["jsonName"]: 
+			case this.questionKinds.IMAGE["jsonName"]:
+			this.removeOtherOption();
+			this.removeAnswerArray();
+			this.removeQuestionArray();
+			break;
+			// We need an answers array
+			case this.questionKinds.ORDERED["jsonName"]:
+			this.removeQuestionArray();
+			this.removeOtherOption();
+			this.addAnswerArray();	
+			break;					
+			case this.questionKinds.MULTIPLE_CHOICE["jsonName"]:
+			case this.questionKinds.CHECKBOX["jsonName"]:
+			this.addOtherOption();
+			this.removeQuestionArray();
+			this.addAnswerArray();	
+			break;
+			// We need a question array
+			case this.questionKinds.LOOP["jsonName"]:
+			this.removeOtherOption();
+			this.removeAnswerArray();
+			this.addQuestionArray();
+			break;	
 		}
-		this.answerArrayView = new answerArrayView(this.question.getAnswers(), this, canHaveJump);
-		this.div.appendChild(this.answerArrayView.getView());
 	}
-}
-this.removeQuestionArray = function(){
-	if (this.questionArrayView != null){
-		this.div.removeChild(this.questionArrayView.getView());
-		this.questionArrayView = null;
+	this.addQuestionArray = function(){
+		if (this.questionArrayView == null){
+			this.questionArrayView = new questionArrayView(this.question.getLoopQuestions(), this, true);
+			this.div.appendChild(this.questionArrayView.getView());
+		}				
 	}
-}
-this.removeAnswerArray = function(){
-	if (this.answerArrayView != null){
-		this.div.removeChild(this.answerArrayView.getView());
-		this.answerArrayView = null;
+	this.addAnswerArray = function(){
+		if (this.answerArrayView == null){
+			var canHaveJump = false;
+			if((this.questionKindDropDown.options[this.questionKindDropDown.selectedIndex].value == this.questionKinds.MULTIPLE_CHOICE["jsonName"]) && !this.inLoop){
+				canHaveJump = true;
+			}
+			this.answerArrayView = new answerArrayView(this.question.getAnswers(), this, canHaveJump);
+			this.div.appendChild(this.answerArrayView.getView());
+		}
 	}
-}
-this.addOtherOption = function(){
-	if (this.otherCheckbox == null){
-		this.otherCheckbox = new checkbox("", "Other", "otherEnabled");
-		var that = this;
-		this.otherCheckbox.getView().onchange = function(){
-			that.contentChanged();
-		};
-		this.otherCheckbox.addTo(this.div);
+	this.removeQuestionArray = function(){
+		if (this.questionArrayView != null){
+			this.div.removeChild(this.questionArrayView.getView());
+			this.questionArrayView = null;
+		}
 	}
-}
-this.removeOtherOption = function(){
-	if (this.otherCheckbox != null){
-		this.otherCheckbox.removeFrom(this.div);
-		this.otherCheckbox = null;
+	this.removeAnswerArray = function(){
+		if (this.answerArrayView != null){
+			this.div.removeChild(this.answerArrayView.getView());
+			this.answerArrayView = null;
+		}
 	}
-}			
+	this.addOtherOption = function(){
+		if (this.otherCheckbox == null){
+			this.otherCheckbox = new checkbox("", "Other", "otherEnabled");
+			var that = this;
+			this.otherCheckbox.getView().onchange = function(){
+				that.contentChanged();
+			};
+			this.otherCheckbox.addTo(this.div);
+		}
+	}
+	this.removeOtherOption = function(){
+		if (this.otherCheckbox != null){
+			this.otherCheckbox.removeFrom(this.div);
+			this.otherCheckbox = null;
+		}
+	}			
 
-this.question = question;
-this.parentView = parentView;
-this.inLoop = inLoop;
-this.questionKinds = new questionKind(this.inLoop);
-this.answerArrayView = null;
-this.questionArrayView = null;
-this.questionKindDropDown = null;
-this.otherCheckbox = null;
-this.IDInput = null;
-this.questionInput = null;
-this.questionKindDropDown = null;
-this.jumpInput = null;
-this.jumpCheckbox = null;
-this.initializeView();
-this.updateContent(this.question);
+	this.question = question;
+	this.parentView = parentView;
+	this.inLoop = inLoop;
+	this.questionKinds = new questionKind(this.inLoop);
+	this.answerArrayView = null;
+	this.questionArrayView = null;
+	this.questionKindDropDown = null;
+	this.otherCheckbox = null;
+	this.IDInput = null;
+	this.questionInput = null;
+	this.questionKindDropDown = null;
+	this.jumpInput = null;
+	this.jumpCheckbox = null;
+	this.initializeView();
+	this.updateContent(this.question);
 };

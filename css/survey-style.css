@@ -1,93 +1,93 @@
 html, body {
-		        height: 100%;
-		        margin: 0px;	
-		        padding: 0px;
-		        text-align: left;
-		    }
-		    .project{
-		    	background: #F0FFF0;
-		    	position: relative;
-	      		overflow: hidden;
-	      		padding-top: 10px;
-	      		width: 64%;
-	      		min-width: 400px; 
-	      		float: right;
-	      		display: inline-block;
-	      		text-align: left;
-		    }
-	      	.survey {
-	      		border-radius: 5px;
-	      		overflow: hidden;
-	      		padding: 10px;		
-	      	}
-	      	.tracker {
-	      		border-radius: 5px;
-	      		overflow: hidden;
-	      		padding: 10px;	
-	      	}      	
-	      	.chapter {
-	      		border-radius: 5px;
-	        	min-height: 100px;
-	      		margin: 10px;
-		        padding: 10px
-	      	}	
-	      	.question{
-	      		border-radius: 5px;
-	      		margin: 10px;
-		        padding: 10px
-	      	}
-	      	.questionsContainerDIV{
-	      		border-radius: 5px;
-	      		overflow: hidden;
-	      		padding: 10px
-	      	}
-	      	.chaptersContainerDIV{
-	      		border-radius: 5px;
-	      		overflow: hidden;
-	      		padding: 10px
-	      	}
-	      	.chapterContainerDIV{
-	      		border-radius: 5px;
-	      		margin: 2px;
-		        padding: 2px;
-		        position: relative;
-		        width: 100%;
-	   			float: left;
-	      	}
-	      	.questionContainerDIV{
-	      		border-radius: 5px;
-	      		margin: 2px;
-		        padding: 2px;
-	      	}
-	      	.answersContainerDIV{
-	      		border-radius: 5px;
-	      		overflow: hidden;
-	      		padding: 10px
-	      	}
-	      	.answerContainerDIV{
-	      		border-radius: 5px;
-	      		margin: 2px;
-		        padding: 2px;
-	      	}
-	      	.jsonFloat{
-	      		position: fixed;
-	      		padding: 20px;
-	      		top: 100px;
-	      		text-align: left;
-	      		white-space: pre-wrap; 
-	      		width: 35%;
-	      		height: 90%;
-	      		overflow:hidden;
-	      		word-wrap: break-word;
-	      		border-radius: 5px
-	      	}
-	      	.h4{
-	      		position: fixed;
-	      		padding-left: 10px;
-	      		padding-top:10px;
-	      		padding-bottom: 10px;
-	      		text-align: center;
-	      		width: 35%;
-	      		color: #333;
-	      		border-radius: 5px
-	      	}
+    height: 100%;
+    margin: 0px;	
+    padding: 0px;
+    text-align: left;
+}
+.project{
+	background: #F0FFF0;
+	position: relative;
+		overflow: hidden;
+		padding-top: 10px;
+		width: 64%;
+		min-width: 400px; 
+		float: right;
+		display: inline-block;
+		text-align: left;
+}
+	.survey {
+		border-radius: 5px;
+		overflow: hidden;
+		padding: 10px;		
+	}
+	.tracker {
+		border-radius: 5px;
+		overflow: hidden;
+		padding: 10px;	
+	}      	
+	.chapter {
+		border-radius: 5px;
+	min-height: 100px;
+		margin: 10px;
+    padding: 10px
+	}	
+	.question{
+		border-radius: 5px;
+		margin: 10px;
+    padding: 10px
+	}
+	.questionsContainerDIV{
+		border-radius: 5px;
+		overflow: hidden;
+		padding: 10px
+	}
+	.chaptersContainerDIV{
+		border-radius: 5px;
+		overflow: hidden;
+		padding: 10px
+	}
+	.chapterContainerDIV{
+		border-radius: 5px;
+		margin: 2px;
+    padding: 2px;
+    position: relative;
+    width: 100%;
+		float: left;
+	}
+	.questionContainerDIV{
+		border-radius: 5px;
+		margin: 2px;
+    padding: 2px;
+	}
+	.answersContainerDIV{
+		border-radius: 5px;
+		overflow: hidden;
+		padding: 10px
+	}
+	.answerContainerDIV{
+		border-radius: 5px;
+		margin: 2px;
+    padding: 2px;
+	}
+	.jsonFloat{
+		position: fixed;
+		padding: 20px;
+		top: 100px;
+		text-align: left;
+		white-space: pre-wrap; 
+		width: 35%;
+		height: 90%;
+		overflow:hidden;
+		word-wrap: break-word;
+		border-radius: 5px
+	}
+	.h4{
+		position: fixed;
+		padding-left: 10px;
+		padding-top:10px;
+		padding-bottom: 10px;
+		text-align: center;
+		width: 35%;
+		color: #333;
+		border-radius: 5px
+	}
