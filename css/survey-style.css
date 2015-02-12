@@ -70,14 +70,14 @@ html, body {
     padding: 2px;
 	}
 	.jsonFloat{
+		overflow: scroll;
 		position: fixed;
 		padding: 20px;
-		top: 100px;
+		top: 125px;
 		text-align: left;
 		white-space: pre-wrap; 
 		width: 35%;
 		height: 90%;
-		overflow:hidden;
 		word-wrap: break-word;
 		border-radius: 5px
 	}
