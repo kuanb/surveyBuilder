@@ -92,14 +92,13 @@ function projectView(pr){
 	this.getView = function(){
 		return this.div;
 	};
-	this.contentChanged = function(){
+	this.contentChanged = function(){	
 		this.pr.setSurvey(this.surveyView.getSurvey());
 		this.pr.setTracker(this.trackerView.getTracker());
 		this.contentChanges++;
 		var projectSnapShot = new project();
 		projectSnapShot.constructFromString(JSON.stringify(this.pr.generateJSON()));
 		var newStackElement = new stackElement(this, projectSnapShot);
-		//console.log(newStackElement);
 		this.uStack.addToStack(newStackElement);
 		this.jsonText.innerHTML = "<b>Input Modification Count:</b> " + this.contentChanges + " <br><br><b>JSON Output:</b><br>" + JSON.stringify(this.pr.generateJSON());
 		this.undo.disabled = !that.uStack.isUndoPossible();
