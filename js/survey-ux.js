@@ -93,7 +93,6 @@ function projectView(pr){
 		return this.div;
 	};
 	this.contentChanged = function(){
-		console.log("content changed");
 		this.pr.setSurvey(this.surveyView.getSurvey());
 		this.pr.setTracker(this.trackerView.getTracker());
 		this.contentChanges++;
@@ -736,7 +735,6 @@ function questionView(question, parentView, inLoop) {
 			this.otherCheckbox = null;
 		}
 	}			
-
 	this.question = question;
 	this.parentView = parentView;
 	this.inLoop = inLoop;
