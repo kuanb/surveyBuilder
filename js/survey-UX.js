@@ -93,6 +93,7 @@ function projectView(pr){
 		return this.div;
 	};
 	this.contentChanged = function(){
+		console.log("content changed");
 		this.pr.setSurvey(this.surveyView.getSurvey());
 		this.pr.setTracker(this.trackerView.getTracker());
 		this.contentChanges++;
@@ -101,7 +102,7 @@ function projectView(pr){
 		var newStackElement = new stackElement(this, projectSnapShot);
 		//console.log(newStackElement);
 		this.uStack.addToStack(newStackElement);
-		this.jsonText.innerHTML = "<b>Input Modification Count:</b> " + this.contentChanges + " <br><br><b>JSON Output:</b><br>" + JSON.stringify(pr.generateJSON());
+		this.jsonText.innerHTML = "<b>Input Modification Count:</b> " + this.contentChanges + " <br><br><b>JSON Output:</b><br>" + JSON.stringify(this.pr.generateJSON());
 	};
 	this.pr = pr;
 	this.contentChanges = -1;
