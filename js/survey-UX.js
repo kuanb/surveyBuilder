@@ -111,8 +111,9 @@ function projectView(pr){
 	this.undo = document.getElementById("undo");
 	that = this;
 	this.undo.onclick = function(){
-		undoStackElement = that.uStack.undo();
-		that.pr = undoStackElement.objectState;
+		var undoStackElement = that.uStack.undo();
+		that.pr = new project();
+		that.pr.constructFromString(JSON.stringify(undoStackElement.objectState.generateJSON()));
 		undoStackElement.view.updateContent(that.pr);
 		that.jsonText.innerHTML = "<b>Input Modification Count:</b> " + that.contentChanges + " <br><br><b>JSON Output:</b><br>" + JSON.stringify(that.pr.generateJSON());
 	}

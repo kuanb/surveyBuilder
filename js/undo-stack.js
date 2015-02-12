@@ -1,14 +1,16 @@
 function undoStack(){
 	this.UStack = [];
-	this.stackIndex;
+	this.stackIndex = -1	;
 	this.updateCall;
 	this.addToStack = function(sElement){
+		console.log("before adding length" + this.UStack.length + " index " + this.stackIndex);
 		this.cleanForwardStack(this.stackIndex);
 		this.UStack.push(sElement);
 		this.stackIndex = this.UStack.length -1;
-		//console.log(this.UStack.length);
+		console.log("after adding lenght" + this.UStack.length + " index " + this.stackIndex);
 	}
 	this.cleanForwardStack = function(index){
+		console.log("cleaning" + index);
 		for (var i = index + 1; i < this.UStack.length; i++) {
 			this.eraseFromStack(i);
 		};
@@ -19,23 +21,23 @@ function undoStack(){
 		}
 	}
 	this.undo = function(){
-		this.stackIndex--
+		this.stackIndex--;
 		//console.log(this.UStack.length);
 		return this.UStack[this.stackIndex];
 	}
 	this.redo = function(){
-		this.stacKIndex++
-		return this.UStack[this.stacKIndex];
+		this.stackIndex++;
+		return this.UStack[this.stackIndex];
 	}
 	this.isRedoPossible = function(){
-		if(this.stacKIndex < this.UStack.length){
+		if(this.stackIndex < this.UStack.length){
 			return true
 		} else {
 			return false
 		}
 	}
 	this.isUndoPossible = function(){
-		if(this.stacKIndex < this.UStack.length){
+		if(this.stackIndex < this.UStack.length){
 			return true
 		} else {
 			return false
