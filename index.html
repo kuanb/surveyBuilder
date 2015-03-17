@@ -1,39 +1,35 @@
 <!DOCTYPE html>
 <html>
-    <head>
-    	<meta charset="UTF-8">
-    	<link href="css/bootstrap.min.css" rel="stylesheet">
-    	<link href="css/bootstrap-switch.min.css" rel="stylesheet">
-    	<link rel="stylesheet" href="css/survey-style.css">
-        <title>
-            Build your project!
-        </title>
-	</head>
-    <body>
-    	<div id="project_container">
-    		<div class="h4">Flocktracker project Builder <3</div>
-            <div style="width:35%; margin-top:58px;position:fixed;">
-    		  <button class="btn btn-success btn-md" style="width:100%;"  onclick="console.log('working')">
-                    Submit Survey
-                </button>
-                <button class="btn btn-success btn-md" id="undo" style="width:100%;"  onclick="console.log('working')">
-                    Undo
-                </button>       
-                <button class="btn btn-success btn-md" id="redo" style="width:100%;"  onclick="console.log('working')">
-                    Redo
-                </button>                              
-            </div>
-    		<div id="JsonGoesHere" class="jsonFloat"></div>
-    		<div id="survey_container"></div>
-    	</div>
-  	</body>
-  	<script src="js/jquery-1.11.1.min.js"></script>
-	<script src="js/bootstrap.min.js"></script>
-	<script src="js/bootstrap-switch.min.js"></script>
-    <script src="js/undo-stack.js"></script>
-	<script src="js/survey-ux.js"></script>
-	<script src="js/survey-model.js"></script>
-	<script type="text/javascript">
+<head>
+<meta charset="UTF-8">
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/bootstrap-switch.min.css" rel="stylesheet">
+<link rel="stylesheet" href="css/survey-style.css">
+<title>Build your project!</title>
+</head>
+<body>
+	<div id="project_container">
+		<div class="h4">Flocktracker project Builder <3</div>
+		<div style="width: 35%; margin-top: 58px; position: fixed;">
+			<button class="btn btn-success btn-md" style="width: 100%;"
+				onclick="console.log('working')">Submit Survey</button>
+			<button class="btn btn-success btn-md" id="undo" style="width: 100%;"
+				onclick="console.log('working')">Undo</button>
+			<button class="btn btn-success btn-md" id="redo" style="width: 100%;"
+				onclick="console.log('working')">Redo</button>
+		</div>
+		<div id="JsonGoesHere" class="jsonFloat"></div>
+		<div id="survey_container"></div>
+	</div>
+</body>
+<script src="js/jquery-1.11.1.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/bootstrap-switch.min.js"></script>
+<script src="js/undo-stack.js"></script>
+<script src="js/survey-ux.js"></script>
+<script src="js/project-models.js"></script>
+<script src="js/flockSON.js"></script>
+<script type="text/javascript">
 		var superString = '{"Survey":{"Chapters":[{"Chapter":"Walkability audit tool","Questions":[{"Question":"Take a picture of the street","id":"STREET_PICTURE","Kind":"IM","Jump":null},{"Question":"Pedestrian Facilities (High): presence of a suitable walking surface, such as a sidewalk or path.","id":"PEDESTRIAN_FACILITIES","Kind":"MC","Jump":null,"Other":false,"Answers":[{"Answer":"1 No permanent facilities; pedestrians walk in roadway or on dirt path","jumpID":""},{"Answer":"2","jumpID":""},{"Answer":"3 Continuous sidewalk on both sides of road, or completely away from roads ","jumpID":""},{"Answer":"4","jumpID":""},{"Answer":"5 Sidewalk on one side of road; minor discontinuities that present no real obstacle to passage","jumpID":""}]},{"Question":"Pedestrian Conflicts (High): potential for conflict with motor vehicle traffic due to driveway and loading dock crossings, speed and volume of traffic, large intersections, low pedestrian visibility. ","id":"PEDESTRIAN_CONFLICTS","Kind":"MC","Jump":null,"Other":false,"Answers":[{"Answer":"1 High conflict potential ","jumpID":""},{"Answer":"2","jumpID":""},{"Answer":"3"  ,"jumpID":""},{"Answer":"4","jumpID":""},{"Answer":"5 Low conflict potential","jumpID":""}]},{"Question":"Crosswalks (High): presence and visibility of crosswalks on roads intersecting the segment. Traffic signals meet pedestrian needs with separate ‘walk’ lights that provide sufficient crossing time. ","id":"CROSSWALKS","Kind":"MC","Jump":null,"Other":false,"Answers":[{"Answer":"1 Crosswalks not present despite major intersections","jumpID":""},{"Answer":"2","jumpID":""},{"Answer":"3","jumpID":""},{"Answer":"4","jumpID":""},{"Answer":"5 No intersections, or crosswalks clearly marked","jumpID":""}]},{"Question":" Maintenance (Medium): cracking, buckling, overgrown vegetation, standing water, etc. on or near walking path. Does not include temporary deficiencies likely to soon be resolved (e.g. tall grass). ","id":"MAINTENANCE","Kind":"MC","Jump":null,"Other":false,"Answers":[{"Answer":"1 Major or frequent problems ","jumpID":""},{"Answer":"2","jumpID":""},{"Answer":"3","jumpID":""},{"Answer":"4","jumpID":""},{"Answer":"5 No problems","jumpID":""}]},{"Question":"Path Size (Medium): measure of useful path width, accounting for barriers to passage along pathway. ","id":"PATH_SIZE","Kind":"MC","Jump":null,"Other":false,"Answers":[{"Answer":"1 No permanent facilities","jumpID":""},{"Answer":"2 < 3 feet wide, significant barriers","jumpID":""},{"Answer":"3","jumpID":""},{"Answer":"4","jumpID":""},{"Answer":"5 > 5 feet wide, barrier free","jumpID":""}]},{"Question":"Buffer (Medium): space separating path from adjacent roadway. ","id":"BUFFER","Kind":"MC","Jump":null,"Other":false,"Answers":[{"Answer":"1 No buffer from roadway ","jumpID":""},{"Answer":"2","jumpID":""},{"Answer":"3","jumpID":""},{"Answer":"4 > 4 feet from roadway","jumpID":""},{"Answer":"5 Not adjacent to roadway","jumpID":""}]},{"Question":"Universal Accessibility (Medium): ease of access for the mobility impaired. Look for ramps and handrails accompanying steps, curb cuts, etc. ","id":"UNIVERSAL_ACCESSIBILITY","Kind":"MC","Jump":null,"Other":false,"Answers":[{"Answer":"1 Completely impassible for wheelchairs, or no permanent facilities","jumpID":""},{"Answer":"2 Difficult or dangerous for wheelchairs (e.g. no curb cuts)","jumpID":""},{"Answer":"3","jumpID":""},{"Answer":"4 Wheelchair accessible route available but inconvenient","jumpID":""},{"Answer":"5 Designed to facilitate wheelchair access","jumpID":""}]},{"Question":"Aesthetics (Medium): includes proximity of construction zones, fences, buildings, noise pollution, quality of landscaping, and pedestrian-oriented features, such as benches and water fountains. ","id":"AESTHETICS","Kind":"MC","Jump":null,"Other":false,"Answers":[{"Answer":"1 Uninviting","jumpID":""},{"Answer":"2","jumpID":""},{"Answer":"3","jumpID":""},{"Answer":"4","jumpID":""},{"Answer":"5 Pleasant","jumpID":""}]},{"Question":"Shade (Low): amount of shade, accounting for different times of day.","id":"SHADE","Kind":"MC","Jump":null,"Other":false,"Answers":[{"Answer":"1 No shade","jumpID":""},{"Answer":"2","jumpID":""},{"Answer":"3","jumpID":""},{"Answer":"4","jumpID":""},{"Answer":"5 Full shade","jumpID":""}]}]}],"TableID":"1dTSjrp3tqex2Mb4cgNxHQTCTd-XM27dJbCPl11uD"},"Tracker":{"Questions":[{"Question":"What´s the name of the street you´re surveying?","id":"STREET_NAME","Kind":"OT","Jump":null}],"TableID":"1ovGJQv1bSMK2g9rZE4dZLOlYUE83qYUGj6xFDprD"}}';
     	var projectTest = new project();
     	projectTest.constructFromString(superString);
