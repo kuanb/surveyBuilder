@@ -14,13 +14,16 @@ function answer() {
 		this.jumpID = jumpID;
 	};
 	this.generateJSON = function() {
+		
 		var answerJSON = {};
+		var answerJSONcontents = {};
 		if (this.answerText != null) {
-			answerJSON["Answer"] = this.answerText;
+			answerJSONcontents["Text"] = this.answerText;
 		}
 		if (this.jumpID != null) {
-			answerJSON["Jump"] = this.jumpID;
+			answerJSONcontents["Jump"] = this.jumpID;
 		}
+		answerJSON["Answer"] = answerJSONcontents;
 		return answerJSON;
 	}
 	this.constructFromJSON = function(object) {
