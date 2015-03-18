@@ -90,70 +90,133 @@ function project() {
 			}
 		}
 	}
-
-	function surveyProject(projectName) {
-		this.projectName = projectName;
-		this.tableID = null;
-		this.survey = null;
-		this.setProjectName = function(projectName) {
-			this.projectName = projectName;
+	this.serializeJSON = function(projectJSONString) {
+		projectObject = null;
+		try {
+			var projectObject = JSON.parse(projectJSONString);
+		} catch (e) {
+			console
+					.log("JSON not parsed correctly, Project is not correct JSON :-(");
 		}
-		this.getProjectName = function() {
-			return this.projectName;
+		projectObjectContents = null;
+		if ("FlocktrackerProject" in projectObject) {
+			projectObjectContents = projectObject["FlocktrackerProject"];
+		} else {
+			console.log("No FlocktrackerProject in Object :-(");
 		}
-		this.setSurvey = function(survey) {
-			this.survey = survey;
-		}
-		this.serializeJSON = function(surveyProjectJSONString) {
-			surveyProjectObject = null;
-			try {
-				var surveyProjectObject = JSON.parse(surveyProjectJSONString);
-			} catch (e) {
-				console
-						.log("JSON not parsed correctly, the Survey Project is not correct JSON :-(");
-			}
-			surveyProjectObjectContents = null;
-			if (this.projectName != null) {
-				if (this.projectName in surveyProjectObject) {
-					surveyProjectObjectContents = surveyProjectObject[projectName];
-				} else {
-					console.log("No SurveyProject " + this.projectName
-							+ " in Object :-(");
-				}
+		if(projectObjectContents != null){
+			if ("SurveyProject" in surveyProjectObjectContents) {
+				this.surveyProject = (new surveyProject());
+				this.surveyProject
+						.serializeJSON(projectObjectContents["SurveyProject"]);
 			} else {
-				console.log("ProjectName of SurveyProject is null :-(");
+				console.log("No SurveyProject in Project :-(");
 			}
-			if (surveyProjectObjectContents != null) {
-				if ("TableID" in surveyProjectObjectContents) {
-					this.tableID = surveyProjectObjectContents["TableID"];
-				} else {
-					console.log("No TableID in survey project object "
-							+ this.projectName + " :-(");
-				}
-				if ("Survey" in surveyProjectObjectContents) {
-					this.survey = (new survey());
-					this.survey
-							.serializeJSON(surveyProjectObjectContents["Survey"]);
-				} else {
-					console.log("No Survey in survey project object "
-							+ this.projectName + " :-(");
-				}
-			}
-		}
-		this.deserializeJSON = function() {
-			var surveyProjectJSONObjectContents = {};
-			surveyProjectJSONObjectContents["TableID"] = this.tableID;
-			if (this.survey != null) {
-				surveyProjectJSONObjectContents["Survey"] = this.survey
-						.deserializeJSON();
+			if ("TrackerProject" in projectObjectContents) {
+				this.trackerProject = (new trackerProject());
+				this.trackerProject
+						.serializeJSON(projectObjectContents["TrackerProject"]);
 			} else {
-				surveyProjectJSONObjectContents["Survey"] = null;
+				console.log("No TrackerProject in survey Project :-(");
 			}
-			surveyProjectJSONObject = {};
-			surveyProjectJSONObject[this.projectName] = surveyProjectJSONObjectContents;
-			return surveyProjectJSONObject;
+			if ("CountersProject" in projectObjectContents) {
+				this.countersProject = (new countersProject());
+				this.countersProject
+						.serializeJSON(projectObjectContents["CountersProject"]);
+			} else {
+				console.log("No CountersProject in survey Project :-(");
+			}
+			
 		}
-
 	}
-
+	this.deserializeJSON = function() {
+		var projectJSONObjectContents = {};
+		if (this.surveyProject != null) {
+			projectJSONObjectContents["SurveyProject"] = this.surveyProject
+					.deserializeJSON();
+		} else {
+			surveyProjectJSONObjectContents["SurveyProject"] = null;
+			console.log("SurveyProject is null :-(")
+		}
+		if (this.countersProject != null) {
+			projectJSONObjectContents["CountersProject"] = this.countersProject
+					.deserializeJSON();
+		} else {
+			surveyProjectJSONObjectContents["CountersProject"] = null;
+			console.log("CountersProject project is null :-(")
+		}
+		if (this.trackerProject != null) {
+			projectJSONObjectContents["TrackerProject"] = this.trackerProject
+					.deserializeJSON();
+		} else {
+			surveyProjectJSONObjectContents["TrackerProject"] = null;
+			console.log("TrackerProject project is null :-(");
+		}
+		var projectJSONObject = {};
+		projectJSONObject["FlocktrackerProject"] = projectJSONObjectContents;
+		return projectJSONObject;
+	}
+}
+function surveyProject(projectName) {
+	this.projectName = projectName;
+	this.tableID = null;
+	this.survey = null;
+	this.setProjectName = function(projectName) {
+		this.projectName = projectName;
+	}
+	this.getProjectName = function() {
+		return this.projectName;
+	}
+	this.setSurvey = function(survey) {
+		this.survey = survey;
+	}
+	this.serializeJSON = function(surveyProjectJSONString) {
+		surveyProjectObject = null;
+		try {
+			var surveyProjectObject = JSON.parse(surveyProjectJSONString);
+		} catch (e) {
+			console
+					.log("JSON not parsed correctly, SurveyProject is not correct JSON :-(");
+		}
+		surveyProjectObjectContents = null;
+		if (this.projectName != null) {
+			if (this.projectName in surveyProjectObject) {
+				surveyProjectObjectContents = surveyProjectObject[projectName];
+			} else {
+				console.log("No SurveyProject " + this.projectName
+						+ " in Object :-(");
+			}
+		} else {
+			console.log("ProjectName of SurveyProject is null :-(");
+		}
+		if (surveyProjectObjectContents != null) {
+			if ("TableID" in surveyProjectObjectContents) {
+				this.tableID = surveyProjectObjectContents["TableID"];
+			} else {
+				console.log("No TableID in SurveyProject object "
+						+ this.projectName + " :-(");
+			}
+			if ("Survey" in surveyProjectObjectContents) {
+				this.survey = (new survey());
+				this.survey
+						.serializeJSON(surveyProjectObjectContents["Survey"]);
+			} else {
+				console.log("No Survey in survey project object "
+						+ this.projectName + " :-(");
+			}
+		}
+	}
+	this.deserializeJSON = function() {
+		var surveyProjectJSONObjectContents = {};
+		surveyProjectJSONObjectContents["TableID"] = this.tableID;
+		if (this.survey != null) {
+			surveyProjectJSONObjectContents["Survey"] = this.survey
+					.deserializeJSON();
+		} else {
+			surveyProjectJSONObjectContents["Survey"] = null;
+		}
+		var surveyProjectJSONObject = {};
+		surveyProjectJSONObject[this.projectName] = surveyProjectJSONObjectContents;
+		return surveyProjectJSONObject;
+	}
 }
