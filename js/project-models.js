@@ -76,9 +76,7 @@ function project() {
 	this.setFlocktrackerProjectVersion = function(flocktrackerProjectVersion) {
 		this.flocktrackerProjectVersion = flocktrackerProjectVersion;
 	}
-	
-	
-	
+
 	this.serializeJSON = function(projectJSONString) {
 		projectObject = null;
 		try {
@@ -175,38 +173,40 @@ function surveyProject(projectName) {
 		this.survey = survey;
 	}
 	this.serializeJSON = function(surveyProjectJSONString) {
-		surveyProjectObject = null;
+		var surveyProjectObject = null;
 		try {
-			var surveyProjectObject = JSON.parse(surveyProjectJSONString);
+			surveyProjectObject = JSON.parse(surveyProjectJSONString);
 		} catch (e) {
 			console
 					.log("JSON not parsed correctly, SurveyProject is not correct JSON :-(");
 		}
-		surveyProjectObjectContents = null;
-		if (this.projectName != null) {
-			if (this.projectName in surveyProjectObject) {
-				surveyProjectObjectContents = surveyProjectObject[projectName];
+		if (surveyProjectObject != null) {
+			var surveyProjectObjectContents = null;
+			if (this.projectName != null) {
+				if (this.projectName in surveyProjectObject) {
+					surveyProjectObjectContents = surveyProjectObject[projectName];
+				} else {
+					console.log("No SurveyProject " + this.projectName
+							+ " in Object :-(");
+				}
 			} else {
-				console.log("No SurveyProject " + this.projectName
-						+ " in Object :-(");
+				console.log("ProjectName of SurveyProject is null :-(");
 			}
-		} else {
-			console.log("ProjectName of SurveyProject is null :-(");
-		}
-		if (surveyProjectObjectContents != null) {
-			if ("TableID" in surveyProjectObjectContents) {
-				this.tableID = surveyProjectObjectContents["TableID"];
-			} else {
-				console.log("No TableID in SurveyProject object "
-						+ this.projectName + " :-(");
-			}
-			if ("Survey" in surveyProjectObjectContents) {
-				this.survey = (new survey());
-				this.survey
-						.serializeJSON(surveyProjectObjectContents["Survey"]);
-			} else {
-				console.log("No Survey in survey project object "
-						+ this.projectName + " :-(");
+			if (surveyProjectObjectContents != null) {
+				if ("TableID" in surveyProjectObjectContents) {
+					this.tableID = surveyProjectObjectContents["TableID"];
+				} else {
+					console.log("No TableID in SurveyProject object "
+							+ this.projectName + " :-(");
+				}
+				if ("Survey" in surveyProjectObjectContents) {
+					this.survey = (new survey());
+					this.survey
+							.serializeJSON(surveyProjectObjectContents["Survey"]);
+				} else {
+					console.log("No Survey in SurveyProject object "
+							+ this.projectName + " :-(");
+				}
 			}
 		}
 	}
@@ -223,4 +223,71 @@ function surveyProject(projectName) {
 		surveyProjectJSONObject[this.projectName] = surveyProjectJSONObjectContents;
 		return surveyProjectJSONObject;
 	}
+}
+function countersProject() {
+	this.counters = null;
+	this.tableID = null;
+	this.serializeJSON = function() {
+
+	}
+	this.deserializeJSON = function() {
+		var countersProjectJSONObjectContents = {};
+		countersProjectJSONObjectContents["TableID"] = this.tableID;
+		if (this.counters != null) {
+			var countersJSONObject = [];
+			for ( var counter in counters) {
+				countersJSONObject.push(counter.deserializeJSON());
+			}
+			countersProjectJSONObjectContents["Counters"] = this.survey
+					.deserializeJSON();
+		} else {
+			countersProjectJSONObjectContents["Counters"] = null;
+		}
+		var countersProjectJSONObject = {};
+		countersProjectJSONObject["CountersProject"] = countersProjectJSONObjectContents;
+		return countersProjectJSONObject;
+	}
+	this.serializeJSON = function(countersProjectJSONString) {
+		var countersProjectObject = null;
+		try {
+			countersProjectObject = JSON.parse(countersProjectJSONString);
+		} catch (e) {
+			console
+					.log("JSON not parsed correctly, CountersProject is not correct JSON :-(");
+		}
+		if (countersProjectObject != null) {
+			var countersProjectObjectContents = null;
+			if (this.projectName in countersProjectObject) {
+				countersProjectObjectContents = countersProjectObject["CountersProject"];
+			} else {
+				console.log("No CountersProject in Object :-(");
+			}
+			if (countersProjectObjectContents != null) {
+				if ("TableID" in countersProjectObjectContents) {
+					this.tableID = countersProjectObjectContents["TableID"];
+				} else {
+					console.log("No TableID in CountersProject object :-(");
+				}
+				if ("Counters" in countersProjectObjectContents) {
+					var countersArray = countersProjectObjectContents["Counters"];
+					if(countersArray.constructor === Array){
+						this.counters = [];
+						for ( var counterJSONObject in countersArray) {
+							var counterObj = new counter();
+							counterObj.serializeJSON(counterJSONObject)
+							this.counters.push(counterObj);
+						}
+					} else {
+						console.log("Counters in CountersProject is not a JSONArray")
+					}
+				} else {
+					console.log("No Counters in CountersSurveyProject object "
+							+ this.projectName + " :-(");
+				}
+			}
+		}
+	}
+}
+function trackerProject() {
+
 }
