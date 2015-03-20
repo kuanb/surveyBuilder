@@ -99,14 +99,18 @@ function project() {
 						if ("SurveyProject" in projectObjectContents) {
 							this.surveyProject = (new surveyProject());
 							this.surveyProject
-									.deserializeJSON(projectObjectContents["SurveyProject"]);
+									.deserializeJSON({
+										"SurveyProject" : projectObjectContents["SurveyProject"]
+									});
 						} else {
 							console.log("No SurveyProject in Project :-(");
 						}
 						if ("TrackerProject" in projectObjectContents) {
 							this.trackerProject = (new trackerProject());
 							this.trackerProject
-									.deserializeJSON(projectObjectContents["TrackerProject"]);
+									.deserializeJSON({
+										"TrackerProject" : projectObjectContents["TrackerProject"]
+									});
 						} else {
 							console
 									.log("No TrackerProject in survey Project :-(");
@@ -114,7 +118,9 @@ function project() {
 						if ("CountersProject" in projectObjectContents) {
 							this.countersProject = (new countersProject());
 							this.countersProject
-									.deserializeJSON(projectObjectContents["CountersProject"]);
+									.deserializeJSON({
+										"CountersProject" : projectObjectContents["CountersProject"]
+									});
 						} else {
 							console
 									.log("No CountersProject in survey Project :-(");
@@ -204,8 +210,9 @@ function surveyProject(projectName) {
 				}
 				if ("Survey" in surveyProjectObjectContents) {
 					this.survey = (new survey());
-					this.survey
-							.deserializeJSON(surveyProjectObjectContents["Survey"]);
+					this.survey.deserializeJSON({
+						"Survey" : surveyProjectObjectContents["Survey"]
+					});
 				} else {
 					console.log("No Survey in SurveyProject object "
 							+ this.projectName + " :-(");
@@ -337,7 +344,7 @@ function trackerProject() {
 				if ("StartSurvey" in trackerProjectObjectContents) {
 					this.startSurveyProject = (new surveyProject("StartSurvey"));
 					this.startSurveyProject
-							.deserializeJSON(trackerProjectObjectContents["StartSurvey"]);
+							.deserializeJSON({"StartSurvey" : trackerProjectObjectContents["StartSurvey"]});
 				} else {
 					console.log("No StartSurvey in TrackerProject object "
 							+ this.projectName + " :-(");
@@ -345,7 +352,7 @@ function trackerProject() {
 				if ("EndSurvey" in trackerProjectObjectContents) {
 					this.endSurveyProject = (new surveyProject("EndSurvey"));
 					this.endSurveyProject
-							.deserializeJSON(trackerProjectObjectContents["EndSurvey"]);
+							.deserializeJSON({"EndSurvey" : trackerProjectObjectContents["EndSurvey"]});
 				} else {
 					console.log("No EndSurvey in TrackerProject object "
 							+ this.projectName + " :-(");
@@ -353,12 +360,11 @@ function trackerProject() {
 				if ("Tracker" in trackerProjectObjectContents) {
 					this.tracker = (new Tracker("Tracker"));
 					this.tracker
-							.deserializeJSON(trackerProjectObjectContents["Tracker"]);
+							.deserializeJSON({"Tracker" : trackerProjectObjectContents["Tracker"]});
 				} else {
 					console.log("No Tracker in TrackerProject object "
 							+ this.projectName + " :-(");
 				}
-
 			}
 		}
 	}
