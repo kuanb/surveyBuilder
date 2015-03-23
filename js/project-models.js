@@ -286,7 +286,7 @@ function countersProject() {
 						}
 					} else {
 						console
-								.log("Counters in CountersProject is not a JSONArray")
+								.log("Counters in CountersProject is not a JSONArray :-(")
 					}
 				} else {
 					console.log("No Counters in CountersSurveyProject object "
@@ -344,23 +344,27 @@ function trackerProject() {
 				if ("StartSurvey" in trackerProjectObjectContents) {
 					this.startSurveyProject = (new surveyProject("StartSurvey"));
 					this.startSurveyProject
-							.deserializeJSON({"StartSurvey" : trackerProjectObjectContents["StartSurvey"]});
+							.deserializeJSON({
+								"StartSurvey" : trackerProjectObjectContents["StartSurvey"]
+							});
 				} else {
 					console.log("No StartSurvey in TrackerProject object "
 							+ this.projectName + " :-(");
 				}
 				if ("EndSurvey" in trackerProjectObjectContents) {
 					this.endSurveyProject = (new surveyProject("EndSurvey"));
-					this.endSurveyProject
-							.deserializeJSON({"EndSurvey" : trackerProjectObjectContents["EndSurvey"]});
+					this.endSurveyProject.deserializeJSON({
+						"EndSurvey" : trackerProjectObjectContents["EndSurvey"]
+					});
 				} else {
 					console.log("No EndSurvey in TrackerProject object "
 							+ this.projectName + " :-(");
 				}
 				if ("Tracker" in trackerProjectObjectContents) {
 					this.tracker = (new Tracker("Tracker"));
-					this.tracker
-							.deserializeJSON({"Tracker" : trackerProjectObjectContents["Tracker"]});
+					this.tracker.deserializeJSON({
+						"Tracker" : trackerProjectObjectContents["Tracker"]
+					});
 				} else {
 					console.log("No Tracker in TrackerProject object "
 							+ this.projectName + " :-(");

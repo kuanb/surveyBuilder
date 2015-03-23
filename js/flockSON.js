@@ -14,7 +14,7 @@ function answer() {
 		this.jumpID = jumpID;
 	};
 	this.generateJSON = function() {
-		
+
 		var answerJSON = {};
 		var answerJSONcontents = {};
 		if (this.answerText != null) {
@@ -319,20 +319,27 @@ function chapter() {
 };
 function survey() {
 	this.chapters = []; // Instances of chapters
-	this.fusionTableID = null; // String
+	this.flockSONversion = null; // String
+	this.title = null; // String
 
-	this.getfusionTableID = function() {
-		return this.fusionTableID;
-	};
-	this.setfusionTableID = function(fusionTableID) {
-		this.fusionTableID = fusionTableID;
-	};
+	this.getTitle = function() {
+		return this.title;
+	}
+	this.setTitle = function(title) {
+		this.title = title;
+	}
+	this.getFlockSONversion = function() {
+		return this.flockSONversion;
+	}
+	this.setFlockSONversion = function(flockSONversion) {
+		this.flockSONversion = flockSONversion;
+	}
 	this.getChapters = function() {
 		return this.chapters;
-	};
+	}
 	this.setChapters = function(chapters) {
 		this.chapters = chapters;
-	};
+	}
 	this.addChapter = function(newChapter) {
 		this.chapters.push(newChapter);
 	}
@@ -343,35 +350,59 @@ function survey() {
 			return chapters.length;
 		}
 	}
-	this.generateJSON = function() {
-		var surveyJSON = {};
-		var chaptersJSONArray = [];
-		for (var i = 0; i < this.chapters.length; i++) {
-			chaptersJSONArray.push(this.chapters[i].generateJSON());
-		}
-		surveyJSON["Chapters"] = chaptersJSONArray;
-		surveyJSON["TableID"] = this.fusionTableID;
-		return surveyJSON;
+
+	this.serializeJSON = fucntion()
+	{
+
 	}
-	this.constructFromJSON = function(object) {
-		if ("Chapters" in object) {
-			var objectChapters = object["Chapters"];
-			if (Array.isArray(objectChapters)) {
-				this.chapters = [];
-				for (var i = 0; i < objectChapters.length; i++) {
-					this.chapters.push(new chapter());
-					this.chapters[i].constructFromJSON(objectChapters[i]);
-				}
-			} else {
-				console.log("Chapters in survey is not an Array :-(");
-			}
-		} else {
-			console.log("No chapters in survey object :-(");
+	this.deserializeJSON = function(surveyJSONString) {
+		var surveyObject = null;
+		try {
+			surveyObject = JSON.parse(surveyJSONString);
+		} catch (e) {
+			console
+					.log("JSON not parsed correctly, Survey is not correct JSON :-(");
 		}
-		if ("TableID" in object) {
-			this.fusionTableID = object["TableID"];
-		} else {
-			console.log("No fusionTableID in survey object :-(");
+		if (surveyObject != null) {
+			surveyObjectContents = null;
+			if ("Survey" in surveyObject) {
+				surveyObjectContents = surveyObject["Survey"];
+			} else {
+				console.log("No Survey in Object :-(");
+			}
+			if (surveyObjectContents != null) {
+				if ("flockSONversion" in surveyObjectContents) {
+					if (surveyObjectContents["flockSONversion"] == "0.1") {
+						this.flockSONversion = surveyObjectContents["flockSONversion"];
+						if ("Title" in surveyObjectContents) {
+							this.title = surveyObjectContents["Title"];
+						} else {
+							console.log("No Title in Survey object :-(");
+						}
+						if ("Chapters" in surveyObjectContents) {
+							var chaptersArray = surveyObjectContents["Chapters"];
+							if (chaptersArray.constructor === Array) {
+								this.chapters = [];
+								for ( var chapterJSONObject in chaptersArray) {
+									var chapterObj = new chapter();
+									chapterObj.derializeJSON(chapterJSONObject)
+									this.chapters.push(chapterObj);
+								}
+							} else {
+								console
+										.log("Chapters in Survey is not a JSONArray :-(")
+							}
+						} else {
+							console.log("No Chapters in Survey object :-(");
+						}
+
+					} else {
+						console.log("Incorrect flockSONversion in Survey :-(")
+					}
+				} else {
+					console.log("No flockSONversion in Survey :-(");
+				}
+			}
 		}
 	}
 };
