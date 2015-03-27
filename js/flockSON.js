@@ -283,37 +283,60 @@ function chapter() {
 			return this.questions.length;
 		}
 	};
-	this.generateJSON = function() {
-		var chapterJSON = {};
-		var questionsJSONArray = [];
-		for (var i = 0; i < this.questions.length; i++) {
-			questionsJSONArray.push(this.questions[i].generateJSON());
-		}
-		chapterJSON["Chapter"] = this.title;
-		if (questionsJSONArray.length > 0) {
-			chapterJSON["Questions"] = questionsJSONArray;
-		}
-		return chapterJSON;
-	}
-	this.constructFromJSON = function(object) {
-		if ("Questions" in object) {
-			var objectQuestions = object["Questions"];
-			if (Array.isArray(objectQuestions)) {
-				this.questions = [];
-				for (var i = 0; i < objectQuestions.length; i++) {
-					this.questions.push(new question(false));
-					this.questions[i].constructFromJSON(objectQuestions[i]);
-				}
-			} else {
-				console.log("Questions in chapter is not an Array :-(");
+	this.serializeJSON = function() {
+		var chapterJSONObjectContents = {};
+		chapterJSONObjectContents["Title"] = this.title;
+		if (this.questions != null) {
+			var questionsJSONObject = [];
+			for ( var question in this.questions) {
+				questionsJSONObject.push(question.serializeJSON());
 			}
+			chapterJSONObjectContents["Questions"] = questionsJSONObject;
 		} else {
-			console.log("No questions in chapter object :-(");
+			chapterJSONObjectContents["Questions"] = null;
 		}
-		if ("Chapter" in object) {
-			this.title = object["Chapter"];
-		} else {
-			console.log("No chapter title in object :-(");
+		var chapterJSONObject = {};
+		chapterJSONObject["Chapter"] = chapterJSONObjectContents;
+		return chapterJSONObject;
+	}
+	this.deserializeJSON = function(chapterJSONString) {
+		var chapterObject = null;
+		try {
+			chapterObject = JSON.parse(chapterJSONString);
+		} catch (e) {
+			console
+					.log("JSON not parsed correctly, Chapter is not correct JSON :-(");
+		}
+		if (chapterObject != null) {
+			var chapterObjectContents = null;
+			if ("Chapter" in chapterObject) {
+				chapterObjectContents = chapterObject["Chapter"];
+			} else {
+				console.log("No Chapter in Object :-(");
+			}
+			if (chapterObjectContents != null) {
+				if ("Title" in chapterObjectContents) {
+					this.title = chapterObjectContents["Title"];
+				} else {
+					console.log("No Title in Chapter object :-(");
+				}
+				if ("Questions" in chapterObjectContents) {
+					var questionsArray = chapterObjectContents["Questions"];
+					if (questionsArray.constructor === Array) {
+						this.questions = [];
+						for ( var questionJSONObject in questionsArray) {
+							var questionObj = new question();
+							questionObj.derializeJSON(questionJSONObject)
+							this.questions.push(questionObj);
+						}
+					} else {
+						console
+								.log("Questions in Chapter is not a JSONArray :-(")
+					}
+				} else {
+					console.log("No Questions in Chapter object :-(");
+				}
+			}
 		}
 	}
 };
@@ -382,7 +405,7 @@ function survey() {
 					.log("JSON not parsed correctly, Survey is not correct JSON :-(");
 		}
 		if (surveyObject != null) {
-			surveyObjectContents = null;
+			var surveyObjectContents = null;
 			if ("Survey" in surveyObject) {
 				surveyObjectContents = surveyObject["Survey"];
 			} else {
