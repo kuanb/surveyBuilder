@@ -353,7 +353,25 @@ function survey() {
 
 	this.serializeJSON = fucntion()
 	{
-
+		var surveyJSONObjectContents = {};
+		if (this.flockSONversion == "0.1") {
+			surveyJSONObjectContents["flockSONversion"] = this.flockSONversion;
+			surveyJSONObjectContents["Title"] = this.title;
+			if (this.chapters != null) {
+				var chaptersJSONObject = [];
+				for ( var chapter in this.chapters) {
+					chaptersJSONObject.push(chapter.serializeJSON());
+				}
+				surveyJSONObjectContents["Chapters"] = chaptersJSONObject;
+			} else {
+				surveyJSONObjectContents["Chapters"] = null;
+			}
+		} else {
+			console.log("Incorrect flockSONversion :-(");
+		}
+		var surveyJSONObject = {};
+		surveyJSONObject["Survey"] = surveyJSONObjectContents;
+		return surveyJSONObject;
 	}
 	this.deserializeJSON = function(surveyJSONString) {
 		var surveyObject = null;

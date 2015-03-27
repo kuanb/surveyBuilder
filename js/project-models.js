@@ -242,11 +242,10 @@ function countersProject() {
 		countersProjectJSONObjectContents["TableID"] = this.tableID;
 		if (this.counters != null) {
 			var countersJSONObject = [];
-			for ( var counter in counters) {
+			for ( var counter in this.counters) {
 				countersJSONObject.push(counter.serializeJSON());
 			}
-			countersProjectJSONObjectContents["Counters"] = this.survey
-					.serializeJSON();
+			countersProjectJSONObjectContents["Counters"] = countersJSONObject;
 		} else {
 			countersProjectJSONObjectContents["Counters"] = null;
 		}
