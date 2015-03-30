@@ -13,17 +13,48 @@ function answer() {
 	this.setjumpID = function(jumpID) {
 		this.jumpID = jumpID;
 	};
-	this.generateJSON = function() {
-		var answerJSON = {};
-		var answerJSONcontents = {};
-		if (this.answerText != null) {
-			answerJSONcontents["Text"] = this.answerText;
+	this.serializeJSON = function(){
+		var answerJSONObjectContents = {};
+		if(this.answerText != null){
+			answerJSONObjectContents["Text"] = this.answerText;
+		} else {
+			console.log("No Text in Answer")
 		}
-		if (this.jumpID != null) {
-			answerJSONcontents["Jump"] = this.jumpID;
+		if(this.jumpID != null){
+			answerJSONObjectContents["JumpID"] = this.jumpID;
+		} else {
+			console.log("No JumpID in Answer")
 		}
-		answerJSON["Answer"] = answerJSONcontents;
-		return answerJSON;
+		var answerJSONObject = {};
+		answerJSONObject["Answer"] = answerJSONObjectContents;
+		return answerJSONObject;
+	}
+	this.deserializeJSON = function(answerJSONString){
+		var answerObject = null;
+		try {
+			answerObject = JSON.parse(answerJSONString);
+		} catch (e) {
+			console
+					.log("JSON not parsed correctly, Answer is not correct JSON :-(");
+		}
+		if (answerObject != null){
+			var answerObjectContents = null;
+			if ("Answer" in answerObject) {
+				answerObjectContents = answerObject["Answer"];
+			} else {
+				console.log("No Survey in Object :-(");
+			}
+			if ("Text" in answerObjectContents) {
+				this.questionText = answerObjectContents["Text"];
+			} else {
+				console.log("No Text in Answer :-(");
+			}
+			if ("JumpID" in answerObjectContents) {
+				this.questionText = answerObjectContents["JumpID"];
+			} else {
+				console.log("No JumpID in Question :-(");
+			}
+		}
 	}
 	this.constructFromJSON = function(object) {
 		if ("Answer" in object) {
