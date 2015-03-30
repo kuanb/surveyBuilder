@@ -14,7 +14,6 @@ function answer() {
 		this.jumpID = jumpID;
 	};
 	this.generateJSON = function() {
-
 		var answerJSON = {};
 		var answerJSONcontents = {};
 		if (this.answerText != null) {
