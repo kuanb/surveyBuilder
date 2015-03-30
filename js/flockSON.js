@@ -49,6 +49,7 @@ function question(inLoop) {
 	this.questionID = null; // String
 	this.otherEnabled = null; // Boolean
 	this.jumpID = null; // String
+
 	this.getKind = function() {
 		return this.kind;
 	};
@@ -91,110 +92,157 @@ function question(inLoop) {
 	this.setLoopQuestions = function(loopQuestions) {
 		this.loopQuestions = loopQuestions;
 	};
-	this.generateJSON = function() {
-		var questionJSON = {};
-		questionJSON["Question"] = this.questionText;
-		questionJSON["id"] = this.questionID;
-		questionJSON["Kind"] = this.kind;
+
+	this.serializeJSON = function() {
+		var questionJSONObjectContents = {};
+		if (this.kind != null) {
+			questionJSONObjectContents["Kind"] = this.kind;
+		} else {
+			console.log("Kind in Question is null");
+		}
+		if (this.questionText != null) {
+			questionJSONObjectContents["Text"] = this.questionText;
+		} else {
+			console.log("Text in Question is null");
+		}
 		if (this.jumpID != null) {
-			questionJSON["Jump"] = this.jumpID;
+			questionJSONObjectContents["JumpID"] = this.jumpID;
+		} else {
+			console.log("JumpID in Question is null");
 		}
 		if (this.otherEnabled != null) {
-			questionJSON["Other"] = this.otherEnabled;
-		}
-		if ((this.answers !== null) && (this.answers.length > 0)) {
-			var length = this.answers.length;
-			var answersArray = [];
-			for (var i = 0; i < length; i++) {
-				answersArray.push(this.answers[i].generateJSON());
-			}
-			;
-			questionJSON["Answers"] = answersArray;
-		}
-		if (this.loopQuestions != null) {
-			var questionsJSONArray = [];
-			for (var i = 0; i < this.loopQuestions.length; i++) {
-				questionsJSONArray.push(this.loopQuestions[i].generateJSON());
-			}
-			if (questionsJSONArray.length > 0) {
-				questionJSON["Questions"] = questionsJSONArray;
-			}
-		}
-		return questionJSON;
-	}
-	this.constructFromJSON = function(object) {
-		if ("Kind" in object) {
-			var tempKind = object["Kind"];
-			var qK = new questionKind(this.inloop);
-			var JSONNames = qK.getJsonNames();
-			var validQuestionKind = false;
-			for (i = 0; i < JSONNames.length; i++) {
-				if (JSONNames[i] === tempKind) {
-					this.kind = tempKind;
-					validQuestionKind = true;
-				}
-			}
-			if (!validQuestionKind) {
-				console
-						.log("Question kind in question object is not a valid value :-(");
-			}
+			questionJSONObjectContents["Other"] = this.otherEnabled;
 		} else {
-			console.log("No question kind in question object :-(");
-		}
-		if ("Jump" in object) {
-			this.jumpID = object["Jump"];
-		} else {
-
-		}
-		if ("Question" in object) {
-			this.questionText = object["Question"];
-		} else {
-			console.log("No question text in question object :-(")
-		}
-		if ("id" in object) {
-			this.questionID = object["id"];
-		}
-		if ((this.kind === qK.MULTIPLE_CHOICE.jsonName)
-				|| (this.kind === qK.CHECKBOX.jsonName)) {
-			if ("Other" in object) {
-				this.otherEnabled = object["Other"];
-			} else {
-				this.otherEnabled = false;
-			}
+			console.log("Other in Question is null");
 		}
 		if (((this.kind === qK.MULTIPLE_CHOICE.jsonName) || (this.kind === qK.CHECKBOX.jsonName))
 				|| (this.kind === qK.ORDERED.jsonName)) {
-			if ("Answers" in object) {
-				var objectAnswers = object["Answers"];
-				if (Array.isArray(objectAnswers)) {
-					this.answers = [];
-					for (var i = 0; i < objectAnswers.length; i++) {
-						this.answers.push(new answer());
-						this.answers[i].constructFromJSON(objectAnswers[i]);
-					}
-				} else {
-					console.log("Answers in question is not an Array :-(");
+			if ((this.answers !== null) && (this.answers.length > 0)) {
+				var length = this.answers.length;
+				var answersArray = [];
+				for (var i = 0; i < length; i++) {
+					answersArray.push(this.answers[i].generateJSON());
 				}
+				;
+				questionJSONObjectContents["Answers"] = answersArray;
 			} else {
-				console.log("No answers in question object :-(");
+				console
+						.log("No Ansers or empty Answers Array in MC, CB or OL quesiton :-(");
 			}
 		}
 		if ((this.kind === qK.LOOP.jsonName) && (this.inLoop == false)) {
-			if ("Questions" in object) {
-				var objectQuestions = object["Questions"];
-				if (Array.isArray(objectQuestions)) {
-					this.loopQuestions = [];
-					for (var i = 0; i < objectQuestions.length; i++) {
-						this.loopQuestions.push(new question(true));
-						this.loopQuestions[i]
-								.constructFromJSON(objectQuestions[i]);
+			if ((this.questions !== null) && (this.questions.length > 0)) {
+				var length = this.questions.length;
+				var questionsArray = [];
+				for (var i = 0; i < length; i++) {
+					questionsArray.push(this.questions[i].generateJSON());
+				}
+				;
+				questionJSONObjectContents["Questions"] = questionsArray;
+			} else {
+				console
+						.log("No Questions or empty Questions Array in LP quesiton :-(");
+			}
+		}
+		var questionJSONObject = {};
+		questionJSONObject["Question"] = questionJSONObjectContents;
+		return questionJSONObject;
+	}
+	this.deserializeJSON = function(questionJSONString) {
+		var questionObject = null;
+		try {
+			questionObject = JSON.parse(tracekrProjectJSONString);
+		} catch (e) {
+			console
+					.log("JSON not parsed correctly, Question is not correct JSON :-(");
+		}
+		if (questionObject != null) {
+			var questionObjectContents = null;
+			if ("Question" in questionObject) {
+				questionObjectContents = questionObject["Question"];
+			} else {
+				console.log("No Question in Object :-(");
+			}
+			if (questionObjectContents != null) {
+				if ("Kind" in questionObjectContents) {
+					var tempKind = questionObjectContents["Kind"];
+					var qK = new questionKind(this.inloop);
+					var JSONNames = qK.getJsonNames();
+					var validQuestionKind = false;
+					for (i = 0; i < JSONNames.length; i++) {
+						if (JSONNames[i] === tempKind) {
+							this.kind = tempKind;
+							validQuestionKind = true;
+						}
+					}
+					if (!validQuestionKind) {
+						console
+								.log("Kind in Question object is not a valid value :-(");
 					}
 				} else {
-					console
-							.log("Questions in loop questions is not an Array :-(");
+					console.log("No Kind in Question :-(");
 				}
-			} else {
-				console.log("No questions in loop question object :-(");
+				if ("Text" in questionObjectContents) {
+					this.questionText = questionObjectContents["Text"];
+				} else {
+					console.log("No Text in Question :-(");
+				}
+				if ("ID" in questionObjectContents) {
+					this.questionID = questionObjectContents["ID"];
+				} else {
+					console.log("No ID in Question :-(");
+				}
+				if ("JumpID" in questionObjectContents) {
+					this.jumpID = questionObjectContents["JumpID"];
+				} else {
+					this.jumpID = false;
+					console.log("No JumpID in Question :-(");
+				}
+				if ((this.kind === qK.MULTIPLE_CHOICE.jsonName)
+						|| (this.kind === qK.CHECKBOX.jsonName)) {
+					if ("Other" in object) {
+						this.otherEnabled = object["Other"];
+					} else {
+						this.otherEnabled = false;
+					}
+				}
+				if (((this.kind === qK.MULTIPLE_CHOICE.jsonName) || (this.kind === qK.CHECKBOX.jsonName))
+						|| (this.kind === qK.ORDERED.jsonName)) {
+					if ("Answers" in object) {
+						var objectAnswers = object["Answers"];
+						if (Array.isArray(objectAnswers)) {
+							this.answers = [];
+							for (var i = 0; i < objectAnswers.length; i++) {
+								this.answers.push(new answer());
+								this.answers[i]
+										.deserializeJSON(objectAnswers[i]);
+							}
+						} else {
+							console
+									.log("Answers in Question is not an Array :-(");
+						}
+					} else {
+						console.log("No Answers in Question object :-(");
+					}
+				}
+				if ((this.kind === qK.LOOP.jsonName) && (this.inLoop == false)) {
+					if ("Questions" in object) {
+						var objectQuestions = object["Questions"];
+						if (Array.isArray(objectQuestions)) {
+							this.loopQuestions = [];
+							for (var i = 0; i < objectQuestions.length; i++) {
+								this.loopQuestions.push(new question(true));
+								this.loopQuestions[i]
+										.deserializeJSON(objectQuestions[i]);
+							}
+						} else {
+							console
+									.log("Questions in LP Question is not an Array :-(");
+						}
+					} else {
+						console.log("No Questions in LP Question object :-(");
+					}
+				}
 			}
 		}
 	}

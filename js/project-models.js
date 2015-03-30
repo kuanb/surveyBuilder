@@ -333,7 +333,7 @@ function trackerProject() {
 					.log("JSON not parsed correctly, TrackerProject is not correct JSON :-(");
 		}
 		if (trackerProjectObject != null) {
-			trackerProjectObjectContents = null;
+			var trackerProjectObjectContents = null;
 			if ("TrackerProject" in trackerProjectObject) {
 				trackerProjectObjectContents = trackerProjectObject["TrackerProject"];
 			} else {
