@@ -1,5 +1,4 @@
-FT_pr = function()
-{
+FT_pr = function() {
 	// Part of the code for the models of the data
 	// /"&)(!/=)"!/=)/"!?/((/&(&%"!(&/=")/)"!(??"!)"=)?/")!=/!&"/!&?#&*)
 	function tracker() {
@@ -83,11 +82,15 @@ FT_pr = function()
 
 		this.deserializeJSON = function(projectJSONString) {
 			projectObject = null;
-			try {
-				var projectObject = JSON.parse(projectJSONString);
-			} catch (e) {
-				console
-						.log("JSON not parsed correctly, Project is not correct JSON :-(");
+			if (projectJSONString.constructor === {}.constructor) {
+				projectObject = surveyProjectJSONString;
+			} else {
+				try {
+					projectObject = JSON.parse(projectJSONString);
+				} catch (e) {
+					console
+							.log("JSON not parsed correctly, Project is not correct JSON :-(");
+				}
 			}
 			if (projectObject != null) {
 				var projectObjectContents = null;
@@ -102,6 +105,8 @@ FT_pr = function()
 							this.flocktrackerProjectVersion = projectObjectContents["FlocktrackerProjectVersion"];
 							if ("SurveyProject" in projectObjectContents) {
 								this.surveyProject = (new surveyProject());
+								this.surveyProject
+										.setProjectName("SurveyProject");
 								this.surveyProject
 										.deserializeJSON({
 											"SurveyProject" : projectObjectContents["SurveyProject"]
@@ -172,7 +177,7 @@ FT_pr = function()
 			projectJSONObject["FlocktrackerProject"] = projectJSONObjectContents;
 			return projectJSONObject;
 		}
-	}
+	};
 	function surveyProject(projectName) {
 		this.projectName = projectName;
 		this.tableID = null;
@@ -188,11 +193,15 @@ FT_pr = function()
 		}
 		this.deserializeJSON = function(surveyProjectJSONString) {
 			var surveyProjectObject = null;
-			try {
-				surveyProjectObject = JSON.parse(surveyProjectJSONString);
-			} catch (e) {
-				console
-						.log("JSON not parsed correctly, SurveyProject is not correct JSON :-(");
+			if (surveyProjectJSONString.constructor === {}.constructor) {
+				surveyProjectObject = surveyProjectJSONString;
+			} else {
+				try {
+					surveyProjectObject = JSON.parse(surveyProjectJSONString);
+				} catch (e) {
+					console
+							.log("JSON not parsed correctly, SurveyProject is not correct JSON :-(");
+				}
 			}
 			if (surveyProjectObject != null) {
 				var surveyProjectObjectContents = null;
@@ -260,11 +269,16 @@ FT_pr = function()
 		}
 		this.deserializeJSON = function(countersProjectJSONString) {
 			var countersProjectObject = null;
-			try {
-				countersProjectObject = JSON.parse(countersProjectJSONString);
-			} catch (e) {
-				console
-						.log("JSON not parsed correctly, CountersProject is not correct JSON :-(");
+			if (countersProjectJSONString.constructor === {}.constructor) {
+				countersProjectObject = countersProjectJSONString;
+			} else {
+				try {
+					countersProjectObject = JSON
+							.parse(countersProjectJSONString);
+				} catch (e) {
+					console
+							.log("JSON not parsed correctly, CountersProject is not correct JSON :-(");
+				}
 			}
 			if (countersProjectObject != null) {
 				var countersProjectObjectContents = null;
@@ -332,11 +346,15 @@ FT_pr = function()
 		}
 		this.deserializeJSON = function(tracekrProjectJSONString) {
 			var trackerProjectObject = null;
-			try {
-				trackerProjectObject = JSON.parse(tracekrProjectJSONString);
-			} catch (e) {
-				console
-						.log("JSON not parsed correctly, TrackerProject is not correct JSON :-(");
+			if (tracekrProjectJSONString.constructor === {}.constructor) {
+				trackerProjectObject = tracekrProjectJSONString;
+			} else {
+				try {
+					trackerProjectObject = JSON.parse(tracekrProjectJSONString);
+				} catch (e) {
+					console
+							.log("JSON not parsed correctly, TrackerProject is not correct JSON :-(");
+				}
 			}
 			if (trackerProjectObject != null) {
 				var trackerProjectObjectContents = null;
