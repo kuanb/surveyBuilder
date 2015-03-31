@@ -3,7 +3,6 @@ var FT_pr = function() {
 	// /"&)(!/=)"!/=)/"!?/((/&(&%"!(&/=")/)"!(??"!)"=)?/")!=/!&"/!&?#&*)
 	var that = this;
 	this.tracker = function() {
-		this.questions = []; // Instances of questions
 		this.fusionTableID = null; // String
 		this.getfusionTableID = function() {
 			return this.fusionTableID;
@@ -11,43 +10,45 @@ var FT_pr = function() {
 		this.setfusionTableID = function(fusionTableID) {
 			this.fusionTableID = fusionTableID;
 		};
-		this.getQuestions = function() {
-			return this.questions;
-		};
-		this.setQuestions = function(questions) {
-			this.questions = questions;
-		};
-		this.generateJSON = function() {
-			var trackerJSON = {};
-			var questionsJSONArray = [];
-			for (var i = 0; i < this.questions.length; i++) {
-				questionsJSONArray.push(this.questions[i].generateJSON());
-			}
-			trackerJSON["Questions"] = questionsJSONArray;
-			trackerJSON["TableID"] = this.fusionTableID;
-			return trackerJSON;
-		}
-		this.constructFromJSON = function(object) {
-			if ("Questions" in object) {
-				var objectQuestions = object["Questions"];
-				if (Array.isArray(objectQuestions)) {
-					this.questions = [];
-					for (var i = 0; i < objectQuestions.length; i++) {
-						this.questions.push(new question(false));
-						this.questions[i].constructFromJSON(objectQuestions[i]);
-					}
-				} else {
-					console.log("Questions in tracker is not an Array :-(");
+		this.deserializeJSON = function(trackerJSONString){
+			trackerObject = null;
+			if (trackerJSONString.constructor === {}.constructor) {
+				trackerObject = surveyProjectJSONString;
+			} else {
+				try {
+					trackerObject = JSON.parse(trackerJSONString);
+				} catch (e) {
+					console
+							.log("JSON not parsed correctly, Tracker is not correct JSON :-(");
 				}
-			} else {
-				console.log("No questions in tracker object :-(");
 			}
-			if ("TableID" in object) {
-				this.fusionTableID = object["TableID"];
-			} else {
-				console.log("No fusionTableID in tracker object :-(");
+			if(trackerObject != null){
+				var trackerObjectContents = null;
+				if ("Tracker" in projectObjectContents) {
+					trackerObjectContents = trackerObject["Tracker"];
+				} else{
+					console.log("No Tracker in Tracker Object :-(")
+				}
+				if(trackerObjectContents != null){
+					if ("TableID" in trackerObjectContents) {
+						this.tableID = trackerObjectContents["TableID"];
+					} else {
+						console.log("No TableID in Tracker object :-(");
+					}
+				}
 			}
-		}
+		};
+		this.serializeJSON = function(){
+			var trackerJSONObjectContents = {};
+			if (this.fusionTableID != null) {
+				trackerJSONObjectContents["TableID"] = this.fusionTableID;
+			} else {
+				trackerJSONObjectContents["TableID"] = null;
+			}
+			var trackerJSONObject = {};
+			trackerJSONObject["Tracker"] = trackerJSONObjectContents;
+			return trackerJSONObject;
+		};
 	}
 	;
 	this.project = function() {
@@ -124,7 +125,7 @@ var FT_pr = function() {
 										.log("No TrackerProject in survey Project :-(");
 							}
 							if ("CountersProject" in projectObjectContents) {
-								this.cProject = (new countersProject());
+								this.cProject = (new that.countersProject());
 								this.cProject
 										.deserializeJSON({
 											"CountersProject" : projectObjectContents["CountersProject"]
