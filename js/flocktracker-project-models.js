@@ -2,6 +2,7 @@ var FT_pr = function() {
 	// Part of the code for the models of the data
 	// /"&)(!/=)"!/=)/"!?/((/&(&%"!(&/=")/)"!(??"!)"=)?/")!=/!&"/!&?#&*)
 	var that = this;
+	this.fSON = new FlockSON();
 	this.tracker = function() {
 		this.fusionTableID = null; // String
 		this.getfusionTableID = function() {
@@ -13,7 +14,7 @@ var FT_pr = function() {
 		this.deserializeJSON = function(trackerJSONString){
 			trackerObject = null;
 			if (trackerJSONString.constructor === {}.constructor) {
-				trackerObject = surveyProjectJSONString;
+				trackerObject = trackerJSONString;
 			} else {
 				try {
 					trackerObject = JSON.parse(trackerJSONString);
@@ -24,7 +25,7 @@ var FT_pr = function() {
 			}
 			if(trackerObject != null){
 				var trackerObjectContents = null;
-				if ("Tracker" in projectObjectContents) {
+				if ("Tracker" in trackerObject) {
 					trackerObjectContents = trackerObject["Tracker"];
 				} else{
 					console.log("No Tracker in Tracker Object :-(")
@@ -223,7 +224,7 @@ var FT_pr = function() {
 								+ this.projectName + " :-(");
 					}
 					if ("Survey" in surveyProjectObjectContents) {
-						this.survey = (new survey());
+						this.survey = (new that.fSON.survey());
 						this.survey.deserializeJSON({
 							"Survey" : surveyProjectObjectContents["Survey"]
 						});
@@ -282,7 +283,7 @@ var FT_pr = function() {
 			}
 			if (countersProjectObject != null) {
 				var countersProjectObjectContents = null;
-				if (this.projectName in countersProjectObject) {
+				if ("CountersProject" in countersProjectObject) {
 					countersProjectObjectContents = countersProjectObject["CountersProject"];
 				} else {
 					console.log("No CountersProject in Object :-(");
@@ -298,8 +299,8 @@ var FT_pr = function() {
 						if (countersArray.constructor === Array) {
 							this.counters = [];
 							for ( var counterJSONObject in countersArray) {
-								var counterObj = new counter();
-								counterObj.derializeJSON(counterJSONObject)
+								var counterObj = new that.counter();
+								counterObj.deserializeJSON(counterJSONObject)
 								this.counters.push(counterObj);
 							}
 						} else {
@@ -397,5 +398,58 @@ var FT_pr = function() {
 				}
 			}
 		}
+	}
+	this.counter = function(){
+		this.name = null;
+		this.id = null;
+		this.deserializeJSON = function(counterJSONString){
+			var counterObject = null;
+			if (counterJSONString.constructor === {}.constructor) {
+				counterObject = counterJSONString;
+			} else {
+				try {
+					counterObject = JSON.parse(counterJSONString);
+				} catch (e) {
+					console
+							.log("JSON not parsed correctly, Counter is not correct JSON :-(");
+				}
+			}
+			if(counterObject != null){
+				var counterObjectContents = null;
+				if ("Counter" in counterObject) {
+					counterObjectContents = counterObject["Counter"];
+				} else{
+					console.log("No Counter in Counter Object :-(")
+				}
+				if(counterObjectContents != null){
+					if ("Name" in counterObjectContents) {
+						this.name = counterObjectContents["Name"];
+					} else {
+						console.log("No Name in Tracker object :-(");
+					}
+					if ("ID" in counterObjectContents) {
+						this.id = counterObjectContents["ID"];
+					} else {
+						console.log("No ID in Counter object :-(");
+					}
+				}
+			}
+		};
+		this.serializeJSON = function(){
+			var counterJSONObjectContents = {};
+			if (this.name != null) {
+				counterJSONObjectContents["Name"] = this.name;
+			} else {
+				counterJSONObjectContents["Name"] = null;
+			}
+			if (this.id != null) {
+				counterJSONObjectContents["ID"] = this.id;
+			} else {
+				counterJSONObjectContents["ID"] = null;
+			}
+			var counterJSONObject = {};
+			counterJSONObject["Counter"] = counterJSONObjectContents;
+			return counterJSONObject;
+		};
 	}
 }
