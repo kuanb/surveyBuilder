@@ -452,7 +452,7 @@ function survey() {
 		}
 	}
 
-	this.serializeJSON = fucntion()
+	this.serializeJSON = function()
 	{
 		var surveyJSONObjectContents = {};
 		if (this.flockSONversion == "0.1") {

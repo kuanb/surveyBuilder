@@ -1,7 +1,8 @@
-FT_pr = function() {
+var FT_pr = function() {
 	// Part of the code for the models of the data
 	// /"&)(!/=)"!/=)/"!?/((/&(&%"!(&/=")/)"!(??"!)"=)?/")!=/!&"/!&?#&*)
-	function tracker() {
+	var that = this;
+	this.tracker = function() {
 		this.questions = []; // Instances of questions
 		this.fusionTableID = null; // String
 		this.getfusionTableID = function() {
@@ -50,27 +51,27 @@ FT_pr = function() {
 	}
 	;
 	this.project = function() {
-		this.surveyProject = null;
-		this.trackerProject = null;
-		this.countersProject = null;
+		this.sProject = null;
+		this.tProject = null;
+		this.cProject = null;
 		this.flocktrackerProjectVersion = null;
 		this.getSurveyProject = function() {
 			return this.surveyProject;
 		}
-		this.setSurveyProject = function(surveyProject) {
-			this.surveyProject = surveyProject;
+		this.setSurveyProject = function(sProject) {
+			this.sProject = sProject;
 		}
 		this.getTrackerProject = function() {
-			return this.trackerProject;
+			return this.tProject;
 		}
-		this.setTrackerProject = function(trackerProject) {
-			this.trackerProject = trackerProject;
+		this.setTrackerProject = function(tProject) {
+			this.tProject = tProject;
 		}
 		this.getCountersProject = function() {
-			return this.countersProject;
+			return this.cProject;
 		}
-		this.setCountersProject = function(countersProject) {
-			this.countersProject = countersProject;
+		this.setCountersProject = function(cProject) {
+			this.cProject = cProject;
 		}
 		this.getFlocktrackerProjectVersion = function() {
 			return this.flocktrackerProjectVersion;
@@ -104,10 +105,8 @@ FT_pr = function() {
 						if (projectObjectContents["FlocktrackerProjectVersion"] == "0.1") {
 							this.flocktrackerProjectVersion = projectObjectContents["FlocktrackerProjectVersion"];
 							if ("SurveyProject" in projectObjectContents) {
-								this.surveyProject = (new surveyProject());
-								this.surveyProject
-										.setProjectName("SurveyProject");
-								this.surveyProject
+								this.sProject = (new that.surveyProject("SurveyProject"));
+								this.sProject
 										.deserializeJSON({
 											"SurveyProject" : projectObjectContents["SurveyProject"]
 										});
@@ -115,8 +114,8 @@ FT_pr = function() {
 								console.log("No SurveyProject in Project :-(");
 							}
 							if ("TrackerProject" in projectObjectContents) {
-								this.trackerProject = (new trackerProject());
-								this.trackerProject
+								this.tProject = (new that.trackerProject());
+								this.tProject
 										.deserializeJSON({
 											"TrackerProject" : projectObjectContents["TrackerProject"]
 										});
@@ -125,8 +124,8 @@ FT_pr = function() {
 										.log("No TrackerProject in survey Project :-(");
 							}
 							if ("CountersProject" in projectObjectContents) {
-								this.countersProject = (new countersProject());
-								this.countersProject
+								this.cProject = (new countersProject());
+								this.cProject
 										.deserializeJSON({
 											"CountersProject" : projectObjectContents["CountersProject"]
 										});
@@ -149,22 +148,22 @@ FT_pr = function() {
 			var projectJSONObjectContents = {};
 			if (this.flocktrackerProjectVersion == "0.1") {
 				projectJSONObjectContents["FlocktrackerProjectVersion"] = this.flocktrackerProjectVersion;
-				if (this.surveyProject != null) {
-					projectJSONObjectContents["SurveyProject"] = this.surveyProject
+				if (this.sProject != null) {
+					projectJSONObjectContents["SurveyProject"] = this.sProject
 							.serializeJSON();
 				} else {
 					surveyProjectJSONObjectContents["SurveyProject"] = null;
 					console.log("SurveyProject is null :-(")
 				}
-				if (this.countersProject != null) {
-					projectJSONObjectContents["CountersProject"] = this.countersProject
+				if (this.cProject != null) {
+					projectJSONObjectContents["CountersProject"] = this.cProject
 							.serializeJSON();
 				} else {
 					surveyProjectJSONObjectContents["CountersProject"] = null;
 					console.log("CountersProject project is null :-(")
 				}
-				if (this.trackerProject != null) {
-					projectJSONObjectContents["TrackerProject"] = this.trackerProject
+				if (this.tProject != null) {
+					projectJSONObjectContents["TrackerProject"] = this.tProject
 							.serializeJSON();
 				} else {
 					surveyProjectJSONObjectContents["TrackerProject"] = null;
@@ -178,7 +177,7 @@ FT_pr = function() {
 			return projectJSONObject;
 		}
 	};
-	function surveyProject(projectName) {
+	this.surveyProject = function(projectName) {
 		this.projectName = projectName;
 		this.tableID = null;
 		this.survey = null;
@@ -248,7 +247,7 @@ FT_pr = function() {
 			return surveyProjectJSONObject;
 		}
 	}
-	function countersProject() {
+	this.countersProject = function() {
 		this.counters = null;
 		this.tableID = null;
 		this.serializeJSON = function() {
@@ -315,10 +314,10 @@ FT_pr = function() {
 			}
 		}
 	}
-	function trackerProject() {
+	this.trackerProject = function() {
 		this.startSurveyProject = null;
 		this.endSurveyProject = null;
-		this.tracker = null;
+		this.tr = null;
 
 		this.serializeJSON = function() {
 			var trackerProjectJSONObjectContents = {};
@@ -334,8 +333,8 @@ FT_pr = function() {
 			} else {
 				trackerProjectJSONObjectContents["EndSurvey"] = null;
 			}
-			if (this.tracker != null) {
-				trackerProjectJSONObjectContents["Tracker"] = this.tracker
+			if (this.tr != null) {
+				trackerProjectJSONObjectContents["Tracker"] = this.tr
 						.serializeJSON();
 			} else {
 				trackerProjectJSONObjectContents["Tracker"] = null;
@@ -365,7 +364,7 @@ FT_pr = function() {
 				}
 				if (trackerProjectObjectContents != null) {
 					if ("StartSurvey" in trackerProjectObjectContents) {
-						this.startSurveyProject = (new surveyProject(
+						this.startSurveyProject = (new that.surveyProject(
 								"StartSurvey"));
 						this.startSurveyProject
 								.deserializeJSON({
@@ -376,7 +375,7 @@ FT_pr = function() {
 								+ this.projectName + " :-(");
 					}
 					if ("EndSurvey" in trackerProjectObjectContents) {
-						this.endSurveyProject = (new surveyProject("EndSurvey"));
+						this.endSurveyProject = (new that.surveyProject("EndSurvey"));
 						this.endSurveyProject
 								.deserializeJSON({
 									"EndSurvey" : trackerProjectObjectContents["EndSurvey"]
@@ -386,8 +385,8 @@ FT_pr = function() {
 								+ this.projectName + " :-(");
 					}
 					if ("Tracker" in trackerProjectObjectContents) {
-						this.tracker = (new Tracker("Tracker"));
-						this.tracker.deserializeJSON({
+						this.tr = (new that.tracker());
+						this.tr.deserializeJSON({
 							"Tracker" : trackerProjectObjectContents["Tracker"]
 						});
 					} else {
