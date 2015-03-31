@@ -1,6 +1,6 @@
 // Here be the Views
 // !!/!T(&"#("/!(/T#")(/!=)/"=)(!)(YEU!")/H)"(UWE=")!"(!=)(!=#)(=))))
-FT_PB = fucntion()
+FT_PB = function()
 {
 	projectView = fucntion(pr, parentView)
 	{

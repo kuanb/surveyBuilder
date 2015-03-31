@@ -1,4 +1,4 @@
-FT_pr = fucntion()
+FT_pr = function()
 {
 	// Part of the code for the models of the data
 	// /"&)(!/=)"!/=)/"!?/((/&(&%"!(&/=")/)"!(??"!)"=)?/")!=/!&"/!&?#&*)
@@ -50,7 +50,7 @@ FT_pr = fucntion()
 		}
 	}
 	;
-	function project() {
+	this.project = function() {
 		this.surveyProject = null;
 		this.trackerProject = null;
 		this.countersProject = null;
