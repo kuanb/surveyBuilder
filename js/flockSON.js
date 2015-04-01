@@ -70,8 +70,7 @@ var FlockSON = function() {
 
 			}
 		}
-	}
-	;
+	};
 
 	this.question = function(inLoop) {
 		this.inLoop = inLoop; // Boolean to know if inside loop
@@ -281,8 +280,7 @@ var FlockSON = function() {
 				}
 			}
 		}
-	}
-	;
+	};
 	this.questionKind = function(inLoop) {
 		// Object to list the question kinds possible to add to a question array
 		this.inLoop = inLoop;
@@ -341,8 +339,7 @@ var FlockSON = function() {
 			}
 			return names;
 		};
-	}
-	;
+	};
 	this.chapter = function() {
 		this.title = null; // String
 		this.questions = []; // Array of question objects
@@ -424,8 +421,7 @@ var FlockSON = function() {
 				}
 			}
 		}
-	}
-	;
+	};
 	this.survey = function() {
 		this.chapters = []; // Instances of chapters
 		this.flockSONversion = null; // String
@@ -481,14 +477,8 @@ var FlockSON = function() {
 			surveyJSONObject["Survey"] = surveyJSONObjectContents;
 			return surveyJSONObject;
 		}
-		this.deserializeJSON = function(surveyJSONString) {
-			var surveyObject = null;
-			try {
-				surveyObject = JSON.parse(surveyJSONString);
-			} catch (e) {
-				console
-						.log("JSON not parsed correctly, Survey is not correct JSON :-(");
-			}
+		this.deserializeJSON = function(surveyObjorString) {
+			var surveyObject = that.getJSON(surveyObjorString);
 			if (surveyObject != null) {
 				var surveyObjectContents = null;
 				if ("Survey" in surveyObject) {
@@ -510,9 +500,9 @@ var FlockSON = function() {
 								if (chaptersArray.constructor === Array) {
 									this.chapters = [];
 									for ( var chapterJSONObject in chaptersArray) {
-										var chapterObj = new chapter();
+										var chapterObj = new that.chapter();
 										chapterObj
-												.derializeJSON(chapterJSONObject)
+												.deserializeJSON(chapterJSONObject)
 										this.chapters.push(chapterObj);
 									}
 								} else {
@@ -530,9 +520,23 @@ var FlockSON = function() {
 					} else {
 						console.log("No flockSONversion in Survey :-(");
 					}
+				} else {
+					console
+							.log("JSON not parsed correctly, Survey is not correct JSON :-(");
 				}
 			}
 		}
+	};
+	this.getJSON = function(JSONStringOrObject) {
+		var object = null;
+		if (JSONStringOrObject.constructor === {}.constructor) {
+			object = JSONStringOrObject;
+		} else {
+			try {
+				object = JSON.parse(JSONStringOrObject);
+			} catch (e) {
+			}
+		}
+		return object;
 	}
-	;
 }
