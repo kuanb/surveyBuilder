@@ -298,9 +298,9 @@ var FT_pr = function() {
 						var countersArray = countersProjectObjectContents["Counters"];
 						if (countersArray.constructor === Array) {
 							this.counters = [];
-							for ( var counterJSONObject in countersArray) {
+							for ( var counterIndex in countersArray) {
 								var counterObj = new that.counter();
-								counterObj.deserializeJSON(counterJSONObject)
+								counterObj.deserializeJSON(countersArray[counterIndex])
 								this.counters.push(counterObj);
 							}
 						} else {
