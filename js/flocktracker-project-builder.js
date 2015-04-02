@@ -1,8 +1,109 @@
 // Here be the Views
 // !!/!T(&"#("/!(/T#")(/!=)/"=)(!)(YEU!")/H)"(UWE=")!"(!=)(!=#)(=))))
-FT_PB = function()
+FT_pb = function()
 {
-	projectView = fucntion(pr, parentView)
+	this.projectView = function(pr, parentView){
+		this.initializeView = function(){
+
+		}
+		this.updateContent = function(pr){
+			
+		}
+		this.contentChanged = function(){
+			
+		}
+		this.getView = function(){
+			
+		}
+
+	}
+	
+	this.surveyProjectView = function(sP, parentView){
+		this.initializeView = function(){
+
+		}
+		this.updateContent = function(pr){
+			
+		}
+		this.contentChanged = function(){
+			
+		}
+		this.getView = function(){
+			
+		}
+		this.parentView = parentView;
+		this.sP = sP;
+	}
+	
+	this.trackerProjectView = function(tP, parentView){
+		this.initializeView = function(){
+
+		}
+		this.updateContent = function(pr){
+			
+		}
+		this.contentChanged = function(){
+			
+		}
+		this.getView = function(){
+			
+		}
+		this.parentView = parentView;
+		this.tP = tP;
+	}
+	
+	this.countersProjectView = function(cP, parentView){
+		this.initializeView = function(){
+
+		}
+		this.updateContent = function(pr){
+			
+		}
+		this.contentChanged = function(){
+			
+		}
+		this.getView = function(){
+			
+		}
+		this.parentView = parentView;
+		this.cP = cP;
+	}
+	
+	this.trackerView = function(tr, parentView){
+		this.initializeView = function(){
+
+		}
+		this.updateContent = function(pr){
+			
+		}
+		this.contentChanged = function(){
+			
+		}
+		this.getView = function(){
+			
+		}
+		this.parentView = parentView;
+		this.tr = tr;
+	}
+	
+	this.counterView = function(co, parentView){
+		this.initializeView = function(){
+
+		}
+		this.updateContent = function(pr){
+			
+		}
+		this.contentChanged = function(){
+			
+		}
+		this.getView = function(){
+			
+		}
+		this.parentView = parentView;
+		this.co = co;
+	}
+	
+	this.OLDprojectView = function(pr, parentView)
 	{
 		this.initializeView = function() {
 			this.div = document.createElement('div');
