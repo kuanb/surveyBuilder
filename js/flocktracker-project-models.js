@@ -11,18 +11,8 @@ var FT_pr = function() {
 		this.setfusionTableID = function(fusionTableID) {
 			this.fusionTableID = fusionTableID;
 		};
-		this.deserializeJSON = function(trackerJSONString){
-			trackerObject = null;
-			if (trackerJSONString.constructor === {}.constructor) {
-				trackerObject = trackerJSONString;
-			} else {
-				try {
-					trackerObject = JSON.parse(trackerJSONString);
-				} catch (e) {
-					console
-							.log("JSON not parsed correctly, Tracker is not correct JSON :-(");
-				}
-			}
+		this.deserializeJSON = function(trackerObjorString){
+			var trackerObject = that.fSON.getJSON(trackerObjorString);
 			if(trackerObject != null){
 				var trackerObjectContents = null;
 				if ("Tracker" in trackerObject) {
@@ -37,6 +27,9 @@ var FT_pr = function() {
 						console.log("No TableID in Tracker object :-(");
 					}
 				}
+			} else {
+				console
+				.log("JSON not parsed correctly, Tracker is not correct JSON :-(");
 			}
 		};
 		this.serializeJSON = function(){
@@ -83,18 +76,8 @@ var FT_pr = function() {
 			this.flocktrackerProjectVersion = flocktrackerProjectVersion;
 		}
 
-		this.deserializeJSON = function(projectJSONString) {
-			projectObject = null;
-			if (projectJSONString.constructor === {}.constructor) {
-				projectObject = surveyProjectJSONString;
-			} else {
-				try {
-					projectObject = JSON.parse(projectJSONString);
-				} catch (e) {
-					console
-							.log("JSON not parsed correctly, Project is not correct JSON :-(");
-				}
-			}
+		this.deserializeJSON = function(projectObjorString) {
+			var projectObject = that.fSON.getJSON(projectObjorString);
 			if (projectObject != null) {
 				var projectObjectContents = null;
 				if ("FlocktrackerProject" in projectObject) {
@@ -144,6 +127,9 @@ var FT_pr = function() {
 								.log("No FlocktrackerProjectVersion in Project :-(");
 					}
 				}
+			} else {
+				console
+				.log("JSON not parsed correctly, Project is not correct JSON :-(");
 			}
 		}
 		this.serializeJSON = function() {
@@ -192,18 +178,8 @@ var FT_pr = function() {
 		this.setSurvey = function(survey) {
 			this.survey = survey;
 		}
-		this.deserializeJSON = function(surveyProjectJSONString) {
-			var surveyProjectObject = null;
-			if (surveyProjectJSONString.constructor === {}.constructor) {
-				surveyProjectObject = surveyProjectJSONString;
-			} else {
-				try {
-					surveyProjectObject = JSON.parse(surveyProjectJSONString);
-				} catch (e) {
-					console
-							.log("JSON not parsed correctly, SurveyProject is not correct JSON :-(");
-				}
-			}
+		this.deserializeJSON = function(surveyProjectObjorString) {
+			var surveyProjectObject = that.fSON.getJSON(surveyProjectObjorString);
 			if (surveyProjectObject != null) {
 				var surveyProjectObjectContents = null;
 				if (this.projectName != null) {
@@ -233,6 +209,9 @@ var FT_pr = function() {
 								+ this.projectName + " :-(");
 					}
 				}
+			} else {
+				console
+				.log("JSON not parsed correctly, SurveyProject is not correct JSON :-(");
 			}
 		}
 		this.serializeJSON = function() {
@@ -268,19 +247,8 @@ var FT_pr = function() {
 			countersProjectJSONObject["CountersProject"] = countersProjectJSONObjectContents;
 			return countersProjectJSONObject;
 		}
-		this.deserializeJSON = function(countersProjectJSONString) {
-			var countersProjectObject = null;
-			if (countersProjectJSONString.constructor === {}.constructor) {
-				countersProjectObject = countersProjectJSONString;
-			} else {
-				try {
-					countersProjectObject = JSON
-							.parse(countersProjectJSONString);
-				} catch (e) {
-					console
-							.log("JSON not parsed correctly, CountersProject is not correct JSON :-(");
-				}
-			}
+		this.deserializeJSON = function(countersProjectObjorString) {
+			var countersProjectObject = that.fSON.getJSON(countersProjectObjorString);
 			if (countersProjectObject != null) {
 				var countersProjectObjectContents = null;
 				if ("CountersProject" in countersProjectObject) {
@@ -313,6 +281,9 @@ var FT_pr = function() {
 										+ this.projectName + " :-(");
 					}
 				}
+			} else {
+				console
+				.log("JSON not parsed correctly, CountersProject is not correct JSON :-(");
 			}
 		}
 	}
@@ -345,18 +316,8 @@ var FT_pr = function() {
 			trackerProjectJSONObject["TrackerProject"] = trackerProjectJSONObjectContents;
 			return trackerProjectJSONObject;
 		}
-		this.deserializeJSON = function(tracekrProjectJSONString) {
-			var trackerProjectObject = null;
-			if (tracekrProjectJSONString.constructor === {}.constructor) {
-				trackerProjectObject = tracekrProjectJSONString;
-			} else {
-				try {
-					trackerProjectObject = JSON.parse(tracekrProjectJSONString);
-				} catch (e) {
-					console
-							.log("JSON not parsed correctly, TrackerProject is not correct JSON :-(");
-				}
-			}
+		this.deserializeJSON = function(trackerProjectObjorString) {
+			var trackerProjectObject = that.fSON.getJSON(trackerProjectObjorString);
 			if (trackerProjectObject != null) {
 				var trackerProjectObjectContents = null;
 				if ("TrackerProject" in trackerProjectObject) {
@@ -396,24 +357,17 @@ var FT_pr = function() {
 								+ this.projectName + " :-(");
 					}
 				}
+			} else {
+				console
+				.log("JSON not parsed correctly, TrackerProject is not correct JSON :-(");
 			}
 		}
 	}
 	this.counter = function(){
 		this.name = null;
 		this.id = null;
-		this.deserializeJSON = function(counterJSONString){
-			var counterObject = null;
-			if (counterJSONString.constructor === {}.constructor) {
-				counterObject = counterJSONString;
-			} else {
-				try {
-					counterObject = JSON.parse(counterJSONString);
-				} catch (e) {
-					console
-							.log("JSON not parsed correctly, Counter is not correct JSON :-(");
-				}
-			}
+		this.deserializeJSON = function(counterObjorString){
+			var counterObject = that.fSON.getJSON(counterObjorString);
 			if(counterObject != null){
 				var counterObjectContents = null;
 				if ("Counter" in counterObject) {
@@ -433,6 +387,9 @@ var FT_pr = function() {
 						console.log("No ID in Counter object :-(");
 					}
 				}
+			} else {
+				console
+				.log("JSON not parsed correctly, Counter is not correct JSON :-(");
 			}
 		};
 		this.serializeJSON = function(){

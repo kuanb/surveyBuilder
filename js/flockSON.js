@@ -31,14 +31,8 @@ var FlockSON = function() {
 			answerJSONObject["Answer"] = answerJSONObjectContents;
 			return answerJSONObject;
 		}
-		this.deserializeJSON = function(answerJSONString) {
-			var answerObject = null;
-			try {
-				answerObject = JSON.parse(answerJSONString);
-			} catch (e) {
-				console
-						.log("JSON not parsed correctly, Answer is not correct JSON :-(");
-			}
+		this.deserializeJSON = function(answerObjorString) {
+			var answerObject = that.getJSON(answerObjorString);
 			if (answerObject != null) {
 				var answerObjectContents = null;
 				if ("Answer" in answerObject) {
@@ -56,6 +50,9 @@ var FlockSON = function() {
 				} else {
 					console.log("No JumpID in Question :-(");
 				}
+			} else {
+				console
+				.log("JSON not parsed correctly, Answer is not correct JSON :-(");
 			}
 		}
 		this.constructFromJSON = function(object) {
@@ -180,14 +177,8 @@ var FlockSON = function() {
 			questionJSONObject["Question"] = questionJSONObjectContents;
 			return questionJSONObject;
 		}
-		this.deserializeJSON = function(questionJSONString) {
-			var questionObject = null;
-			try {
-				questionObject = JSON.parse(tracekrProjectJSONString);
-			} catch (e) {
-				console
-						.log("JSON not parsed correctly, Question is not correct JSON :-(");
-			}
+		this.deserializeJSON = function(questionObjorString) {
+			var questionObject = that.getJSON(questionObjorString);
 			if (questionObject != null) {
 				var questionObjectContents = null;
 				if ("Question" in questionObject) {
@@ -278,6 +269,9 @@ var FlockSON = function() {
 						}
 					}
 				}
+			} else {
+				console
+				.log("JSON not parsed correctly, Question is not correct JSON :-(");
 			}
 		}
 	};
@@ -381,14 +375,8 @@ var FlockSON = function() {
 			chapterJSONObject["Chapter"] = chapterJSONObjectContents;
 			return chapterJSONObject;
 		}
-		this.deserializeJSON = function(chapterJSONString) {
-			var chapterObject = null;
-			try {
-				chapterObject = JSON.parse(chapterJSONString);
-			} catch (e) {
-				console
-						.log("JSON not parsed correctly, Chapter is not correct JSON :-(");
-			}
+		this.deserializeJSON = function(chapterObjorString) {
+			var chapterObject = that.getJSON(chapterObjorString);
 			if (chapterObject != null) {
 				var chapterObjectContents = null;
 				if ("Chapter" in chapterObject) {
@@ -419,6 +407,9 @@ var FlockSON = function() {
 						console.log("No Questions in Chapter object :-(");
 					}
 				}
+			} else {
+				console
+				.log("JSON not parsed correctly, Chapter is not correct JSON :-(");
 			}
 		}
 	};
