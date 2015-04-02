@@ -37,7 +37,7 @@
 		console.log(ftpr.project);
     	var projectTest = new ftpr.project();
     	projectTest.deserializeJSON(superString);
-    	
+    	console.log(JSON.stringify(projectTest.serializeJSON()));
     	var projectView = new projectView(projectTest);
     	var container = document.getElementById("project_container");
     	container.appendChild(projectView.getView());

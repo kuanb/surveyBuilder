@@ -189,7 +189,7 @@ var FlockSON = function() {
 				if (questionObjectContents != null) {
 					if ("Kind" in questionObjectContents) {
 						var tempKind = questionObjectContents["Kind"];
-						var qK = new questionKind(this.inloop);
+						var qK = new that.questionKind(this.inloop);
 						var JSONNames = qK.getJsonNames();
 						var validQuestionKind = false;
 						for (i = 0; i < JSONNames.length; i++) {
@@ -223,20 +223,20 @@ var FlockSON = function() {
 					}
 					if ((this.kind === qK.MULTIPLE_CHOICE.jsonName)
 							|| (this.kind === qK.CHECKBOX.jsonName)) {
-						if ("Other" in object) {
-							this.otherEnabled = object["Other"];
+						if ("Other" in questionObjectContents) {
+							this.otherEnabled = questionObjectContents["Other"];
 						} else {
 							this.otherEnabled = false;
 						}
 					}
 					if (((this.kind === qK.MULTIPLE_CHOICE.jsonName) || (this.kind === qK.CHECKBOX.jsonName))
 							|| (this.kind === qK.ORDERED.jsonName)) {
-						if ("Answers" in object) {
-							var objectAnswers = object["Answers"];
+						if ("Answers" in questionObjectContents) {
+							var objectAnswers = questionObjectContents["Answers"];
 							if (Array.isArray(objectAnswers)) {
 								this.answers = [];
 								for (var i = 0; i < objectAnswers.length; i++) {
-									this.answers.push(new answer());
+									this.answers.push(new that.answer());
 									this.answers[i]
 											.deserializeJSON(objectAnswers[i]);
 								}
@@ -394,9 +394,9 @@ var FlockSON = function() {
 						var questionsArray = chapterObjectContents["Questions"];
 						if (questionsArray.constructor === Array) {
 							this.questions = [];
-							for ( var questionJSONObject in questionsArray) {
-								var questionObj = new question();
-								questionObj.derializeJSON(questionJSONObject)
+							for (var questionIndex in questionsArray) {
+								var questionObj = new that.question();
+								questionObj.deserializeJSON(questionsArray[questionIndex]);
 								this.questions.push(questionObj);
 							}
 						} else {
@@ -490,10 +490,10 @@ var FlockSON = function() {
 								var chaptersArray = surveyObjectContents["Chapters"];
 								if (chaptersArray.constructor === Array) {
 									this.chapters = [];
-									for ( var chapterJSONObject in chaptersArray) {
+									for ( var chapterIndex in chaptersArray) {
 										var chapterObj = new that.chapter();
 										chapterObj
-												.deserializeJSON(chapterJSONObject)
+												.deserializeJSON(chaptersArray[chapterIndex])
 										this.chapters.push(chapterObj);
 									}
 								} else {
