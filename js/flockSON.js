@@ -20,12 +20,12 @@ var FlockSON = function() {
 			if (this.answerText != null) {
 				answerJSONObjectContents["Text"] = this.answerText;
 			} else {
-				console.log("No Text in Answer")
+				console.log("No Text in Answer :-(")
 			}
 			if (this.jumpID != null) {
 				answerJSONObjectContents["JumpID"] = this.jumpID;
 			} else {
-				console.log("No JumpID in Answer")
+				console.log("No JumpID in Answer :-(")
 			}
 			var answerJSONObject = {};
 			answerJSONObject["Answer"] = answerJSONObjectContents;
@@ -38,17 +38,24 @@ var FlockSON = function() {
 				if ("Answer" in answerObject) {
 					answerObjectContents = answerObject["Answer"];
 				} else {
-					console.log("No Survey in Object :-(");
+					console.log("No Answer in Object :-(");
 				}
-				if ("Text" in answerObjectContents) {
-					this.questionText = answerObjectContents["Text"];
-				} else {
-					console.log("No Text in Answer :-(");
-				}
-				if ("JumpID" in answerObjectContents) {
-					this.questionText = answerObjectContents["JumpID"];
-				} else {
-					console.log("No JumpID in Question :-(");
+				if(answerObjectContents != null){
+					if ("Answer" in answerObject) {
+						answerObjectContents = answerObject["Answer"];
+					} else {
+						console.log("No Survey in Object :-(");
+					}
+					if ("Text" in answerObjectContents) {
+						this.answerText = answerObjectContents["Text"];
+					} else {
+						console.log("No Text in Answer :-(");
+					}
+					if ("JumpID" in answerObjectContents) {
+						this.answerText = answerObjectContents["JumpID"];
+					} else {
+						console.log("No JumpID in Question :-(");
+					}
 				}
 			} else {
 				console
@@ -142,15 +149,16 @@ var FlockSON = function() {
 			if (this.otherEnabled != null) {
 				questionJSONObjectContents["Other"] = this.otherEnabled;
 			} else {
-				console.log("Other in Question is null");
+				console.log("Other in Question is null :-(");
 			}
+			var qK = new that.questionKind(this.inloop);
 			if (((this.kind === qK.MULTIPLE_CHOICE.jsonName) || (this.kind === qK.CHECKBOX.jsonName))
 					|| (this.kind === qK.ORDERED.jsonName)) {
 				if ((this.answers !== null) && (this.answers.length > 0)) {
 					var length = this.answers.length;
 					var answersArray = [];
 					for (var i = 0; i < length; i++) {
-						answersArray.push(this.answers[i].generateJSON());
+						answersArray.push(this.answers[i].serializeJSON());
 					}
 					;
 					questionJSONObjectContents["Answers"] = answersArray;
@@ -364,8 +372,8 @@ var FlockSON = function() {
 			chapterJSONObjectContents["Title"] = this.title;
 			if (this.questions != null) {
 				var questionsJSONObject = [];
-				for ( var question in this.questions) {
-					questionsJSONObject.push(question.serializeJSON());
+				for ( var questionIndex in this.questions) {
+					questionsJSONObject.push(this.questions[questionIndex].serializeJSON());
 				}
 				chapterJSONObjectContents["Questions"] = questionsJSONObject;
 			} else {
@@ -454,8 +462,8 @@ var FlockSON = function() {
 				surveyJSONObjectContents["Title"] = this.title;
 				if (this.chapters != null) {
 					var chaptersJSONObject = [];
-					for ( var chapter in this.chapters) {
-						chaptersJSONObject.push(chapter.serializeJSON());
+					for ( var chapterIndex in this.chapters) {
+						chaptersJSONObject.push(this.chapters[chapterIndex].serializeJSON());
 					}
 					surveyJSONObjectContents["Chapters"] = chaptersJSONObject;
 				} else {

@@ -4,12 +4,12 @@ var FT_pr = function() {
 	var that = this;
 	this.fSON = new FlockSON();
 	this.tracker = function() {
-		this.fusionTableID = null; // String
+		this.tableID = null; // String
 		this.getfusionTableID = function() {
-			return this.fusionTableID;
+			return this.tableID;
 		};
 		this.setfusionTableID = function(fusionTableID) {
-			this.fusionTableID = fusionTableID;
+			this.tableID = fusionTableID;
 		};
 		this.deserializeJSON = function(trackerObjorString){
 			var trackerObject = that.fSON.getJSON(trackerObjorString);
@@ -34,8 +34,8 @@ var FT_pr = function() {
 		};
 		this.serializeJSON = function(){
 			var trackerJSONObjectContents = {};
-			if (this.fusionTableID != null) {
-				trackerJSONObjectContents["TableID"] = this.fusionTableID;
+			if (this.tableID != null) {
+				trackerJSONObjectContents["TableID"] = this.tableID;
 			} else {
 				trackerJSONObjectContents["TableID"] = null;
 			}
@@ -236,8 +236,8 @@ var FT_pr = function() {
 			countersProjectJSONObjectContents["TableID"] = this.tableID;
 			if (this.counters != null) {
 				var countersJSONObject = [];
-				for ( var counter in this.counters) {
-					countersJSONObject.push(counter.serializeJSON());
+				for ( var counterIndex in this.counters) {
+					countersJSONObject.push(this.counters[counterIndex].serializeJSON());
 				}
 				countersProjectJSONObjectContents["Counters"] = countersJSONObject;
 			} else {
