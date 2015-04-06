@@ -11,9 +11,12 @@
 	<div id="project_container">
 		<div class="h4">Flocktracker project Builder <3</div>
 		<div style="width: 35%; margin-top: 58px; position: fixed;">
-			<a href="#" class="btn btn-success btn-md" id="upload"><span class="glyphicon glyphicon-cloud-upload"></span> Upload project!</a>	
-			<a href="#" class="btn btn-primary btn-md" id="undo">Undo <span class="glyphicon glyphicon-arrow-left"></span></a>
-			<a href="#" class="btn btn-primary btn-md" id="redo"><span class="glyphicon glyphicon-arrow-right"></span> Redo</a>
+			<a class="btn btn-success btn-md" id="upload"><span
+				class="glyphicon glyphicon-cloud-upload"></span> Upload project!</a> <a
+				class="btn btn-primary btn-md" id="undo">Undo <span
+				class="glyphicon glyphicon-arrow-left"></span></a> <a
+				class="btn btn-primary btn-md" id="redo"><span
+				class="glyphicon glyphicon-arrow-right"></span> Redo</a>
 		</div>
 		<div id="JsonGoesHere" class="jsonFloat"></div>
 		<div id="survey_container"></div>
@@ -29,30 +32,33 @@
 <script src="js/flockSON-survey-builder.js"></script>
 <script src="js/flocktracker-project-builder.js"></script>
 <script type="text/javascript">
+	
+    	
+    	this.undoHandler = function(){
+	    	this.contentChanged = function(){
+	    		that.FTproject = that.projectView.getProject();
+				contentChanges++;
+				var projectSnapShot = new ftpr.project();
+				projectSnapShot.deserializeJSON(FTproject.serializeJSON());
+				var newStackElement = new stackElement(projectView, projectSnapShot);
+				uStack.addToStack(newStackElement);
+				jsonText.innerHTML = "<b>Input Modification Count:</b> "
+						+ this.contentChanges + " <br><br><b>JSON Output:</b><br>"
+						+ JSON.stringify(FTproject.serializeJSON());
+				$(this.undo).attr('disabled', !that.uStack.isUndoPossible());
+				$(this.redo).attr('disabled', !that.uStack.isRedoPossible());  
+	    	};
+    	}
 		var superString = '{ "FlocktrackerProject": { "CountersProject": { "Counters": [ { "Counter": { "Name": "Benches", "ID" : "BENCH" } }, { "Counter": { "Name": "Trees", "ID" : "TREE" } }, { "Counter": { "Name": "Shadow places", "ID" : "SHADOW" } } ], "TableID": "1cfIgPxhTCn17wO0O0lmtea-gkoBd7LEACkTC-qTu" }, "SurveyProject": { "Survey": { "Chapters": [ { "Chapter": { "Questions": [ { "Question": { "ID": "q1", "Text": "Where do you live?", "Kind": "MC", "Other": true, "Answers": [ { "Answer": { "Text": "City" } }, { "Answer": { "Text": "Country" } } ] } }, { "Question": { "ID": "q2", "Text": "What’s your house surface area?", "Kind": "ON" } }, { "Question": { "ID": "q3", "Text": "Take a picture of a nearby object", "Kind": "IM" } }, { "Question": { "ID": "q4", "Text": "What food do you like?", "Kind": "CB", "Other": true, "Answers": [ { "Answer": { "Text": "Tacos" } }, { "Answer": { "Text": "Pozole" } }, { "Answer": { "Text": "Carnitas" } } ] } }, { "Question": { "ID": "q5", "Text": "Order the elements of this list in order of importance.", "Kind": "OL", "Answers": [ { "Answer": { "Text": "Security" } }, { "Answer": { "Text": "Comfort" } }, { "Answer": { "Text": "Price" } } ] } } ], "Title": "Chapter 1" } }, { "Chapter": { "Questions": [ { "Question": { "ID": "q6", "Text": "Are you...?", "Kind": "MC", "Other": true, "Answers": [ { "Answer": { "Text": "A woman" } }, { "Answer": { "Text": "A man" } } ] } }, { "Question": { "ID": "q7", "Text": "What’s your name?", "Kind": "OT" } }, { "Question": { "ID": "q8", "Text": "Take a picture of you.", "Kind": "IM" } }, { "Question": { "ID": "q9", "Text": "What music do you like?", "Kind": "CB", "Other": true, "Answers": [ { "Answer": { "Text": "Rock" } }, { "Answer": { "Text": "Country" } }, { "Answer": { "Text": "Polka" } } ] } }, { "Question": { "ID": "q10", "Text": "Order the elements of this list in order of importance.", "Kind": "OL", "Answers": [ { "Answer": { "Text": "Information" } }, { "Answer": { "Text": "Knowledge" } }, { "Answer": { "Text": "Wisdom" } } ] } }, { "Question": { "ID": "q11", "Text": "How many children do you have?", "Kind": "LP", "Questions": [ { "Question": { "ID": "q12", "Text": "Does he or she live with you?", "Kind": "MC", "Other": true, "Answers": [ { "Answer": { "Text": "Yes" } }, { "Answer": { "Text": "No" } } ] } } ] } }, { "Question": { "ID": "q13", "Text": "What’s his or her age?", "Kind": "ON" } }, { "Question": { "ID": "q14", "Text": "Take a picture of him or her.", "Kind": "IM" } }, { "Question": { "ID": "q15", "Text": "What cartoon does he or she like?", "Kind": "CB", "Other": true, "Answers": [ { "Answer": { "Text": "Pokémon" } }, { "Answer": { "Text": "Spirited Away" } }, { "Answer": { "Text": "My Little Pony" } } ] } }, { "Question": { "ID": "q16", "Text": "Order the elements of this list in order of importance for his or her well being", "Kind": "OL", "Answers": [ { "Answer": { "Text": "Nutrition" } }, { "Answer": { "Text": "Education" } }, { "Answer": { "Text": "Leisure time" } } ] } } ], "Title": "Chapter 2" } } ], "flockSONversion": 0.1, "Title": "Survey title" }, "TableID": "1dVcrBq7qAC7wRUl6iVPPTQf4n1qyoZiLZH_bIrdR" }, "TrackerProject": { "StartSurvey": { "Survey": { "Chapters": [ { "Chapter": { "Questions": [ { "Question": { "ID": "q1", "Text": "Where do you live?", "Kind": "MC", "Other": true, "Answers": [ { "Answer": { "Text": "City" } }, { "Answer": { "Text": "Country" } } ] } }, { "Question": { "ID": "q2", "Text": "What’s your house surface area?", "Kind": "ON" } }, { "Question": { "ID": "q3", "Text": "Take a picture of a nearby object", "Kind": "IM" } }, { "Question": { "ID": "q4", "Text": "What food do you like?", "Kind": "CB", "Other": true, "Answers": [ { "Answer": { "Text": "Tacos" } }, { "Answer": { "Text": "Pozole" } }, { "Answer": { "Text": "Carnitas" } } ] } }, { "Question": { "ID": "q5", "Text": "Order the elements of this list in order of importance.", "Kind": "OL", "Answers": [ { "Answer": { "Text": "Security" } }, { "Answer": { "Text": "Comfort" } }, { "Answer": { "Text": "Price" } } ] } } ], "Title": "Chapter 1" } }, { "Chapter": { "Questions": [ { "Question": { "ID": "q6", "Text": "Are you...?", "Kind": "MC", "Other": true, "Answers": [ { "Answer": { "Text": "A woman" } }, { "Answer": { "Text": "A man" } } ] } }, { "Question": { "ID": "q7", "Text": "What’s your name?", "Kind": "OT" } }, { "Question": { "ID": "q8", "Text": "Take a picture of you.", "Kind": "IM" } }, { "Question": { "ID": "q9", "Text": "What music do you like?", "Kind": "CB", "Other": true, "Answers": [ { "Answer": { "Text": "Rock" } }, { "Answer": { "Text": "Country" } }, { "Answer": { "Text": "Polka" } } ] } }, { "Question": { "ID": "q10", "Text": "Order the elements of this list in order of importance.", "Kind": "OL", "Answers": [ { "Answer": { "Text": "Information" } }, { "Answer": { "Text": "Knowledge" } }, { "Answer": { "Text": "Wisdom" } } ] } }, { "Question": { "ID": "q11", "Text": "How many children do you have?", "Kind": "LP", "Questions": [ { "Question": { "ID": "q12", "Text": "Does he or she live with you?", "Kind": "MC", "Other": true, "Answers": [ { "Answer": { "Text": "Yes" } }, { "Answer": { "Text": "No" } } ] } } ] } }, { "Question": { "ID": "q13", "Text": "What’s his or her age?", "Kind": "ON" } }, { "Question": { "ID": "q14", "Text": "Take a picture of him or her.", "Kind": "IM" } }, { "Question": { "ID": "q15", "Text": "What cartoon does he or she like?", "Kind": "CB", "Other": true, "Answers": [ { "Answer": { "Text": "Pokémon" } }, { "Answer": { "Text": "Spirited Away" } }, { "Answer": { "Text": "My Little Pony" } } ] } }, { "Question": { "ID": "q16", "Text": "Order the elements of this list in order of importance for his or her well being", "Kind": "OL", "Answers": [ { "Answer": { "Text": "Nutrition" } }, { "Answer": { "Text": "Education" } }, { "Answer": { "Text": "Leisure time" } } ] } } ], "Title": "Chapter 2" } } ], "flockSONversion": 0.1, "Title": "Survey title" }, "TableID": "1OC0lCgrnj7OgNBjKkUxiSoQ3y92ibuXI85DMVMB9" }, "EndSurvey": { "Survey": { "Chapters": [ { "Chapter": { "Questions": [ { "Question": { "ID": "q1", "Text": "Where do you live?", "Kind": "MC", "Other": true, "Answers": [ { "Answer": { "Text": "City" } }, { "Answer": { "Text": "Country" } } ] } }, { "Question": { "ID": "q2", "Text": "What’s your house surface area?", "Kind": "ON" } }, { "Question": { "ID": "q3", "Text": "Take a picture of a nearby object", "Kind": "IM" } }, { "Question": { "ID": "q4", "Text": "What food do you like?", "Kind": "CB", "Other": true, "Answers": [ { "Answer": { "Text": "Tacos" } }, { "Answer": { "Text": "Pozole" } }, { "Answer": { "Text": "Carnitas" } } ] } }, { "Question": { "ID": "q5", "Text": "Order the elements of this list in order of importance.", "Kind": "OL", "Answers": [ { "Answer": { "Text": "Security" } }, { "Answer": { "Text": "Comfort" } }, { "Answer": { "Text": "Price" } } ] } } ], "Title": "Chapter 1" } }, { "Chapter": { "Questions": [ { "Question": { "ID": "q6", "Text": "Are you...?", "Kind": "MC", "Other": true, "Answers": [ { "Answer": { "Text": "A woman" } }, { "Answer": { "Text": "A man" } } ] } }, { "Question": { "ID": "q7", "Text": "What’s your name?", "Kind": "OT" } }, { "Question": { "ID": "q8", "Text": "Take a picture of you.", "Kind": "IM" } }, { "Question": { "ID": "q9", "Text": "What music do you like?", "Kind": "CB", "Other": true, "Answers": [ { "Answer": { "Text": "Rock" } }, { "Answer": { "Text": "Country" } }, { "Answer": { "Text": "Polka" } } ] } }, { "Question": { "ID": "q10", "Text": "Order the elements of this list in order of importance.", "Kind": "OL", "Answers": [ { "Answer": { "Text": "Information" } }, { "Answer": { "Text": "Knowledge" } }, { "Answer": { "Text": "Wisdom" } } ] } }, { "Question": { "ID": "q11", "Text": "How many children do you have?", "Kind": "LP", "Questions": [ { "Question": { "ID": "q12", "Text": "Does he or she live with you?", "Kind": "MC", "Other": true, "Answers": [ { "Answer": { "Text": "Yes" } }, { "Answer": { "Text": "No" } } ] } } ] } }, { "Question": { "ID": "q13", "Text": "What’s his or her age?", "Kind": "ON" } }, { "Question": { "ID": "q14", "Text": "Take a picture of him or her.", "Kind": "IM" } }, { "Question": { "ID": "q15", "Text": "What cartoon does he or she like?", "Kind": "CB", "Other": true, "Answers": [ { "Answer": { "Text": "Pokémon" } }, { "Answer": { "Text": "Spirited Away" } }, { "Answer": { "Text": "My Little Pony" } } ] } }, { "Question": { "ID": "q16", "Text": "Order the elements of this list in order of importance for his or her well being", "Kind": "OL", "Answers": [ { "Answer": { "Text": "Nutrition" } }, { "Answer": { "Text": "Education" } }, { "Answer": { "Text": "Leisure time" } } ] } } ], "Title": "Chapter 2" } } ], "flockSONversion": 0.1, "Title": "Survey title" }, "TableID": "1OvGFdM5wViaS78g3pGpJsHDKZ0vN7maPb4qNjmRR" }, "Tracker": { "TableID": "1Sgw05bWkYDFy_N1NUtqWZxdBYJPDdMtWKzMjowJM" } }, "FlocktrackerProjectVersion": 0.1 } }';
 		var ftpr = new FT_pr(); // Flocktracker models;
 		var ftprB = new FT_pb(); // Flocktracker views
     	var FTproject = new ftpr.project();
+    	var uC = new this.undoHandler();
     	FTproject.deserializeJSON(superString);
     	console.log(JSON.stringify(FTproject.serializeJSON()));
-    	var projectView = new ftprB.projectView(FTproject, this);
+    	var projectView = new ftprB.projectView(FTproject, this.uC);
     	var container = document.getElementById("project_container");
     	container.appendChild(projectView.getView());
-    	
-    	function contentChanged(){
-    		FTproject = projectView.getProject();
-			contentChanges++;
-			var projectSnapShot = new ftpr.project();
-			projectSnapShot.deserializeJSON(FTproject.serializeJSON());
-			var newStackElement = new stackElement(projectView, projectSnapShot);
-			uStack.addToStack(newStackElement);
-			jsonText.innerHTML = "<b>Input Modification Count:</b> "
-					+ this.contentChanges + " <br><br><b>JSON Output:</b><br>"
-					+ JSON.stringify(this.FTproject.serializeJSON());
-			$(this.undo).attr('disabled', !that.uStack.isUndoPossible());
-			$(this.redo).attr('disabled', !that.uStack.isRedoPossible());   	
-    	}
-    	
     	var floatDiv = document.getElementById('JsonGoesHere');
 		var jsonText = document.createElement("div");
 		jsonText.style.cssText = 'font-size:0.75em';
@@ -60,7 +66,7 @@
 		var contentChanges = -1;
 		var uStack = new undoStack();
 		undo = document.getElementById("undo");
-		that = this;
+		var that = this;
 		undo.onclick = function() {
 			var undoStackElement = that.uStack.undo();
 			that.FTproject = undoStackElement.objectState;
@@ -85,6 +91,6 @@
 			that.undo.disabled = !that.uStack.isUndoPossible();
 			that.redo.disabled = !that.uStack.isRedoPossible();
 		}
-		contentChanged();
+		uC.contentChanged();
     </script>
 </html>

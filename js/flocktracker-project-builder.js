@@ -1,9 +1,17 @@
 // Here be the Views
 // !!/!T(&"#("/!(/T#")(/!=)/"=)(!)(YEU!")/H)"(UWE=")!"(!=)(!=#)(=))))
 FT_pb = function() {
-	var that = this;
+	this.FTPrM = new FT_pr();
 	this.FSUxEl = new FS_ux_el();
+	this.FS = new FlockSON();
+	var that = this;
 	this.projectView = function(pr, parentView) {
+		this.parentView = parentView;
+		this.pr = pr;
+		var thatP = this;
+		this.addSPB = null;
+		this.addTPB = null;
+		this.addCPB = null;
 		this.initializeView = function() {
 			this.div = document.createElement('div');
 			this.div.className = "project";
@@ -31,7 +39,10 @@ FT_pb = function() {
 			this.div.appendChild(this.projectsContainer);
 			var thatP = this;
 			this.addSPB.getView().onclick = function(){
-				thatP.addSPB.changeLook("remove", "", "Survey");				
+				thatP.addSPB.changeLook("remove", "", "Survey");
+				var SP =  new that.FTPrM.surveyProject("SurveyProject");
+				var SPV = new that.surveyProjectView(SP, thatP);
+				thatP.sPcontainer.appendChild(SPV.getView());
 				thatP.contentChanged();
 			}
 			this.addTPB.getView().onclick = function(){
@@ -44,10 +55,10 @@ FT_pb = function() {
 			}
 			
 		}
-		this.updateContent = function(pr) {
-
-		}
 		this.contentChanged = function() {
+			this.parentView.contentChanged();
+		}
+		this.updateContent = function(pr) {
 
 		}
 		this.getView = function() {
@@ -56,14 +67,14 @@ FT_pb = function() {
 		this.getProject = function(){
 			return this.pr;
 		}
-		this.parentView = parentView;
-		this.pr = pr;
 		this.initializeView();
+		this.updateContent(this.pr);
 	}
 
 	this.surveyProjectView = function(sP, parentView) {
 		this.initializeView = function() {
-
+			this.div = document.createElement('div');
+			this.div.innerHTML = "SDSNDAJSNASJN";
 		}
 		this.updateContent = function(pr) {
 
