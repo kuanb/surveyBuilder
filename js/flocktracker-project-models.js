@@ -49,7 +49,7 @@ var FT_pr = function() {
 		this.cProject = null;
 		this.flocktrackerProjectVersion = null;
 		this.getSurveyProject = function() {
-			return this.surveyProject;
+			return this.sProject;
 		}
 		this.setSurveyProject = function(sProject) {
 			this.sProject = sProject;
