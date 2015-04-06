@@ -226,7 +226,7 @@ var FlockSON = function() {
 					if ("JumpID" in questionObjectContents) {
 						this.jumpID = questionObjectContents["JumpID"];
 					} else {
-						this.jumpID = false;
+						this.jumpID = null;
 						console.log("No JumpID in Question :-(");
 					}
 					if ((this.kind === qK.MULTIPLE_CHOICE.jsonName)

@@ -1,6 +1,4 @@
 var FT_pr = function() {
-	// Part of the code for the models of the data
-	// /"&)(!/=)"!/=)/"!?/((/&(&%"!(&/=")/)"!(??"!)"=)?/")!=/!&"/!&?#&*)
 	var that = this;
 	this.fSON = new FlockSON();
 	this.tracker = function() {
@@ -138,21 +136,21 @@ var FT_pr = function() {
 				projectJSONObjectContents["FlocktrackerProjectVersion"] = this.flocktrackerProjectVersion;
 				if (this.sProject != null) {
 					projectJSONObjectContents["SurveyProject"] = this.sProject
-							.serializeJSON();
+							.serializeJSON()["SurveyProject"];
 				} else {
 					surveyProjectJSONObjectContents["SurveyProject"] = null;
 					console.log("SurveyProject is null :-(")
 				}
 				if (this.cProject != null) {
 					projectJSONObjectContents["CountersProject"] = this.cProject
-							.serializeJSON();
+							.serializeJSON()["CountersProject"];
 				} else {
 					surveyProjectJSONObjectContents["CountersProject"] = null;
 					console.log("CountersProject project is null :-(")
 				}
 				if (this.tProject != null) {
 					projectJSONObjectContents["TrackerProject"] = this.tProject
-							.serializeJSON();
+							.serializeJSON()["TrackerProject"];
 				} else {
 					surveyProjectJSONObjectContents["TrackerProject"] = null;
 					console.log("TrackerProject project is null :-(");
@@ -219,7 +217,7 @@ var FT_pr = function() {
 			surveyProjectJSONObjectContents["TableID"] = this.tableID;
 			if (this.survey != null) {
 				surveyProjectJSONObjectContents["Survey"] = this.survey
-						.serializeJSON();
+						.serializeJSON()["Survey"];
 			} else {
 				surveyProjectJSONObjectContents["Survey"] = null;
 			}
@@ -296,19 +294,19 @@ var FT_pr = function() {
 			var trackerProjectJSONObjectContents = {};
 			if (this.startSurveyProject != null) {
 				trackerProjectJSONObjectContents["StartSurvey"] = this.startSurveyProject
-						.serializeJSON();
+						.serializeJSON()["StartSurvey"];
 			} else {
 				trackerProjectJSONObjectContents["StartSurvey"] = null;
 			}
 			if (this.endSurveyProject != null) {
 				trackerProjectJSONObjectContents["EndSurvey"] = this.endSurveyProject
-						.serializeJSON();
+						.serializeJSON()["EndSurvey"];
 			} else {
 				trackerProjectJSONObjectContents["EndSurvey"] = null;
 			}
 			if (this.tr != null) {
 				trackerProjectJSONObjectContents["Tracker"] = this.tr
-						.serializeJSON();
+						.serializeJSON()["Tracker"];
 			} else {
 				trackerProjectJSONObjectContents["Tracker"] = null;
 			}
