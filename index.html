@@ -13,10 +13,8 @@
 		<div style="width: 35%; margin-top: 58px; position: fixed;">
 			<button class="btn btn-success btn-md" style="width: 100%;"
 				onclick="console.log('working')">Submit Survey</button>
-			<button class="btn btn-success btn-md" id="undo" style="width: 100%;"
-				onclick="console.log('working')">Undo</button>
-			<button class="btn btn-success btn-md" id="redo" style="width: 100%;"
-				onclick="console.log('working')">Redo</button>
+			<a href="#" class="btn btn-primary btn-md" id="undo">Undo <span class="glyphicon glyphicon-arrow-left"></span></a>
+			<a href="#" class="btn btn-primary btn-md" id="redo"><span class="glyphicon glyphicon-arrow-right"></span> Redo</a>
 		</div>
 		<div id="JsonGoesHere" class="jsonFloat"></div>
 		<div id="survey_container"></div>
@@ -52,9 +50,8 @@
 			jsonText.innerHTML = "<b>Input Modification Count:</b> "
 					+ this.contentChanges + " <br><br><b>JSON Output:</b><br>"
 					+ JSON.stringify(this.FTproject.serializeJSON());
-			this.undo.disabled = !that.uStack.isUndoPossible();
-			this.redo.disabled = !that.uStack.isRedoPossible();
-    	
+			$(this.undo).attr('disabled', !that.uStack.isUndoPossible());
+			$(this.redo).attr('disabled', !that.uStack.isRedoPossible());   	
     	}
     	
     	var floatDiv = document.getElementById('JsonGoesHere');
@@ -73,10 +70,10 @@
 			that.jsonText.innerHTML = "<b>Input Modification Count:</b> "
 					+ that.contentChanges + " <br><br><b>JSON Output:</b><br>"
 					+ JSON.stringify(that.pr.generateJSON());
-			that.undo.disabled = !that.uStack.isUndoPossible();
-			that.redo.disabled = !that.uStack.isRedoPossible();
+			$(this.undo).attr('disabled', !that.uStack.isUndoPossible());
+			$(this.redo).attr('disabled', !that.uStack.isRedoPossible());   
 		}
-		undo.disabled = true;
+		$(undo).attr('disabled', true);
 		var redo = document.getElementById("redo");
 		redo.onclick = function() {
 			var redoStackElement = that.uStack.redo();
