@@ -1,4 +1,5 @@
 function surveyView(survey, parentView) {
+	this.FSUxEl = new FS_ux_el();
 	this.initializeView = function() {
 		this.div = document.createElement('div');
 		this.div.className = "survey";

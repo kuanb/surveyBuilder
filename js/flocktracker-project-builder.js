@@ -1,9 +1,48 @@
 // Here be the Views
 // !!/!T(&"#("/!(/T#")(/!=)/"=)(!)(YEU!")/H)"(UWE=")!"(!=)(!=#)(=))))
 FT_pb = function() {
+	var that = this;
+	this.FSUxEl = new FS_ux_el();
 	this.projectView = function(pr, parentView) {
 		this.initializeView = function() {
 			this.div = document.createElement('div');
+			this.div.className = "project";
+			this.div.id = "project";
+			this.buttonsContainer = document.createElement('div');
+			this.buttonsContainer.className = "project_buttons_container";
+			this.addSPB = new that.FSUxEl.button("add", "", "Survey");
+			this.buttonsContainer.appendChild(this.addSPB.getView());
+			this.addTPB = new that.FSUxEl.button("add", "", "Tracker");
+			this.buttonsContainer.appendChild(this.addTPB.getView());
+			this.addCPB = new that.FSUxEl.button("add", "", "Counters");
+			this.buttonsContainer.appendChild(this.addCPB.getView());
+			this.div.appendChild(this.buttonsContainer);
+			this.sPcontainer = document.createElement('div');
+			this.sPcontainer.className = "survey_project_container";
+			this.tPcontainer = document.createElement('div');
+			this.tPcontainer.className = "tracker_project_container";
+			this.cPcontainer = document.createElement('div');
+			this.cPcontainer.className = "counters_project_container";
+			this.projectsContainer = document.createElement("div");
+			this.projectsContainer.className = "projects_container"
+			this.projectsContainer.appendChild(this.sPcontainer);
+			this.projectsContainer.appendChild(this.tPcontainer);
+			this.projectsContainer.appendChild(this.cPcontainer);
+			this.div.appendChild(this.projectsContainer);
+			var thatP = this;
+			this.addSPB.getView().onclick = function(){
+				thatP.addSPB.changeLook("remove", "", "Survey");				
+				thatP.contentChanged();
+			}
+			this.addTPB.getView().onclick = function(){
+				thatP.addTPB.changeLook("remove", "", "Tracker");
+				thatP.contentChanged();
+			}
+			this.addCPB.getView().onclick = function(){
+				thatP.addCPB.changeLook("remove", "", "Counters");
+				thatP.contentChanged();
+			}
+			
 		}
 		this.updateContent = function(pr) {
 
