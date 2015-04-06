@@ -41,21 +41,30 @@ FT_pb = function() {
 			this.projectsContainer.appendChild(this.cPcontainer);
 			this.div.appendChild(this.projectsContainer);
 			this.addSPB.getView().onclick = function(){
-				thatP.addSPB.changeLook("remove", "", "Survey");
-				var sP =  new that.FTPrM.surveyProject("SurveyProject");
-				thatP.addSurveyProject(sP);
+				if(thatP.sPcontainer.innerHTML != ""){
+					thatP.removeSurveyProject();
+				} else {
+					var sP =  new that.FTPrM.surveyProject("SurveyProject");
+					thatP.addSurveyProject(sP);
+				}
 				thatP.contentChanged();
 			}
 			this.addTPB.getView().onclick = function(){
-				thatP.addTPB.changeLook("remove", "", "Tracker");
-				var tP =  new that.FTPrM.trackerProject();
-				thatP.addTrackerProject(tP);
+				if(thatP.tPcontainer.innerHTML != ""){
+					thatP.removeTrackerProject();
+				} else {
+					var tP =  new that.FTPrM.trackerProject();
+					thatP.addTrackerProject(tP);
+				}
 				thatP.contentChanged();
 			}
 			this.addCPB.getView().onclick = function(){
-				thatP.addCPB.changeLook("remove", "", "Counters");
-				var cP =  new that.FTPrM.countersProject();
-				thatP.addCountersProject(cP);
+				if(thatP.cPcontainer.innerHTML != ""){
+					thatP.removeCountersProject();
+				} else {
+					var cP =  new that.FTPrM.countersProject();
+					thatP.addCountersProject(cP);
+				}
 				thatP.contentChanged();
 			}
 			
@@ -71,26 +80,53 @@ FT_pb = function() {
 			this.trackerProjectView
 			if(sP != null){
 				this.addSurveyProject(sP);
+				thatP.addSPB.changeLook("remove", "", "Survey");
+			} else {
+				thatP.addSPB.changeLook("add", "", "Survey");
 			}
 			if(tP != null){
 				this.addTrackerProject(tP);
+				thatP.addTPB.changeLook("remove", "", "Tracker");
+			} else {
+				thatP.addTPB.changeLook("add", "", "Tracker");
 			}
 			if(cP != null){
 				this.addCountersProject(cP);
+				thatP.addCPB.changeLook("remove", "", "Counters");
+			} else {
+				thatP.addCPB.changeLook("add", "", "Counters");
 			}			
 		}
 		this.addSurveyProject = function(sP){
 			this.surveyProjectView = new that.surveyProjectView(sP, thatP);
 			thatP.sPcontainer.appendChild(this.surveyProjectView.getView());
+			thatP.addSPB.changeLook("remove", "", "Survey");
 		}
 		this.addTrackerProject = function(tP){
 			this.trackerProjectView = new that.trackerProjectView(tP, thatP);
 			thatP.tPcontainer.appendChild(this.trackerProjectView.getView());
+			thatP.addTPB.changeLook("remove", "", "Tracker");
 		}
 		this.addCountersProject = function(cP){
 			this.countersProjectView = new that.countersProjectView(cP, thatP);
 			thatP.cPcontainer.appendChild(this.countersProjectView.getView());
+			thatP.addCPB.changeLook("remove", "", "Counters");
 		}		
+		this.removeSurveyProject = function(){
+			this.pr.setSurveyProject(null);
+			thatP.sPcontainer.innerHTML = "";
+			thatP.addSPB.changeLook("add", "", "Survey");
+		}
+		this.removeTrackerProject = function(){
+			this.pr.setTrackerProject(null);
+			thatP.tPcontainer.innerHTML = "";
+			thatP.addTPB.changeLook("add", "", "Tracker");
+		}
+		this.removeCountersProject = function(){
+			this.pr.setCountersProject(null);
+			thatP.cPcontainer.innerHTML = "";
+			thatP.addCPB.changeLook("add", "", "Counters");
+		}
 		this.getView = function() {
 			return this.div;
 		}

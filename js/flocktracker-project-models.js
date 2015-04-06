@@ -138,21 +138,21 @@ var FT_pr = function() {
 					projectJSONObjectContents["SurveyProject"] = this.sProject
 							.serializeJSON()["SurveyProject"];
 				} else {
-					surveyProjectJSONObjectContents["SurveyProject"] = null;
+					projectJSONObjectContents["SurveyProject"] = null;
 					console.log("SurveyProject is null :-(")
 				}
 				if (this.cProject != null) {
 					projectJSONObjectContents["CountersProject"] = this.cProject
 							.serializeJSON()["CountersProject"];
 				} else {
-					surveyProjectJSONObjectContents["CountersProject"] = null;
+					projectJSONObjectContents["CountersProject"] = null;
 					console.log("CountersProject project is null :-(")
 				}
 				if (this.tProject != null) {
 					projectJSONObjectContents["TrackerProject"] = this.tProject
 							.serializeJSON()["TrackerProject"];
 				} else {
-					surveyProjectJSONObjectContents["TrackerProject"] = null;
+					projectJSONObjectContents["TrackerProject"] = null;
 					console.log("TrackerProject project is null :-(");
 				}
 			} else {
