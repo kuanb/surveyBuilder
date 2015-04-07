@@ -167,6 +167,12 @@ var FT_pr = function() {
 		this.projectName = projectName;
 		this.tableID = null;
 		this.survey = null;
+		this.getTableID = function(){
+			return this.tableID;
+		}
+		this.setTableID = function(tableID){
+			this.tableID = tableID;
+		}
 		this.setProjectName = function(projectName) {
 			this.projectName = projectName;
 		}

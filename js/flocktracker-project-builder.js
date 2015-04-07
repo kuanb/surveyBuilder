@@ -4,6 +4,7 @@ FT_pb = function() {
 	this.FTPrM = new FT_pr();
 	this.FSUxEl = new FS_ux_el();
 	this.FS = new FlockSON();
+	this.FSsb = new FS_sb();
 	var that = this;
 	this.projectView = function(pr, parentView) {
 		this.parentView = parentView;
@@ -98,6 +99,7 @@ FT_pb = function() {
 			}			
 		}
 		this.addSurveyProject = function(sP){
+			this.pr.setSurveyProject(sP);
 			this.surveyProjectView = new that.surveyProjectView(sP, thatP);
 			thatP.sPcontainer.appendChild(this.surveyProjectView.getView());
 			thatP.addSPB.changeLook("remove", "", "Survey");
@@ -140,15 +142,30 @@ FT_pb = function() {
 	this.surveyProjectView = function(sP, parentView) {
 		this.parentView = parentView;
 		this.sP = sP;
+		this.fusionTableIDInput = null;
+		this.surveyView = null;
+		thatSP = this;
 		this.initializeView = function() {
 			this.div = document.createElement('div');
-			this.div.innerHTML = JSON.stringify(sP.serializeJSON());
+			this.tableIDInput = document.createElement("input");
+			this.tableIDInput.type = "text";
+			this.tableIDInput.className = "form-control"
+			this.tableIDInput.placeholder = "Table ID"	
+			this.tableIDInput.oninput = function() {
+				thatSP.contentChanged();
+			};
+			this.div.appendChild(this.tableIDInput);
+			this.surveyView = new that.FSsb.surveyView(new that.FS.survey(), this);
+			this.div.appendChild(this.surveyView.getView());
 		}
-		this.updateContent = function(pr) {
-
+		this.updateContent = function(sP) {
+			this.sP = sP;
 		}
 		this.contentChanged = function() {
-
+			if(this.tableIDInput.value != ""){
+				this.sP.setTableID(this.tableIDInput.value)
+			}
+			this.parentView.contentChanged();
 		}
 		this.getView = function() {
 			return this.div;
@@ -163,7 +180,8 @@ FT_pb = function() {
 			this.div = document.createElement('div');
 			this.div.innerHTML = JSON.stringify(tP.serializeJSON());
 		}
-		this.updateContent = function(pr) {
+		this.updateContent = function(tP) {
+			this.tP = tP;
 
 		}
 		this.contentChanged = function() {
@@ -182,8 +200,8 @@ FT_pb = function() {
 			this.div = document.createElement('div');
 			this.div.innerHTML = JSON.stringify(cP.serializeJSON());
 		}
-		this.updateContent = function(pr) {
-
+		this.updateContent = function(cP) {
+			this.cP = cP;
 		}
 		this.contentChanged = function() {
 
@@ -195,11 +213,13 @@ FT_pb = function() {
 	}
 
 	this.trackerView = function(tr, parentView) {
+		this.parentView = parentView;
+		this.tr = tr;
 		this.initializeView = function() {
 
 		}
-		this.updateContent = function(pr) {
-
+		this.updateContent = function(tr) {
+			this.tr = tr;
 		}
 		this.contentChanged = function() {
 
@@ -207,11 +227,13 @@ FT_pb = function() {
 		this.getView = function() {
 			return this.div;
 		}
-		this.parentView = parentView;
-		this.tr = tr;
+		this.initializeView();
+		this.updateContent(this.tr);
 	}
 
 	this.counterView = function(co, parentView) {
+		this.parentView = parentView;
+		this.co = co;
 		this.initializeView = function() {
 
 		}
@@ -224,8 +246,8 @@ FT_pb = function() {
 		this.getView = function() {
 			return this.div;
 		}
-		this.parentView = parentView;
-		this.co = co;
+		this.initializeView();
+		this.updateContent(this.tr);
 	}
 
 	this.OLDprojectView = function(pr, parentView) {
