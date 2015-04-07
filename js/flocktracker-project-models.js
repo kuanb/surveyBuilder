@@ -87,7 +87,7 @@ var FT_pr = function() {
 					if ("FlocktrackerProjectVersion" in projectObjectContents) {
 						if (projectObjectContents["FlocktrackerProjectVersion"] == "0.1") {
 							this.flocktrackerProjectVersion = projectObjectContents["FlocktrackerProjectVersion"];
-							if ("SurveyProject" in projectObjectContents) {
+							if ("SurveyProject" in projectObjectContents && (projectObjectContents["SurveyProject"] != null)) {
 								this.sProject = (new that.surveyProject("SurveyProject"));
 								this.sProject
 										.deserializeJSON({
@@ -96,7 +96,7 @@ var FT_pr = function() {
 							} else {
 								console.log("No SurveyProject in Project :-(");
 							}
-							if ("TrackerProject" in projectObjectContents) {
+							if ("TrackerProject" in projectObjectContents && (projectObjectContents["TrackerProject"] != null)) {
 								this.tProject = (new that.trackerProject());
 								this.tProject
 										.deserializeJSON({
@@ -106,7 +106,7 @@ var FT_pr = function() {
 								console
 										.log("No TrackerProject in survey Project :-(");
 							}
-							if ("CountersProject" in projectObjectContents) {
+							if ("CountersProject" in projectObjectContents && (projectObjectContents["CountersProject"] != null)) {
 								this.cProject = (new that.countersProject());
 								this.cProject
 										.deserializeJSON({

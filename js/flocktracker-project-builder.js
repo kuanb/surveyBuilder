@@ -41,36 +41,47 @@ FT_pb = function() {
 			this.projectsContainer.appendChild(this.tPcontainer);
 			this.projectsContainer.appendChild(this.cPcontainer);
 			this.div.appendChild(this.projectsContainer);
-			this.addSPB.getView().onclick = function(){
-				if(thatP.sPcontainer.innerHTML != ""){
+			this.addSPB.getView().onclick = function() {
+				if (thatP.sPcontainer.innerHTML != "") {
 					thatP.removeSurveyProject();
 				} else {
-					var sP =  new that.FTPrM.surveyProject("SurveyProject");
+					var sP = new that.FTPrM.surveyProject("SurveyProject");
 					thatP.addSurveyProject(sP);
 				}
 				thatP.contentChanged();
 			}
-			this.addTPB.getView().onclick = function(){
-				if(thatP.tPcontainer.innerHTML != ""){
+			this.addTPB.getView().onclick = function() {
+				if (thatP.tPcontainer.innerHTML != "") {
 					thatP.removeTrackerProject();
 				} else {
-					var tP =  new that.FTPrM.trackerProject();
+					var tP = new that.FTPrM.trackerProject();
 					thatP.addTrackerProject(tP);
 				}
 				thatP.contentChanged();
 			}
-			this.addCPB.getView().onclick = function(){
-				if(thatP.cPcontainer.innerHTML != ""){
+			this.addCPB.getView().onclick = function() {
+				if (thatP.cPcontainer.innerHTML != "") {
 					thatP.removeCountersProject();
 				} else {
-					var cP =  new that.FTPrM.countersProject();
+					var cP = new that.FTPrM.countersProject();
 					thatP.addCountersProject(cP);
 				}
 				thatP.contentChanged();
 			}
-			
+
 		}
 		this.contentChanged = function() {
+			
+			if (this.surveyProjectView != null) {
+				var sPv = this.surveyProjectView.getSurveyProject();
+				var sPm = this.pr.getSurveyProject();
+				if(sPv != sPm){
+					this.pr.setSurveyProject(sPv);
+				}
+			} else {
+				this.pr.setSurveyProject(null);
+			}
+			
 			this.parentView.contentChanged();
 		}
 		this.updateContent = function(pr) {
@@ -78,53 +89,71 @@ FT_pb = function() {
 			var sP = pr.getSurveyProject();
 			var tP = pr.getTrackerProject();
 			var cP = pr.getCountersProject();
-			this.trackerProjectView
-			if(sP != null){
-				this.addSurveyProject(sP);
+			if (sP != null) {
+				thatP.addSurveyProject(sP);
 				thatP.addSPB.changeLook("remove", "", "Survey");
 			} else {
+				thatP.removeSurveyProject();
 				thatP.addSPB.changeLook("add", "", "Survey");
 			}
-			if(tP != null){
+			if (tP != null) {
 				this.addTrackerProject(tP);
 				thatP.addTPB.changeLook("remove", "", "Tracker");
 			} else {
 				thatP.addTPB.changeLook("add", "", "Tracker");
 			}
-			if(cP != null){
+			if (cP != null) {
 				this.addCountersProject(cP);
 				thatP.addCPB.changeLook("remove", "", "Counters");
 			} else {
 				thatP.addCPB.changeLook("add", "", "Counters");
-			}			
+			}
 		}
-		this.addSurveyProject = function(sP){
-			this.pr.setSurveyProject(sP);
-			this.surveyProjectView = new that.surveyProjectView(sP, thatP);
-			thatP.sPcontainer.appendChild(this.surveyProjectView.getView());
-			thatP.addSPB.changeLook("remove", "", "Survey");
+		this.addSurveyProject = function(sP) {
+			if (this.surveyProjectView == null) {
+				this.pr.setSurveyProject(sP);
+				this.surveyProjectView = new that.surveyProjectView(sP, thatP);
+				thatP.sPcontainer.appendChild(this.surveyProjectView.getView());
+				thatP.addSPB.changeLook("remove", "", "Survey");
+			} else {
+				this.surveyProjectView.updateContent(sP);
+			}
 		}
-		this.addTrackerProject = function(tP){
-			this.trackerProjectView = new that.trackerProjectView(tP, thatP);
-			thatP.tPcontainer.appendChild(this.trackerProjectView.getView());
-			thatP.addTPB.changeLook("remove", "", "Tracker");
+		this.addTrackerProject = function(tP) {
+			if (this.trackerProjectView == null) {
+				this.trackerProjectView = new that.trackerProjectView(tP, thatP);
+				thatP.tPcontainer
+						.appendChild(this.trackerProjectView.getView());
+				thatP.addTPB.changeLook("remove", "", "Tracker");
+			} else {
+				this.trackerProjectView.updateContent(tP);
+			}
 		}
-		this.addCountersProject = function(cP){
-			this.countersProjectView = new that.countersProjectView(cP, thatP);
-			thatP.cPcontainer.appendChild(this.countersProjectView.getView());
-			thatP.addCPB.changeLook("remove", "", "Counters");
-		}		
-		this.removeSurveyProject = function(){
+		this.addCountersProject = function(cP) {
+			if (this.countersProjectView == null) {
+				this.countersProjectView = new that.countersProjectView(cP,
+						thatP);
+				thatP.cPcontainer.appendChild(this.countersProjectView
+						.getView());
+				thatP.addCPB.changeLook("remove", "", "Counters");
+			} else {
+				this.countersProjectView.updateContent(cP);
+			}
+		}
+		this.removeSurveyProject = function() {
+			this.surveyProjectView = null;
 			this.pr.setSurveyProject(null);
 			thatP.sPcontainer.innerHTML = "";
 			thatP.addSPB.changeLook("add", "", "Survey");
 		}
-		this.removeTrackerProject = function(){
+		this.removeTrackerProject = function() {
+			this.trackerProjectView = null;
 			this.pr.setTrackerProject(null);
 			thatP.tPcontainer.innerHTML = "";
 			thatP.addTPB.changeLook("add", "", "Tracker");
 		}
-		this.removeCountersProject = function(){
+		this.removeCountersProject = function() {
+			this.countersProjectView = null;
 			this.pr.setCountersProject(null);
 			thatP.cPcontainer.innerHTML = "";
 			thatP.addCPB.changeLook("add", "", "Counters");
@@ -132,7 +161,7 @@ FT_pb = function() {
 		this.getView = function() {
 			return this.div;
 		}
-		this.getProject = function(){
+		this.getProject = function() {
 			return this.pr;
 		}
 		this.initializeView();
@@ -142,28 +171,42 @@ FT_pb = function() {
 	this.surveyProjectView = function(sP, parentView) {
 		this.parentView = parentView;
 		this.sP = sP;
-		this.fusionTableIDInput = null;
+		this.tableIDInput = null;
 		this.surveyView = null;
 		thatSP = this;
+		this.getSurveyProject = function(){
+			return this.sP;
+		}
 		this.initializeView = function() {
 			this.div = document.createElement('div');
 			this.tableIDInput = document.createElement("input");
 			this.tableIDInput.type = "text";
 			this.tableIDInput.className = "form-control"
-			this.tableIDInput.placeholder = "Table ID"	
+			this.tableIDInput.placeholder = "Table ID"
 			this.tableIDInput.oninput = function() {
 				thatSP.contentChanged();
 			};
 			this.div.appendChild(this.tableIDInput);
-			this.surveyView = new that.FSsb.surveyView(new that.FS.survey(), this);
+			this.surveyView = new that.FSsb.surveyView(new that.FS.survey(),
+					thatSP);
 			this.div.appendChild(this.surveyView.getView());
 		}
 		this.updateContent = function(sP) {
 			this.sP = sP;
+			if (this.tableIDInput.value != this.sP.getTableID()) {
+				this.tableIDInput.value = this.sP.getTableID();
+			}
 		}
 		this.contentChanged = function() {
-			if(this.tableIDInput.value != ""){
+			if (this.tableIDInput.value != "") {
 				this.sP.setTableID(this.tableIDInput.value)
+			} else {
+				this.sP.setTableID(null);
+			}
+			if (this.surveyView != null) {
+				this.sP.setSurvey(this.surveyView.getSurvey());
+			} else {
+				this.sP.setSurvey(null);
 			}
 			this.parentView.contentChanged();
 		}
@@ -171,6 +214,7 @@ FT_pb = function() {
 			return this.div;
 		}
 		this.initializeView();
+		this.updateContent(this.sP);
 	}
 
 	this.trackerProjectView = function(tP, parentView) {
@@ -195,7 +239,7 @@ FT_pb = function() {
 
 	this.countersProjectView = function(cP, parentView) {
 		this.parentView = parentView;
-		this.cP = cP;		
+		this.cP = cP;
 		this.initializeView = function() {
 			this.div = document.createElement('div');
 			this.div.innerHTML = JSON.stringify(cP.serializeJSON());
