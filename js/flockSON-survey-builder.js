@@ -8,6 +8,14 @@ FS_sb = function() {
 			this.div = document.createElement('div');
 			this.div.className = "survey";
 			var thatSV = this;
+			this.surveyNameInput = document.createElement("input");
+			this.surveyNameInput.type = "text";
+			this.surveyNameInput.className = "form-control"
+			this.surveyNameInput.placeholder = "Title"	
+			this.surveyNameInput.oninput = function() {
+				thatSV.contentChanged();
+			};
+			this.div.appendChild(this.surveyNameInput);
 			this.addChapterButton = new that.FSUxEl.button("add", "", "Add chapter");
 			this.addChapterButton.getView().onclick = function() {
 				thatSV.addChapter(new that.FS.chapter());
@@ -50,7 +58,7 @@ FS_sb = function() {
 			chapterContainerDIV.appendChild(eraseChapterButton.getView());
 			chapterContainerDIV.appendChild(newChapterDIV);
 			this.chaptersArrayContainerDiV.appendChild(chapterContainerDIV);
-			eraseChapterButton.onclick = function() {
+			eraseChapterButton.getView().onclick = function() {
 				thatC.eraseChapter(chapterContainerDIV);
 			}
 		}
@@ -71,7 +79,6 @@ FS_sb = function() {
 				changedChapters[i] = this.chapterViews[i].getChapter();
 			}
 			this.survey.setChapters(changedChapters);
-			this.survey.setfusionTableID(this.fusionTableIDInput.value);
 			this.parentView.contentChanged();
 		};
 		this.getSurvey = function() {
