@@ -71,7 +71,7 @@
 			var undoStackElement = that.uStack.undo();
 			that.FTproject = undoStackElement.objectState;
 			undoStackElement.view.updateContent(that.FTproject);
-			that.contentChanges--;
+			contentChanges--;
 			that.jsonText.innerHTML = "<b>Input Modification Count:</b> "
 					+ contentChanges + " <br><br><b>JSON Output:</b><br>"
 					+ JSON.stringify(that.FTproject.serializeJSON());
@@ -84,7 +84,7 @@
 			var redoStackElement = that.uStack.redo();
 			that.FTproject = redoStackElement.objectState;
 			redoStackElement.view.updateContent(that.FTproject);
-			that.contentChanges++;
+			contentChanges++;
 			that.jsonText.innerHTML = "<b>Input Modification Count:</b> "
 					+ contentChanges + " <br><br><b>JSON Output:</b><br>"
 					+ JSON.stringify(that.FTproject.serializeJSON());
