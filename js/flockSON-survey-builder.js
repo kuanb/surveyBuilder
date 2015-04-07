@@ -3,7 +3,7 @@ FS_sb = function() {
 	this.FS = new FlockSON();
 	var that = this;
 	this.surveyView = function(survey, parentView) {
-		thatC = this;
+		var thatC = this;
 		this.initializeView = function() {
 			this.div = document.createElement('div');
 			this.div.className = "survey";
@@ -51,7 +51,7 @@ FS_sb = function() {
 		this.addChapter = function(chapter) {
 			var chapterContainerDIV = document.createElement('div');
 			chapterContainerDIV.className = "chapterContainerDIV";
-			var newChapterView = new chapterView(chapter, this);
+			var newChapterView = new that.chapterView(chapter, this);
 			this.chapterViews.push(newChapterView);
 			var newChapterDIV = newChapterView.getView();
 			var eraseChapterButton = new that.FSUxEl.button("remove", "", "Erase chapter");
@@ -96,6 +96,7 @@ FS_sb = function() {
 		this.updateContent(this.survey);
 	}
 	this.questionArrayView = function(questionArray, parentView, inLoop) {
+		var thatQAV = this;
 		this.initializeView = function() {
 			this.div = document.createElement('div');
 			this.div.className = "questionsContainerDIV";
@@ -129,11 +130,11 @@ FS_sb = function() {
 		this.addQuestion = function(question) {
 			var questionContainerDIV = document.createElement('div');
 			questionContainerDIV.className = "questionContainerDIV";
-			newQuestionView = new questionView(question, this, inLoop);
+			newQuestionView = new that.questionView(question, this, inLoop);
 			this.questionViews.push(newQuestionView);
 			var newQuestionDIV = newQuestionView.getView();
-			var eraseQuestionButton = new button("remove", "", "Erase question");
-			questionContainerDIV.appendChild(eraseQuestionButton);
+			var eraseQuestionButton = new that.FSUxEl.button("remove", "", "Erase question");
+			questionContainerDIV.appendChild(eraseQuestionButton.getView());
 			questionContainerDIV.appendChild(newQuestionDIV);
 			this.questionsArrayContainer.appendChild(questionContainerDIV);
 			eraseQuestionButton.onclick = function() {
@@ -176,21 +177,21 @@ FS_sb = function() {
 	}
 	;
 
-	function answerArrayView(answerArray, parentView, canHaveJumps) {
+	this.answerArrayView = function(answerArray, parentView, canHaveJumps) {
+		var thatAAV = this;
 		this.initializeView = function() {
 			this.answerViews = []; // Array of question Views objects
 			this.div = document.createElement('div');
 			this.div.className = "answersContainerDIV";
 			this.answersArrayContainer = document.createElement('div');
 			this.answersArrayContainer.className = "this.answersArrayContainerDIV";
-			this.addAnswerButton = new button("add", "", "Add answer");
-			var that = this;
-			this.addAnswerButton.onclick = function() {
+			this.addAnswerButton = new that.FSUxEl.button("add", "", "Add answer");
+			this.addAnswerButton.getView().onclick = function() {
 				that.addAnswer(new answer());
 				that.contentChanged();
 			};
 			this.div.appendChild(this.answersArrayContainer);
-			this.div.appendChild(this.addAnswerButton);
+			this.div.appendChild(this.addAnswerButton.getView());
 		}
 		this.updateContent = function(answerArray) {
 			if (answerArray != this.getAnswers()) {
@@ -211,14 +212,13 @@ FS_sb = function() {
 		this.addAnswer = function(answer) {
 			var answerContainerDIV = document.createElement('div');
 			answerContainerDIV.className = "answerContainerDIV";
-			var newAnswerView = new answerView(answer, this, this.canHaveJumps);
+			var newAnswerView = new that.answerView(answer, this, this.canHaveJumps);
 			this.answerViews.push(newAnswerView);
 			var newAnswerDIV = newAnswerView.getView();
-			var eraseAnswerButton = new button("remove", "", "Erase answer");
-			answerContainerDIV.appendChild(eraseAnswerButton);
+			var eraseAnswerButton = new that.FSUxEl.button("remove", "", "Erase answer");
+			answerContainerDIV.appendChild(eraseAnswerButton.getView());
 			answerContainerDIV.appendChild(newAnswerDIV);
 			this.answersArrayContainer.appendChild(answerContainerDIV);
-			var that = this;
 			eraseAnswerButton.onclick = function() {
 				that.eraseAnswer(answerContainerDIV);
 			};
@@ -253,11 +253,11 @@ FS_sb = function() {
 		this.initializeView();
 		this.updateContent(this.answerArray);
 	}
-	function answerView(answer, parentView, canHaveJump) {
+	this.answerView = function(answer, parentView, canHaveJump) {
+		var thatAV = this;
 		this.initializeView = function() {
 			this.div = document.createElement('div');
 			this.div.className = "answer";
-			var that = this;
 			this.answerInput = document.createElement("input");
 			this.answerInput.type = "text";
 			this.answerInput.className = "form-control";
@@ -272,7 +272,7 @@ FS_sb = function() {
 				that.contentChanged();
 			};
 
-			this.jumpCheckbox = new checkbox("", "Jump", "jumpEnabled");
+			this.jumpCheckbox = new that.FSUxEl.checkbox("", "Jump", "jumpEnabled");
 			this.jumpCheckbox.getView().checked = false;
 			this.jumpCheckbox.getView().onchange = function() {
 				that.toggleJumpOption();
@@ -330,7 +330,8 @@ FS_sb = function() {
 		this.updateContent(this.answer);
 	}
 	;
-	function chapterView(chapter, parentView) {
+	this.chapterView = function(chapter, parentView) {
+		var thatCV = this;
 		this.updateContent = function(chapter) {
 			if (this.titleInput.value != this.chapter.getTitle()) {
 				this.titleInput.value = this.chapter.getTitle();
@@ -424,7 +425,8 @@ FS_sb = function() {
 		this.initializeView();
 		this.updateContent(this.tracker);
 	}
-	function questionView(question, parentView, inLoop) {
+	this.questionView = function(question, parentView, inLoop) {
+		var thatQV = this;
 		this.updateContent = function(question) {
 			this.question = question;
 			if (this.questionInput.value != this.question.getQuestionText()) {
@@ -472,7 +474,6 @@ FS_sb = function() {
 			this.IDInput = document.createElement("input");
 			this.IDInput.type = "text";
 			this.IDInput.className = "form-control"
-			var that = this;
 			this.IDInput.oninput = function() {
 				that.contentChanged();
 			};
@@ -483,7 +484,7 @@ FS_sb = function() {
 				that.contentChanged();
 			};
 
-			this.questionKindDropDown = new select("", "", this.questionKinds
+			this.questionKindDropDown = new that.FSUxEl.select("", "", this.questionKinds
 					.getNames(), this.questionKinds.getJsonNames());
 			this.questionKindDropDown.onchange = function() {
 				that.updateQuestionKind(this.options[this.selectedIndex].value);
@@ -498,7 +499,7 @@ FS_sb = function() {
 				that.contentChanged();
 			};
 
-			this.jumpCheckbox = new checkbox("", "Jump", "jumpEnabled");
+			this.jumpCheckbox = new that.FSUxEl.checkbox("", "Jump", "jumpEnabled");
 			this.jumpCheckbox.getView().onchange = function() {
 				that.toggleJumpOption();
 			};
@@ -588,7 +589,7 @@ FS_sb = function() {
 		}
 		this.addQuestionArray = function() {
 			if (this.questionArrayView == null) {
-				this.questionArrayView = new questionArrayView(this.question
+				this.questionArrayView = new that.questionArrayView(this.question
 						.getLoopQuestions(), this, true);
 				this.div.appendChild(this.questionArrayView.getView());
 			}
@@ -600,7 +601,7 @@ FS_sb = function() {
 						&& !this.inLoop) {
 					canHaveJump = true;
 				}
-				this.answerArrayView = new answerArrayView(this.question
+				this.answerArrayView = new that.answerArrayView(this.question
 						.getAnswers(), this, canHaveJump);
 				this.div.appendChild(this.answerArrayView.getView());
 			}
@@ -619,8 +620,7 @@ FS_sb = function() {
 		}
 		this.addOtherOption = function() {
 			if (this.otherCheckbox == null) {
-				this.otherCheckbox = new checkbox("", "Other", "otherEnabled");
-				var that = this;
+				this.otherCheckbox = new that.FSUxEl.checkbox("", "Other", "otherEnabled");
 				this.otherCheckbox.getView().onchange = function() {
 					that.contentChanged();
 				};
@@ -636,7 +636,7 @@ FS_sb = function() {
 		this.question = question;
 		this.parentView = parentView;
 		this.inLoop = inLoop;
-		this.questionKinds = new questionKind(this.inLoop);
+		this.questionKinds = new that.FS.questionKind(this.inLoop);
 		this.answerArrayView = null;
 		this.questionArrayView = null;
 		this.questionKindDropDown = null;

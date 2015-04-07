@@ -210,6 +210,10 @@ FT_pb = function() {
 			this.sP = sP;
 			if (this.tableIDInput.value != this.sP.getTableID()) {
 				this.tableIDInput.value = this.sP.getTableID();
+			} 
+			var surv = this.sP.getSurvey();
+			if(this.sP.getSurvey() != null){
+				this.surveyView.updateContent(surv);
 			}
 		}
 		this.contentChanged = function() {

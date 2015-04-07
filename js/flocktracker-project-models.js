@@ -182,6 +182,9 @@ var FT_pr = function() {
 		this.setSurvey = function(survey) {
 			this.survey = survey;
 		}
+		this.getSurvey = function(){
+			return this.survey;
+		}
 		this.deserializeJSON = function(surveyProjectObjorString) {
 			var surveyProjectObject = that.fSON.getJSON(surveyProjectObjorString);
 			if (surveyProjectObject != null) {
