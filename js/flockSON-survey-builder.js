@@ -1,14 +1,16 @@
 FS_sb = function() {
 	this.FSUxEl = new FS_ux_el();
+	this.FS = new FlockSON();
 	var that = this;
 	this.surveyView = function(survey, parentView) {
+		thatC = this;
 		this.initializeView = function() {
 			this.div = document.createElement('div');
 			this.div.className = "survey";
 			var thatSV = this;
 			this.addChapterButton = new that.FSUxEl.button("add", "", "Add chapter");
 			this.addChapterButton.getView().onclick = function() {
-				thatSV.addChapter(new chapter());
+				thatSV.addChapter(new that.FS.chapter());
 				thatSV.contentChanged();
 			};
 			this.chaptersArrayContainerDiV = document.createElement('div');
@@ -44,13 +46,12 @@ FS_sb = function() {
 			var newChapterView = new chapterView(chapter, this);
 			this.chapterViews.push(newChapterView);
 			var newChapterDIV = newChapterView.getView();
-			var eraseChapterButton = new button("remove", "", "Erase chapter");
-			var that = this;
-			chapterContainerDIV.appendChild(eraseChapterButton);
+			var eraseChapterButton = new that.FSUxEl.button("remove", "", "Erase chapter");
+			chapterContainerDIV.appendChild(eraseChapterButton.getView());
 			chapterContainerDIV.appendChild(newChapterDIV);
 			this.chaptersArrayContainerDiV.appendChild(chapterContainerDIV);
 			eraseChapterButton.onclick = function() {
-				that.eraseChapter(chapterContainerDIV);
+				thatC.eraseChapter(chapterContainerDIV);
 			}
 		}
 		this.eraseChapter = function(chapterDIV) {
@@ -87,20 +88,20 @@ FS_sb = function() {
 		this.initializeView();
 		this.updateContent(this.survey);
 	}
-	function questionArrayView(questionArray, parentView, inLoop) {
+	this.questionArrayView = function(questionArray, parentView, inLoop) {
 		this.initializeView = function() {
 			this.div = document.createElement('div');
 			this.div.className = "questionsContainerDIV";
 			this.questionsArrayContainer = document.createElement('div');
 			this.questionsArrayContainer.className = "questionsArrayContainer";
-			this.addQuestionButton = new button("add", "", "Add question");
-			var that = this;
-			this.addQuestionButton.onclick = function() {
-				that.addQuestion(new question(that.inLoop));
-				that.contentChanged();
+			this.addQuestionButton = new that.FSUxEl.button("add", "", "Add question");
+			var thatQAV = this;
+			this.addQuestionButton.getView().onclick = function() {
+				thatQAV.addQuestion(new question(thatQAV.inLoop));
+				thatQAV.contentChanged();
 			};
 			this.div.appendChild(this.questionsArrayContainer);
-			this.div.appendChild(this.addQuestionButton);
+			this.div.appendChild(this.addQuestionButton.getView());
 		}
 		this.updateContent = function(questionArray) {
 			if (questionArray != this.getQuestions()) {
@@ -125,12 +126,11 @@ FS_sb = function() {
 			this.questionViews.push(newQuestionView);
 			var newQuestionDIV = newQuestionView.getView();
 			var eraseQuestionButton = new button("remove", "", "Erase question");
-			var that = this;
 			questionContainerDIV.appendChild(eraseQuestionButton);
 			questionContainerDIV.appendChild(newQuestionDIV);
 			this.questionsArrayContainer.appendChild(questionContainerDIV);
 			eraseQuestionButton.onclick = function() {
-				that.eraseQuestion(questionContainerDIV);
+				thatQAV.eraseQuestion(questionContainerDIV);
 			};
 		};
 		this.eraseQuestion = function(questionDIV) {
@@ -335,7 +335,7 @@ FS_sb = function() {
 							.updateContent(this.chapter.getQuestions);
 				}
 			} else {
-				this.questionArrayView = new questionArrayView(this.chapter
+				this.questionArrayView = new that.questionArrayView(this.chapter
 						.getQuestions(), this, false);
 				this.div.appendChild(this.questionArrayView.getView());
 			}
