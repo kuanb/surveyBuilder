@@ -142,7 +142,7 @@ FS_sb = function() {
 			questionContainerDIV.appendChild(eraseQuestionButton.getView());
 			questionContainerDIV.appendChild(newQuestionDIV);
 			this.questionsArrayContainer.appendChild(questionContainerDIV);
-			eraseQuestionButton.onclick = function() {
+			eraseQuestionButton.getView().onclick = function() {
 				thatQAV.eraseQuestion(questionContainerDIV);
 			};
 		};
@@ -192,8 +192,8 @@ FS_sb = function() {
 			this.addAnswerButton = new that.FSUxEl.button("add", "",
 					"Add answer");
 			this.addAnswerButton.getView().onclick = function() {
-				that.addAnswer(new answer());
-				that.contentChanged();
+				thatAAV.addAnswer(new that.FS.answer());
+				thatAAV.contentChanged();
 			};
 			this.div.appendChild(this.answersArrayContainer);
 			this.div.appendChild(this.addAnswerButton.getView());
@@ -226,8 +226,8 @@ FS_sb = function() {
 			answerContainerDIV.appendChild(eraseAnswerButton.getView());
 			answerContainerDIV.appendChild(newAnswerDIV);
 			this.answersArrayContainer.appendChild(answerContainerDIV);
-			eraseAnswerButton.onclick = function() {
-				that.eraseAnswer(answerContainerDIV);
+			eraseAnswerButton.getView().onclick = function() {
+				thatAAV.eraseAnswer(answerContainerDIV);
 			};
 		};
 		this.eraseAnswer = function(answerDIV) {
