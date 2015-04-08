@@ -186,6 +186,7 @@ var FlockSON = function() {
 			return questionJSONObject;
 		}
 		this.deserializeJSON = function(questionObjorString) {
+			var qK = new that.questionKind(this.inloop);
 			var questionObject = that.getJSON(questionObjorString);
 			if (questionObject != null) {
 				var questionObjectContents = null;
@@ -197,7 +198,6 @@ var FlockSON = function() {
 				if (questionObjectContents != null) {
 					if ("Kind" in questionObjectContents) {
 						var tempKind = questionObjectContents["Kind"];
-						var qK = new that.questionKind(this.inloop);
 						var JSONNames = qK.getJsonNames();
 						var validQuestionKind = false;
 						for (i = 0; i < JSONNames.length; i++) {

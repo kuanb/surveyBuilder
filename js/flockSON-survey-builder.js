@@ -107,9 +107,8 @@ FS_sb = function() {
 			this.questionsArrayContainer.className = "questionsArrayContainer";
 			this.addQuestionButton = new that.FSUxEl.button("add", "",
 					"Add question");
-			var thatQAV = this;
 			this.addQuestionButton.getView().onclick = function() {
-				thatQAV.addQuestion(new question(thatQAV.inLoop));
+				thatQAV.addQuestion(new that.FS.question(thatQAV.inLoop));
 				thatQAV.contentChanged();
 			};
 			this.div.appendChild(this.questionsArrayContainer);
@@ -268,12 +267,14 @@ FS_sb = function() {
 			this.answerInput = document.createElement("input");
 			this.answerInput.type = "text";
 			this.answerInput.className = "form-control";
+			this.answerInput.placeholder = "Answer text";
 			this.answerInput.oninput = function() {
 				thatAV.contentChanged();
 			};
 			this.jumpInput = document.createElement("input");
 			this.jumpInput.type = "text";
 			this.jumpInput.className = "form-control";
+			this.jumpInput.placeholder = "Junmp ID";
 			this.jumpInput.style.display = "none";
 			this.jumpInput.oninput = function() {
 				thatAV.contentChanged();
@@ -362,6 +363,7 @@ FS_sb = function() {
 			this.titleInput = document.createElement("input");
 			this.titleInput.type = "text";
 			this.titleInput.className = "form-control"
+			this.titleInput.placeholder = "Title";
 			this.titleInput.oninput = function() {
 				that.contentChanged();
 			};
@@ -480,13 +482,15 @@ FS_sb = function() {
 			this.div.className = "question";
 			this.IDInput = document.createElement("input");
 			this.IDInput.type = "text";
-			this.IDInput.className = "form-control"
+			this.IDInput.className = "form-control";
+			this.IDInput.placeholder = "Question ID";
 			this.IDInput.oninput = function() {
 				thatQV.contentChanged();
 			};
 			this.questionInput = document.createElement("input");
 			this.questionInput.type = "text";
-			this.questionInput.className = "form-control"
+			this.questionInput.className = "form-control";
+			this.questionInput.placeholder = "Question text";
 			this.questionInput.oninput = function() {
 				thatQV.contentChanged();
 			};
@@ -502,6 +506,7 @@ FS_sb = function() {
 			this.jumpInput = document.createElement("input");
 			this.jumpInput.type = "text";
 			this.jumpInput.className = "form-control"
+			this.jumpInput.placeholder = "Jump ID";
 			this.jumpInput.style.display = "none";
 			this.jumpInput.oninput = function() {
 				thatQV.contentChanged();
