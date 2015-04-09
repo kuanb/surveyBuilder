@@ -20,7 +20,6 @@ FT_pb = function() {
 		this.initializeView = function() {
 			this.div = document.createElement('div');
 			this.div.className = "project";
-			this.div.id = "project";
 			this.buttonsContainer = document.createElement('div');
 			this.buttonsContainer.className = "project_buttons_container";
 			this.addSPB = new that.FSUxEl.button("add", "", "Survey");
@@ -204,6 +203,7 @@ FT_pb = function() {
 		}
 		this.initializeView = function() {
 			this.div = document.createElement('div');
+			this.div.className = "survey_project";
 			this.tableIDInput = document.createElement("input");
 			this.tableIDInput.type = "text";
 			this.tableIDInput.className = "form-control"
@@ -249,12 +249,74 @@ FT_pb = function() {
 	this.trackerProjectView = function(tP, parentView) {
 		this.parentView = parentView;
 		this.tP = tP;
+		var thatTP = this;
+		this.startSurveyView == null;
 		this.getTrackerProject = function(){
 			return this.tP;
 		}
 		this.initializeView = function() {
 			this.div = document.createElement('div');
-			this.div.innerHTML = JSON.stringify(tP.serializeJSON());
+			this.div = document.createElement('div');
+			this.div.className = "tracker_project";
+			this.buttonsContainer = document.createElement('div');
+			this.buttonsContainer.className = "tracker_project_buttons_container";
+			this.addSSB = new that.FSUxEl.button("add", "", "Start Survey");
+			this.buttonsContainer.appendChild(this.addSSB.getView());
+			this.addESB = new that.FSUxEl.button("add", "", "End Survey");
+			this.buttonsContainer.appendChild(this.addESB.getView());
+			this.div.appendChild(this.buttonsContainer);
+			this.sScontainer = document.createElement('div');
+			this.sScontainer.className = "survey_project_container";
+			this.eScontainer = document.createElement('div');
+			this.eScontainer.className = "tracker_project_container";
+			this.projectsContainer = document.createElement("div");
+			this.projectsContainer.className = "projects_container"
+			this.projectsContainer.appendChild(this.sScontainer);
+			this.projectsContainer.appendChild(this.eScontainer);
+			this.div.appendChild(this.projectsContainer);
+			this.addSSB.getView().onclick = function() {
+				if (thatTP.sScontainer.innerHTML != "") {
+					thatTP.removeStartSurvey();
+				} else {
+					var sP = new that.FTPrM.surveyProject("StartSurvey");
+					thatTP.addStartSurvey(sP);
+					var ps = thatTP.projectsContainer.children[Array.prototype.indexOf.call(thatTP.sScontainer.parentNode.children, thatTP.sScontainer)].offsetTop;
+					var pcs = thatTP.div.children[Array.prototype.indexOf.call(thatTP.projectsContainer.parentNode.children, thatTP.projectsContainer)].offsetTop;
+					thatTP.div.scrollTop = ps + pcs;
+				}
+				thatTP.contentChanged();
+			}
+			this.addESB.getView().onclick = function() {
+				if (thatP.tPcontainer.innerHTML != "") {
+					thatP.removeTrackerProject();
+				} else {
+					var tP = new that.FTPrM.trackerProject();
+					thatP.addTrackerProject(tP);
+					var ps = thatP.projectsContainer.children[Array.prototype.indexOf.call(thatP.tPcontainer.parentNode.children, thatP.tPcontainer)].offsetTop;
+					var pcs = thatP.div.children[Array.prototype.indexOf.call(thatP.projectsContainer.parentNode.children, thatP.projectsContainer)].offsetTop;
+					thatP.div.scrollTop = ps + pcs;
+				}
+				thatP.contentChanged();
+			}
+
+		}
+		this.removeStartSurvey = function(){
+			
+		}
+		this.addStartSurvey = function(sP){
+			if (this.startSurveyView == null) {
+				this.startSurveyView = new that.surveyProjectView(sP, thatTP);
+				thatTP.sScontainer.appendChild(this.startSurveyView.getView());
+				thatTP.addSSB.changeLook("remove", "", "Survey");
+			} else {
+				this.startSurveyView.updateContent(sP);
+			}
+		}
+		this.removeEndSurvey = function(){
+			
+		}
+		this.addEndSurvey = function(){
+			
 		}
 		this.updateContent = function(tP) {
 			this.tP = tP;
