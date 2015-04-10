@@ -250,7 +250,8 @@ FT_pb = function() {
 		this.parentView = parentView;
 		this.tP = tP;
 		var thatTP = this;
-		this.startSurveyView == null;
+		this.startSurveyView = null;
+		this.endSurveyView = null;
 		this.getTrackerProject = function(){
 			return this.tP;
 		}
@@ -268,7 +269,7 @@ FT_pb = function() {
 			this.sScontainer = document.createElement('div');
 			this.sScontainer.className = "survey_project_container";
 			this.eScontainer = document.createElement('div');
-			this.eScontainer.className = "tracker_project_container";
+			this.eScontainer.className = "survey_project_container";
 			this.projectsContainer = document.createElement("div");
 			this.projectsContainer.className = "projects_container"
 			this.projectsContainer.appendChild(this.sScontainer);
@@ -287,40 +288,51 @@ FT_pb = function() {
 				thatTP.contentChanged();
 			}
 			this.addESB.getView().onclick = function() {
-				if (thatP.tPcontainer.innerHTML != "") {
-					thatP.removeTrackerProject();
+				if (thatTP.eScontainer.innerHTML != "") {
+					thatTP.removeEndSurvey();
 				} else {
-					var tP = new that.FTPrM.trackerProject();
-					thatP.addTrackerProject(tP);
-					var ps = thatP.projectsContainer.children[Array.prototype.indexOf.call(thatP.tPcontainer.parentNode.children, thatP.tPcontainer)].offsetTop;
-					var pcs = thatP.div.children[Array.prototype.indexOf.call(thatP.projectsContainer.parentNode.children, thatP.projectsContainer)].offsetTop;
-					thatP.div.scrollTop = ps + pcs;
+					var sP = new that.FTPrM.surveyProject("EndSurvey");
+					thatTP.addEndSurvey(sP);
+					var ps = thatTP.projectsContainer.children[Array.prototype.indexOf.call(thatTP.eScontainer.parentNode.children, thatTP.eScontainer)].offsetTop;
+					var pcs = thatTP.div.children[Array.prototype.indexOf.call(thatTP.projectsContainer.parentNode.children, thatTP.projectsContainer)].offsetTop;
+					thatTP.div.scrollTop = ps + pcs;
 				}
-				thatP.contentChanged();
+				thatTP.contentChanged();
 			}
 
 		}
 		this.removeStartSurvey = function(){
-			
+			this.startSurveyView = null;
+			this.tP.setStartSurvey(null);
+			thatTP.sScontainer.innerHTML = "";
+			thatTP.addSSB.changeLook("add", "", "Start Survey");
 		}
 		this.addStartSurvey = function(sP){
 			if (this.startSurveyView == null) {
 				this.startSurveyView = new that.surveyProjectView(sP, thatTP);
 				thatTP.sScontainer.appendChild(this.startSurveyView.getView());
-				thatTP.addSSB.changeLook("remove", "", "Survey");
+				thatTP.addSSB.changeLook("remove", "", "End Survey");
 			} else {
 				this.startSurveyView.updateContent(sP);
 			}
 		}
 		this.removeEndSurvey = function(){
-			
+			this.endSurveyView = null;
+			this.tP.setEndSurvey(null);
+			thatTP.eScontainer.innerHTML = "";
+			thatTP.addESB.changeLook("add", "", "End Survey");
 		}
-		this.addEndSurvey = function(){
-			
+		this.addEndSurvey = function(sP){
+			if (this.endSurveyView == null) {
+				this.endSurveyView = new that.surveyProjectView(sP, thatTP);
+				thatTP.eScontainer.appendChild(this.endSurveyView.getView());
+				thatTP.addESB.changeLook("remove", "", "End Survey");
+			} else {
+				this.endSurveyView.updateContent(sP);
+			}
 		}
 		this.updateContent = function(tP) {
 			this.tP = tP;
-
 		}
 		this.contentChanged = function() {
 

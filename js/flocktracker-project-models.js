@@ -298,7 +298,18 @@ var FT_pr = function() {
 		this.startSurveyProject = null;
 		this.endSurveyProject = null;
 		this.tr = null;
-
+		this.setStartSurvey = function(startSurvey){
+			this.startSurveyProject = startSurvey;
+		}
+		this.getStartSurvey = function(){
+			return this.startSurveyProject
+		}
+		this.setEndSurvey = function(endSurvey){
+			this.endSurveyProject = endSurvey;
+		}
+		this.getEndSurvey = function(){
+			return this.endSurveyProject
+		}
 		this.serializeJSON = function() {
 			var trackerProjectJSONObjectContents = {};
 			if (this.startSurveyProject != null) {
