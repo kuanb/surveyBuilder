@@ -356,12 +356,21 @@ FT_pb = function() {
 	this.countersProjectView = function(cP, parentView) {
 		this.parentView = parentView;
 		this.cP = cP;
+		var thatCPV = this;
 		this.getCountersProject = function(){
 			return this.cP;
 		}
 		this.initializeView = function() {
-			this.div = document.createElement('div');
-			this.div.innerHTML = JSON.stringify(cP.serializeJSON());
+			this.div = document.createElement("div");
+			this.div.className = "counters_project";
+			this.tableIDInput = document.createElement("input");
+			this.tableIDInput.type = "text";
+			this.tableIDInput.className = "form-control"
+			this.tableIDInput.placeholder = "Table ID"
+			this.tableIDInput.oninput = function() {
+				thatCPV.contentChanged();
+			};
+			this.div.appendChild(this.tableIDInput);
 		}
 		this.updateContent = function(cP) {
 			this.cP = cP;
@@ -378,9 +387,19 @@ FT_pb = function() {
 	this.trackerView = function(tr, parentView) {
 		this.parentView = parentView;
 		this.tr = tr;
+		this.tableIDInput = null;
+		var thatTV = this;
 		this.initializeView = function() {
 			this.div = document.createElement("div");
-			this.div.innerHTML = JSON.stringify(this.tr.serializeJSON());
+			this.div.className = "tracker";
+			this.tableIDInput = document.createElement("input");
+			this.tableIDInput.type = "text";
+			this.tableIDInput.className = "form-control"
+			this.tableIDInput.placeholder = "Table ID"
+			this.tableIDInput.oninput = function() {
+				thatTV.contentChanged();
+			};
+			this.div.appendChild(this.tableIDInput);
 		}
 		this.updateContent = function(tr) {
 			this.tr = tr;
@@ -398,6 +417,7 @@ FT_pb = function() {
 	this.counterView = function(co, parentView) {
 		this.parentView = parentView;
 		this.co = co;
+		var thatCV = this;
 		this.initializeView = function() {
 
 		}
