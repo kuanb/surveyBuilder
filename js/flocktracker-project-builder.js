@@ -197,7 +197,7 @@ FT_pb = function() {
 		this.sP = sP;
 		this.tableIDInput = null;
 		this.surveyView = null;
-		thatSP = this;
+		var thatSP = this;
 		this.getSurveyProject = function(){
 			return this.sP;
 		}
@@ -224,6 +224,9 @@ FT_pb = function() {
 			var surv = this.sP.getSurvey();
 			if(this.sP.getSurvey() != null){
 				this.surveyView.updateContent(surv);
+			} else {
+				this.surveyView = new that.FSsb.surveyView(new that.FS.survey(),
+						thatSP);
 			}
 		}
 		this.contentChanged = function() {

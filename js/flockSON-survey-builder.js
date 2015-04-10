@@ -3,11 +3,10 @@ FS_sb = function() {
 	this.FS = new FlockSON();
 	var that = this;
 	this.surveyView = function(survey, parentView) {
-		var thatC = this;
+		var thatSV = this;
 		this.initializeView = function() {
 			this.div = document.createElement('div');
 			this.div.className = "survey";
-			var thatSV = this;
 			this.surveyNameInput = document.createElement("input");
 			this.surveyNameInput.type = "text";
 			this.surveyNameInput.className = "form-control"
@@ -34,6 +33,9 @@ FS_sb = function() {
 		}
 		this.updateContent = function(survey) {
 			this.survey = survey;
+			if (this.surveyNameInput.value != this.survey.getTitle()) {
+				this.surveyNameInput.value = this.survey.getTitle();
+			} 
 			if (this.chapters != this.survey.getChapters()) {
 				this.chapterViews = [];
 				while (this.chaptersArrayContainerDiV.firstChild) {
@@ -77,6 +79,11 @@ FS_sb = function() {
 			this.contentChanged();
 		}
 		this.contentChanged = function() {
+			if (this.surveyNameInput.value != "") {
+				this.survey.setTitle(this.surveyNameInput.value)
+			} else {
+				this.sP.setTableID(null);
+			}
 			var changedChapters = [];
 			for (i = 0; i < this.chapterViews.length; i++) {
 				changedChapters[i] = this.chapterViews[i].getChapter();
@@ -93,6 +100,7 @@ FS_sb = function() {
 		this.div = null;
 		this.addChapterButton = null;
 		this.fusionTableIDInput = null;
+		this.surveyNameInput = null;
 		this.chaptersContainerDIV = null;
 		this.chaptersArrayContainerDiV = null;
 		this.initializeView();
