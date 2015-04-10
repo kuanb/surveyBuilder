@@ -247,13 +247,6 @@ FT_pb = function() {
 	}
 
 	this.trackerProjectView = function(tP, parentView) {
-		this.parentView = parentView;
-		this.tP = tP;
-		var thatTP = this;
-		this.startSurveyView = null;
-		this.endSurveyView = null;
-		this.trackerView = null;
-		this.tracker = null;
 		this.getTrackerProject = function(){
 			return this.tP;
 		}
@@ -266,9 +259,6 @@ FT_pb = function() {
 			this.trackerView = new that.trackerView(this.tracker, thatTP);
 			this.trackerContainer.appendChild(this.trackerView.getView());
 			this.div.appendChild(this.trackerContainer);
-			
-			
-			
 			this.buttonsContainer = document.createElement('div');
 			this.buttonsContainer.className = "tracker_project_buttons_container";
 			this.addSSB = new that.FSUxEl.button("add", "", "Start Survey");
@@ -321,7 +311,7 @@ FT_pb = function() {
 			if (this.startSurveyView == null) {
 				this.startSurveyView = new that.surveyProjectView(sP, thatTP);
 				thatTP.sScontainer.appendChild(this.startSurveyView.getView());
-				thatTP.addSSB.changeLook("remove", "", "End Survey");
+				thatTP.addSSB.changeLook("remove", "", "Start Survey");
 			} else {
 				this.startSurveyView.updateContent(sP);
 			}
@@ -343,6 +333,23 @@ FT_pb = function() {
 		}
 		this.updateContent = function(tP) {
 			this.tP = tP;
+			this.trackerView.updateContent(this.tP.getTracker());
+			var tempSS = this.tP.getStartSurvey();
+			if(tempSS != null){
+				if(this.startSurveyView == null){
+					this.addStartSurvey(tempSS);
+				} else {
+					this.startSurveyView.updateContent(tempES);
+				}
+			}
+			var tempES = this.tP.getEndSurvey();
+			if(tempES != null){
+				if(this.endSurveyView == null){
+					this.addEndSurvey(tempES);
+				} else {
+					this.endSurveyView.updateContent(tempES);
+				}
+			}
 		}
 		this.contentChanged = function() {
 
@@ -350,7 +357,15 @@ FT_pb = function() {
 		this.getView = function() {
 			return this.div;
 		}
+		this.parentView = parentView;
+		this.tP = tP;
+		var thatTP = this;
+		this.startSurveyView = null;
+		this.endSurveyView = null;
+		this.trackerView = null;
+		this.tracker = null;
 		this.initializeView();
+		this.updateContent(this.tP);	
 	}
 
 	this.countersProjectView = function(cP, parentView) {

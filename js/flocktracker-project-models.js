@@ -310,6 +310,12 @@ var FT_pr = function() {
 		this.getEndSurvey = function(){
 			return this.endSurveyProject
 		}
+		this.getTracker = function(){
+			return this.tr
+		}
+		this.setTracker = function(tr){
+			this.tr = tr;
+		}
 		this.serializeJSON = function() {
 			var trackerProjectJSONObjectContents = {};
 			if (this.startSurveyProject != null) {
