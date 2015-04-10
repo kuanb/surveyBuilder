@@ -252,13 +252,23 @@ FT_pb = function() {
 		var thatTP = this;
 		this.startSurveyView = null;
 		this.endSurveyView = null;
+		this.trackerView = null;
+		this.tracker = null;
 		this.getTrackerProject = function(){
 			return this.tP;
 		}
 		this.initializeView = function() {
 			this.div = document.createElement('div');
-			this.div = document.createElement('div');
 			this.div.className = "tracker_project";
+			this.trackerContainer = document.createElement('tracker');
+			this.trackerContainer.className = "tracker_container";
+			this.tracker = new that.FTPrM.tracker();
+			this.trackerView = new that.trackerView(this.tracker, thatTP);
+			this.trackerContainer.appendChild(this.trackerView.getView());
+			this.div.appendChild(this.trackerContainer);
+			
+			
+			
 			this.buttonsContainer = document.createElement('div');
 			this.buttonsContainer.className = "tracker_project_buttons_container";
 			this.addSSB = new that.FSUxEl.button("add", "", "Start Survey");
@@ -369,7 +379,8 @@ FT_pb = function() {
 		this.parentView = parentView;
 		this.tr = tr;
 		this.initializeView = function() {
-
+			this.div = document.createElement("div");
+			this.div.innerHTML = JSON.stringify(this.tr.serializeJSON());
 		}
 		this.updateContent = function(tr) {
 			this.tr = tr;
