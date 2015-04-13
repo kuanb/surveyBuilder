@@ -389,9 +389,6 @@ FT_pb = function() {
 	}
 
 	this.countersProjectView = function(cP, parentView) {
-		this.parentView = parentView;
-		this.cP = cP;
-		var thatCPV = this;
 		this.getCountersProject = function(){
 			return this.cP;
 		}
@@ -406,6 +403,21 @@ FT_pb = function() {
 				thatCPV.contentChanged();
 			};
 			this.div.appendChild(this.tableIDInput);
+			this.addCounterButton = new that.FSUxEl.button("add", "",
+			"Add counter");
+			this.addCounterButton.getView().onclick = function() {
+				thatCPV.addCounter(new that.FTPrM.counter());
+				thatCPV.contentChanged();
+			};
+			this.countersArrayContainerDiV = document.createElement('div');
+			this.countersArrayContainerDiV.className = "countersArrayContainerDiV";
+			this.countersContainerDIV = document.createElement('div');
+			this.countersContainerDIV.className = "countersContainerDIV";
+			this.countersContainerDIV
+			.appendChild(this.countersArrayContainerDiV);
+			this.countersContainerDIV.appendChild(this.addCounterButton
+			.getView());
+			this.div.appendChild(this.countersContainerDIV);
 		}
 		this.updateContent = function(cP) {
 			this.cP = cP;
@@ -421,6 +433,28 @@ FT_pb = function() {
 		this.getView = function() {
 			return this.div;
 		}
+		this.addCounter = function(counter){
+			var counterContainerDIV = document.createElement('div');
+			counterContainerDIV.className = "counterContainerDIV";
+			var newCounterView = new that.counterView(counter, thatCPV);
+			this.counterViews.push(newCounterView);
+			var newCounterDIV = newCounterView.getView();
+			var eraseCounterButton = new that.FSUxEl.button("remove", "",
+					"Erase counter");
+			counterContainerDIV.appendChild(eraseCounterButton.getView());
+			counterContainerDIV.appendChild(newCounterDIV);
+			this.countersArrayContainerDiV.appendChild(counterContainerDIV);
+			eraseCounterButton.getView().onclick = function() {
+				thatCPV.eraseCounter(counterContainerDIV);
+			}
+		}
+		this.parentView = parentView;
+		this.cP = cP;
+		var thatCPV = this;
+		this.addCounterButton = null;
+		this.counterContainerDIV = null;
+		this.counterArrayContainerDiV = null;
+		this.counterViews = []; // Instances of counters
 		this.initializeView();
 	}
 
@@ -468,7 +502,7 @@ FT_pb = function() {
 		this.co = co;
 		var thatCV = this;
 		this.initializeView = function() {
-
+			this.div = document.createElement("div");
 		}
 		this.updateContent = function(pr) {
 			
