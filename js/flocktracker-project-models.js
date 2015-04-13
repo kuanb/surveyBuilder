@@ -238,6 +238,9 @@ var FT_pr = function() {
 	this.countersProject = function() {
 		this.counters = null;
 		this.tableID = null;
+		this.setCounters = function(counters){
+			this.counters = counters;
+		}
 		this.setTableID = function(tableID){
 			this.tableID = tableID;
 		}

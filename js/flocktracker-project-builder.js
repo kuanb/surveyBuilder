@@ -428,6 +428,11 @@ FT_pb = function() {
 			} else {
 				this.cP.setTableID(null);
 			}
+			var changedCounters = [];
+			for (i = 0; i < this.counterViews.length; i++) {
+				changedCounters[i] = this.counterViews[i].getCounter();
+			}
+			this.cP.setCounters(changedCounters);
 			this.parentView.contentChanged();
 		}
 		this.getView = function() {
@@ -512,6 +517,9 @@ FT_pb = function() {
 		this.parentView = parentView;
 		this.co = co;
 		var thatCV = this;
+		this.getCounter = function(){
+			return this.co;
+		}
 		this.initializeView = function() {
 			this.div = document.createElement("div");
 		}
