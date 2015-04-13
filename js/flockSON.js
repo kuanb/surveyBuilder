@@ -147,8 +147,14 @@ var FlockSON = function() {
 				console.log("Text in Question is null");
 			}
 			if (this.jumpID != null) {
-				questionJSONObjectContents["JumpID"] = this.jumpID;
+				if(this.jumpID != ""){
+					questionJSONObjectContents["JumpID"] = this.jumpID;
+				} else {
+					questionJSONObjectContents["JumpID"] = null;
+					console.log("JumpID in Question is null");
+				}
 			} else {
+				questionJSONObjectContents["JumpID"] = null;
 				console.log("JumpID in Question is null");
 			}
 			if (this.otherEnabled != null) {
