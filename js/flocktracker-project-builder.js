@@ -357,6 +357,7 @@ FT_pb = function() {
 			}
 		}
 		this.contentChanged = function() {
+			this.tP.setTracker(this.trackerView.getTracker());
 			if (this.startSurveyView != null) {
 				var sSv = this.startSurveyView.getSurveyProject();
 				var sSm = this.tP.getStartSurvey();
@@ -366,9 +367,16 @@ FT_pb = function() {
 			} else {
 				this.tP.setStartSurvey(null);
 			}
+			if (this.endSurveyView != null) {
+				var eSv = this.endSurveyView.getSurveyProject();
+				var eSm = this.tP.getEndSurvey();
+				if(eSv != eSm){
+					this.tP.setEndSurvey(eSv);
+				}
+			} else {
+				this.tP.setEndSurvey(null);
+			}
 			this.parentView.contentChanged();
-			
-			
 		}
 		this.getView = function() {
 			return this.div;
@@ -420,6 +428,9 @@ FT_pb = function() {
 		this.tr = tr;
 		this.tableIDInput = null;
 		var thatTV = this;
+		this.getTracker = function(){
+			return this.tr;
+		}
 		this.initializeView = function() {
 			this.div = document.createElement("div");
 			this.div.className = "tracker";
@@ -434,9 +445,15 @@ FT_pb = function() {
 		}
 		this.updateContent = function(tr) {
 			this.tr = tr;
+			
 		}
 		this.contentChanged = function() {
-
+			if (this.tableIDInput.value != "") {
+				this.tr.setTableID(this.tableIDInput.value);
+			} else {
+				this.tr.setTableID(null);
+			}
+			this.parentView.contentChanged();
 		}
 		this.getView = function() {
 			return this.div;
