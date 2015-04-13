@@ -297,7 +297,7 @@ var FT_pr = function() {
 	this.trackerProject = function() {
 		this.startSurveyProject = null;
 		this.endSurveyProject = null;
-		this.tr = null;
+		this.tr = new that.tracker();
 		this.setStartSurvey = function(startSurvey){
 			this.startSurveyProject = startSurvey;
 		}

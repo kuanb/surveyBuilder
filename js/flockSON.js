@@ -136,6 +136,11 @@ var FlockSON = function() {
 			} else {
 				console.log("Kind in Question is null");
 			}
+			if (this.questionID != null) {
+				questionJSONObjectContents["ID"] = this.questionID;
+			} else {
+				console.log("ID in Question is null");
+			}
 			if (this.questionText != null) {
 				questionJSONObjectContents["Text"] = this.questionText;
 			} else {

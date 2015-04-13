@@ -424,10 +424,6 @@ FT_pb = function() {
 	}
 
 	this.trackerView = function(tr, parentView) {
-		this.parentView = parentView;
-		this.tr = tr;
-		this.tableIDInput = null;
-		var thatTV = this;
 		this.getTracker = function(){
 			return this.tr;
 		}
@@ -458,6 +454,10 @@ FT_pb = function() {
 		this.getView = function() {
 			return this.div;
 		}
+		this.parentView = parentView;
+		this.tr = tr;
+		this.tableIDInput = null;
+		var thatTV = this;
 		this.initializeView();
 		this.updateContent(this.tr);
 	}
