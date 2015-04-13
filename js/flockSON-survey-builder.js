@@ -82,7 +82,7 @@ FS_sb = function() {
 			if (this.surveyNameInput.value != "") {
 				this.survey.setTitle(this.surveyNameInput.value)
 			} else {
-				this.sP.setTableID(null);
+				this.survey.setTitle(null);
 			}
 			var changedChapters = [];
 			for (i = 0; i < this.chapterViews.length; i++) {

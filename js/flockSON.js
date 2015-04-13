@@ -173,11 +173,11 @@ var FlockSON = function() {
 				}
 			}
 			if ((this.kind === qK.LOOP.jsonName) && (this.inLoop == false)) {
-				if ((this.questions !== null) && (this.questions.length > 0)) {
-					var length = this.questions.length;
+				if ((this.loopQuestions !== null) && (this.loopQuestions.length > 0)) {
+					var length = this.loopQuestions.length;
 					var questionsArray = [];
 					for (var i = 0; i < length; i++) {
-						questionsArray.push(this.questions[i].generateJSON());
+						questionsArray.push(this.loopQuestions[i].serializeJSON());
 					}
 					;
 					questionJSONObjectContents["Questions"] = questionsArray;
