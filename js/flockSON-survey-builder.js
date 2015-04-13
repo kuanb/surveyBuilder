@@ -64,7 +64,7 @@ FS_sb = function() {
 			chapterContainerDIV.appendChild(newChapterDIV);
 			this.chaptersArrayContainerDiV.appendChild(chapterContainerDIV);
 			eraseChapterButton.getView().onclick = function() {
-				thatC.eraseChapter(chapterContainerDIV);
+				thatSV.eraseChapter(chapterContainerDIV);
 			}
 		}
 		this.eraseChapter = function(chapterDIV) {

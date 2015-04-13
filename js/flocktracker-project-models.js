@@ -206,7 +206,7 @@ var FT_pr = function() {
 						console.log("No TableID in SurveyProject object "
 								+ this.projectName + " :-(");
 					}
-					if ("Survey" in surveyProjectObjectContents) {
+					if ("Survey" in surveyProjectObjectContents)  {
 						this.survey = (new that.fSON.survey());
 						this.survey.deserializeJSON({
 							"Survey" : surveyProjectObjectContents["Survey"]

@@ -225,13 +225,15 @@ FT_pb = function() {
 			if(this.sP.getSurvey() != null){
 				this.surveyView.updateContent(surv);
 			} else {
-				this.surveyView = new that.FSsb.surveyView(new that.FS.survey(),
-						thatSP);
+				surv = new that.FS.survey();
 			}
+			// Here the FlockSON version is hardcoded!!!!!!!!!!!!!!!!!!!!!
+			surv.setFlockSONversion(0.1);
+			this.surveyView.updateContent(surv);
 		}
 		this.contentChanged = function() {
 			if (this.tableIDInput.value != "") {
-				this.sP.setTableID(this.tableIDInput.value)
+				this.sP.setTableID(this.tableIDInput.value);
 			} else {
 				this.sP.setTableID(null);
 			}
@@ -342,7 +344,7 @@ FT_pb = function() {
 				if(this.startSurveyView == null){
 					this.addStartSurvey(tempSS);
 				} else {
-					this.startSurveyView.updateContent(tempES);
+					this.startSurveyView.updateContent(tempSS);
 				}
 			}
 			var tempES = this.tP.getEndSurvey();
@@ -355,7 +357,18 @@ FT_pb = function() {
 			}
 		}
 		this.contentChanged = function() {
-
+			if (this.startSurveyView != null) {
+				var sSv = this.startSurveyView.getSurveyProject();
+				var sSm = this.tP.getStartSurvey();
+				if(sSv != sSm){
+					this.tP.setStartSurvey(sSv);
+				}
+			} else {
+				this.tP.setStartSurvey(null);
+			}
+			this.parentView.contentChanged();
+			
+			
 		}
 		this.getView = function() {
 			return this.div;
