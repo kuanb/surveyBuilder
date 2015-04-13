@@ -421,6 +421,21 @@ FT_pb = function() {
 		}
 		this.updateContent = function(cP) {
 			this.cP = cP;
+			if (this.tableIDInput.value != this.cP.getTableID()) {
+				this.tableIDInput.value = this.cP.getTableID();
+			} 
+			if (this.counters != this.cP.getCounters()) {
+				this.counterViews = [];
+				while (this.countersArrayContainerDiV.firstChild) {
+					this.countersArrayContainerDiV
+							.removeChild(this.countersArrayContainerDiV.firstChild);
+				}
+				this.counters = this.cP.getCounters();
+				for (var i = 0; i < this.counters.length; i++) {
+					this.addCounter(this.counters[i]);
+				}
+				;
+			}
 		}
 		this.contentChanged = function() {
 			if (this.tableIDInput.value != "") {
@@ -472,6 +487,7 @@ FT_pb = function() {
 		this.counterArrayContainerDiV = null;
 		this.counterViews = []; // Instances of counters
 		this.initializeView();
+		this.updateContent(this.cP);
 	}
 
 	this.trackerView = function(tr, parentView) {
