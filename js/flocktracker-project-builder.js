@@ -448,6 +448,17 @@ FT_pb = function() {
 				thatCPV.eraseCounter(counterContainerDIV);
 			}
 		}
+		this.eraseCounter = function(counterDIV){
+			var parentChilds = counterDIV.parentNode.childNodes;
+			for (var i = 0; i < parentChilds.length; i++) {
+				if (parentChilds[i] == counterDIV) {
+					this.counterViews.splice(i, 1);
+					break
+				}
+			}
+			this.countersArrayContainerDiV.removeChild(counterDIV);
+			this.contentChanged();
+		}
 		this.parentView = parentView;
 		this.cP = cP;
 		var thatCPV = this;
