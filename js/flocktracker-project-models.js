@@ -399,6 +399,18 @@ var FT_pr = function() {
 	this.counter = function(){
 		this.name = null;
 		this.id = null;
+		this.setName = function(name){
+			this.name = name;
+		}
+		this.getName = function(){
+			return this.name;
+		}
+		this.setID = function(id){
+			this.id = id;
+		}
+		this.getID = function(){
+			return this.id;
+		}
 		this.deserializeJSON = function(counterObjorString){
 			var counterObject = that.fSON.getJSON(counterObjorString);
 			if(counterObject != null){

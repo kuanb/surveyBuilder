@@ -492,7 +492,9 @@ FT_pb = function() {
 		}
 		this.updateContent = function(tr) {
 			this.tr = tr;
-			
+			if (this.tableIDInput.value != this.tr.getTableID()) {
+				this.tableIDInput.value = this.tr.getTableID();
+			} 
 		}
 		this.contentChanged = function() {
 			if (this.tableIDInput.value != "") {
@@ -514,25 +516,59 @@ FT_pb = function() {
 	}
 
 	this.counterView = function(co, parentView) {
-		this.parentView = parentView;
-		this.co = co;
-		var thatCV = this;
 		this.getCounter = function(){
 			return this.co;
 		}
 		this.initializeView = function() {
 			this.div = document.createElement("div");
+			this.nameInput = document.createElement("input");
+			this.nameInput.type = "text";
+			this.nameInput.className = "form-control"
+			this.nameInput.placeholder = "Counter name"
+			this.nameInput.oninput = function() {
+				thatCV.contentChanged();
+			};
+			this.div.appendChild(this.nameInput);
+			this.idInput = document.createElement("input");
+			this.idInput.type = "text";
+			this.idInput.className = "form-control"
+			this.idInput.placeholder = "Counter ID"
+			this.idInput.oninput = function() {
+				thatCV.contentChanged();
+			};
+			this.div.appendChild(this.idInput);
 		}
-		this.updateContent = function(pr) {
-			
+		this.updateContent = function(co) {
+			this.co = co;
+			if (this.nameInput.value != this.co.getName()) {
+				this.nameInput.value = this.co.getName();
+			} 
+			if (this.idInput.value != this.co.getID()) {
+				this.idInput.value = this.co.getID();
+			} 
 		}
 		this.contentChanged = function() {
-
+			if (this.nameInput.value != "") {
+				this.co.setName(this.nameInput.value);
+			} else {
+				this.co.setName(null);
+			}
+			if (this.idInput.value != "") {
+				this.co.setID(this.idInput.value);
+			} else {
+				this.co.setID(null);
+			}
+			this.parentView.contentChanged();
 		}
 		this.getView = function() {
 			return this.div;
 		}
+		this.parentView = parentView;
+		this.co = co;
+		var thatCV = this;
+		this.nameInput = null;
+		this.idInput = null;
 		this.initializeView();
-		this.updateContent(this.tr);
+		this.updateContent(this.co);
 	}
 }
