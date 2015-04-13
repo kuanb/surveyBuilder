@@ -238,6 +238,12 @@ var FT_pr = function() {
 	this.countersProject = function() {
 		this.counters = null;
 		this.tableID = null;
+		this.setTableID = function(tableID){
+			this.tableID = tableID;
+		}
+		this.getTableID = function(){
+			return this.tableID;
+		}
 		this.serializeJSON = function() {
 			var countersProjectJSONObjectContents = {};
 			countersProjectJSONObjectContents["TableID"] = this.tableID;
