@@ -36,18 +36,15 @@ html, body {
 	padding: 5px;
 	border-style: solid;
 	border-color: transparent;
-	border-radius: 5px;
-	border-width: 2px;
+	border-radius: 10px;
+	border-width: 1px;
 }
 
-.project:hover, .survey_project_container .survey_project:hover,
+.survey_project_container .survey_project:hover,
 	.counters_project:hover, .tracker_project:hover, .counterContainerDIV:hover,
 	.chapterContainerDIV:hover, .questionContainerDIV:hover,
 	.answerContainerDIV:hover {
-	border-style: solid;
 	border-color: #F2F2F2;
-	border-radius: 5px;
-	border-width: 2px;
 }
 
 .jsonFloat {
