@@ -3,8 +3,12 @@ html, body {
 	margin: 0px;
 	padding: 0px;
 	text-align: left;
-	background-color: #F43E3C;
+	background-color: #F2F2F2;
 	overflow: hidden;
+}
+
+#FT_logo{
+   width:30px;
 }
 
 #project_container {
@@ -12,7 +16,7 @@ html, body {
 }
 
 #survey_container {
-	background: #F0FFF0;
+	background: #193B68;
 	position: relative;
 	overflow: auto;
 	padding-top: 10px;
@@ -41,20 +45,20 @@ html, body {
 	.chapterContainerDIV:hover, .questionContainerDIV:hover,
 	.answerContainerDIV:hover {
 	border-style: solid;
-	border-color: black;
+	border-color: #F2F2F2;
 	border-radius: 5px;
 	border-width: 2px;
 }
 
 .jsonFloat {
-	overflow: scroll;
+	overflow: auto;
 	position: fixed;
 	padding: 20px;
 	top: 160px;
 	text-align: left;
 	white-space: pre-wrap;
 	width: 35%;
-	height: 90%;
+	height: 50%;
 	word-wrap: break-word;
 	border-radius: 5px
 }
