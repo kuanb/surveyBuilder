@@ -24,68 +24,26 @@ html, body {
 	text-align: left;
 }
 
-.survey, .project, .survey_project, .counters_project, .countersContainerDIV, .counter {
+.survey, .project, .survey_project, .counters_project, .tracker_project,
+	.countersContainerDIV, .counter, .chapter, .question,
+	.chapterContainerDIV, .questionContainerDIV, .answerContainerDIV,
+	.tracker_project_buttons_container, .counterContainerDIV {
+	overflow: hidden;
+	padding: 5px;
+	border-style: solid;
+	border-color: transparent;
 	border-radius: 5px;
 	border-width: 2px;
-	overflow: hidden;
-	padding: 20px;
 }
 
-.tracker {
+.project:hover, .survey_project_container .survey_project:hover,
+	.counters_project:hover, .tracker_project:hover, .counterContainerDIV:hover,
+	.chapterContainerDIV:hover, .questionContainerDIV:hover,
+	.answerContainerDIV:hover {
+	border-style: solid;
+	border-color: black;
 	border-radius: 5px;
-	overflow: hidden;
-	padding: 10px;
-}
-
-.chapter {
-	border-radius: 5px;
-	margin: 10px;
-	padding: 10px
-}
-
-.question {
-	border-radius: 5px;
-	margin: 10px;
-	padding: 10px
-}
-
-.questionsContainerDIV {
-	border-radius: 5px;
-	overflow: hidden;
-	padding: 10px
-}
-
-.chaptersContainerDIV {
-	border-radius: 5px;
-	overflow: hidden;
-	padding: 10px
-}
-
-.chapterContainerDIV {
-	border-radius: 5px;
-	margin: 2px;
-	padding: 2px;
-	position: relative;
-	width: 100%;
-	float: left;
-}
-
-.questionContainerDIV {
-	border-radius: 5px;
-	margin: 2px;
-	padding: 2px;
-}
-
-.answersContainerDIV {
-	border-radius: 5px;
-	overflow: hidden;
-	padding: 10px
-}
-
-.answerContainerDIV {
-	border-radius: 5px;
-	margin: 2px;
-	padding: 2px;
+	border-width: 2px;
 }
 
 .jsonFloat {
