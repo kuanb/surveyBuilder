@@ -19,7 +19,7 @@ FT_pb = function() {
 		this.div = null;
 		this.initializeView = function() {
 			this.div = document.createElement('div');
-			this.div.className = "project";
+			this.div.className = "FT project";
 			this.buttonsContainer = document.createElement('div');
 			this.buttonsContainer.className = "project_buttons_container";
 			this.addSPB = new that.FSUxEl.button("add", "", "Survey");
@@ -199,7 +199,7 @@ FT_pb = function() {
 		}
 		this.initializeView = function() {
 			this.div = document.createElement('div');
-			this.div.className = "survey_project";
+			this.div.className = "FT survey_project";
 			this.tableIDInput = document.createElement("input");
 			this.tableIDInput.type = "text";
 			this.tableIDInput.className = "form-control"
@@ -253,7 +253,7 @@ FT_pb = function() {
 		}
 		this.initializeView = function() {
 			this.div = document.createElement('div');
-			this.div.className = "tracker_project";
+			this.div.className = "FT tracker_project";
 			this.trackerContainer = document.createElement('tracker');
 			this.trackerContainer.className = "tracker_container";
 			this.tracker = new that.FTPrM.tracker();
@@ -394,7 +394,7 @@ FT_pb = function() {
 		}
 		this.initializeView = function() {
 			this.div = document.createElement("div");
-			this.div.className = "counters_project";
+			this.div.className = "FT counters_project";
 			this.tableIDInput = document.createElement("input");
 			this.tableIDInput.type = "text";
 			this.tableIDInput.className = "form-control"
@@ -496,7 +496,7 @@ FT_pb = function() {
 		}
 		this.initializeView = function() {
 			this.div = document.createElement("div");
-			this.div.className = "tracker";
+			this.div.className = "FT tracker";
 			this.tableIDInput = document.createElement("input");
 			this.tableIDInput.type = "text";
 			this.tableIDInput.className = "form-control"
@@ -537,6 +537,7 @@ FT_pb = function() {
 		}
 		this.initializeView = function() {
 			this.div = document.createElement("div");
+			this.div.className = "FT counter"
 			this.nameInput = document.createElement("input");
 			this.nameInput.type = "text";
 			this.nameInput.className = "form-control"

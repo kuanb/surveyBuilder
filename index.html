@@ -57,7 +57,7 @@
     	FTproject.deserializeJSON(superString);
     	console.log(JSON.stringify(FTproject.serializeJSON()));
     	var projectView = new ftprB.projectView(FTproject, this.uC);
-    	var container = document.getElementById("project_container");
+    	var container = document.getElementById("survey_container");
     	container.appendChild(projectView.getView());
     	var floatDiv = document.getElementById('JsonGoesHere');
 		var jsonText = document.createElement("div");
