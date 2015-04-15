@@ -22,10 +22,15 @@
 				class="glyphicon glyphicon-arrow-right"></span> Redo</a>
 		</div>
 		<div id="JSON_input_container">
-			You can load a previous project by pasting it here!
+			You can load a previous project by pasting it here:
 				<input id="project_input" type="text" class="form-control" placeholder="Paste your project here">
 				<a class="btn btn-success btn-md" id="parse_button"><span
 				class="glyphicon glyphicon-ok"></span> Parse your project!</a>
+		</div>
+		<div id="modification_data">
+			<b>Input Modification Count:</b> <b id="modification_count">0</b>
+			<br><br>
+			<b>JSON Output:</b><br>
 		</div>
 		<div id="JsonGoesHere" class="jsonFloat"></div>
 	</div>
@@ -49,9 +54,8 @@
 				projectSnapShot.deserializeJSON(FTproject.serializeJSON());
 				var newStackElement = new stackElement(projectView, projectSnapShot);
 				uStack.addToStack(newStackElement);
-				jsonText.innerHTML = "<b>Input Modification Count:</b> "
-						+ contentChanges + " <br><br><b>JSON Output:</b><br>"
-						+ JSON.stringify(FTproject.serializeJSON());
+				modCount.innerHTML = contentChanges;
+				jsonText.innerHTML = JSON.stringify(FTproject.serializeJSON());
 				$(undo).attr('disabled', !uStack.isUndoPossible());
 				$(redo).attr('disabled', !uStack.isRedoPossible());  
 	    	};
@@ -66,10 +70,8 @@
     	var projectView = new ftprB.projectView(FTproject, this.uC);
     	var container = document.getElementById("survey_container");
     	container.appendChild(projectView.getView());
-    	var floatDiv = document.getElementById('JsonGoesHere');
-		var jsonText = document.createElement("div");
-		jsonText.style.cssText = 'font-size:0.75em';
-		floatDiv.appendChild(jsonText);
+    	var jsonText = document.getElementById('JsonGoesHere');
+    	var modCount = document.getElementById("modification_count");
 		var contentChanges = -1;
 		var uStack = new undoStack();
 		undo = document.getElementById("undo");
@@ -79,9 +81,8 @@
 			that.FTproject = undoStackElement.objectState;
 			undoStackElement.view.updateContent(that.FTproject);
 			contentChanges--;
-			that.jsonText.innerHTML = "<b>Input Modification Count:</b> "
-					+ contentChanges + " <br><br><b>JSON Output:</b><br>"
-					+ JSON.stringify(that.FTproject.serializeJSON());
+			that.modCount.innerHTML = contentChanges;
+			that.jsonText.innerHTML = JSON.stringify(that.FTproject.serializeJSON());
 			$(undo).attr('disabled', !that.uStack.isUndoPossible());
 			$(redo).attr('disabled', !that.uStack.isRedoPossible());   
 		}
@@ -92,9 +93,8 @@
 			that.FTproject = redoStackElement.objectState;
 			redoStackElement.view.updateContent(that.FTproject);
 			contentChanges++;
-			that.jsonText.innerHTML = "<b>Input Modification Count:</b> "
-					+ contentChanges + " <br><br><b>JSON Output:</b><br>"
-					+ JSON.stringify(that.FTproject.serializeJSON());
+			that.modCount.innerHTML = contentChanges;
+			that.jsonText.innerHTML = JSON.stringify(that.FTproject.serializeJSON());
 			$(undo).attr('disabled', !that.uStack.isUndoPossible());
 			$(redo).attr('disabled', !that.uStack.isRedoPossible()); 
 		}

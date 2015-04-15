@@ -63,6 +63,10 @@ html, body {
 	border-color: #F2F2F2;
 }
 
+#modification_data, #JSON_input_container{
+	padding: 20px;
+}
+
 .jsonFloat {
 	overflow: auto;
 	padding: 20px;
@@ -70,7 +74,7 @@ html, body {
 	text-align: left;
 	white-space: pre-wrap;
 	width: 90%;
-	height: 40%;
+	height: 25%;
 	word-wrap: break-word;
 	border-radius: 5px
 }
