@@ -21,6 +21,12 @@
 				class="btn btn-primary btn-md" id="redo"><span
 				class="glyphicon glyphicon-arrow-right"></span> Redo</a>
 		</div>
+		<div id="JSON_input_container">
+			You can load a previous project by pasting it here!
+				<input type="text" class="form-control" placeholder="Paste your project here">
+				<a class="btn btn-success btn-md" id="upload"><span
+				class="glyphicon glyphicon-ok"></span> Parse your project!</a>
+		</div>
 		<div id="JsonGoesHere" class="jsonFloat"></div>
 	</div>
 	<div id="survey_container"></div>
@@ -35,8 +41,6 @@
 <script src="js/flockSON-survey-builder.js"></script>
 <script src="js/flocktracker-project-builder.js"></script>
 <script type="text/javascript">
-	
-    	
     	this.undoHandler = function(){
 	    	this.contentChanged = function(){
 	    		that.FTproject = that.projectView.getProject();
