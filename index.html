@@ -5,7 +5,7 @@
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/bootstrap-switch.min.css" rel="stylesheet">
 <link rel="stylesheet" href="css/survey-style.css">
-<title>Build your project!</title>
+<title>Flocktracker project builder</title>
 </head>
 <body>
 	<div id="project_container">
@@ -23,8 +23,8 @@
 		</div>
 		<div id="JSON_input_container">
 			You can load a previous project by pasting it here!
-				<input type="text" class="form-control" placeholder="Paste your project here">
-				<a class="btn btn-success btn-md" id="upload"><span
+				<input id="project_input" type="text" class="form-control" placeholder="Paste your project here">
+				<a class="btn btn-success btn-md" id="parse_button"><span
 				class="glyphicon glyphicon-ok"></span> Parse your project!</a>
 		</div>
 		<div id="JsonGoesHere" class="jsonFloat"></div>
@@ -100,5 +100,11 @@
 		}
 		$(redo).attr('disabled', true);
 		uC.contentChanged();
+		var parseButton = document.getElementById("parse_button");
+		var projectInput = document.getElementById("project_input");
+		parseButton.onclick = function(){
+			FTproject.deserializeJSON(projectInput.value);
+			projectView.updateContent(FTproject);
+		}
     </script>
 </html>
