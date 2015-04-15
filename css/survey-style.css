@@ -3,16 +3,11 @@ html, body {
 	margin: 0px;
 	padding: 0px;
 	text-align: left;
-	background-color: #F2F2F2;
 	overflow: hidden;
 }
 
 #FT_logo{
    width:30px;
-}
-
-#project_container {
-	height: 100%;
 }
 
 #survey_container {
@@ -26,6 +21,28 @@ html, body {
 	float: right;
 	display: inline-block;
 	text-align: left;
+}
+
+#project_container {
+	background-color: #F2F2F2;
+	position: relative;
+	overflow: auto;
+	padding-top: 10px;
+	width: 36%;
+	height: 100%;
+	min-width: 400px;
+	float: left;
+	display: inline-block;
+	text-align: left;
+}
+
+#control_buttons_container {
+	padding-left: 10px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	text-align: center;
+	width: 75%;
+	color: #333;
 }
 
 .survey, .project, .survey_project, .counters_project, .tracker_project,
@@ -49,24 +66,22 @@ html, body {
 
 .jsonFloat {
 	overflow: auto;
-	position: fixed;
 	padding: 20px;
 	top: 160px;
 	text-align: left;
 	white-space: pre-wrap;
-	width: 35%;
-	height: 50%;
+	width: 90%;
+	height: 40%;
 	word-wrap: break-word;
 	border-radius: 5px
 }
 
 .h4 {
-	position: fixed;
 	padding-left: 10px;
 	padding-top: 10px;
 	padding-bottom: 10px;
-	text-align: center;
-	width: 35%;
+	text-align: left;
+	width: 100%;
 	color: #333;
 	border-radius: 5px
 }
