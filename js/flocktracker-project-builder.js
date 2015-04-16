@@ -24,10 +24,8 @@ FT_pb = function() {
 			this.tabsContainer.className = "nav nav-tabs";
 			this.tabsContainer["data-tabs"] = "tabs";
 			this.tabsContainer.innerHTML = '<li class="active"><a href="#survey_project" data-toggle="tab">Survey</a></li><li><a href="#tracker_project" data-toggle="tab">Tracker</a></li><li><a href="#counters_project" data-toggle="tab">Counters</a></li>';
-			this.div.appendChild(this.tabsContainer);
 			this.projectsContainer = document.createElement("div");
 			this.projectsContainer.className = "tab-content projects_container";
-			this.div.appendChild(this.projectsContainer);
 			this.surveyProjecTabContents = document.createElement("div");
 			this.surveyProjecTabContents.className = "tab-pane active";
 			this.surveyProjecTabContents.id = "survey_project";
@@ -40,7 +38,6 @@ FT_pb = function() {
 			this.projectsContainer.appendChild(this.surveyProjecTabContents);
 			this.projectsContainer.appendChild(this.trackerProjecTabContents);
 			this.projectsContainer.appendChild(this.countersProjecTabContents);
-			
 			this.buttonsContainer = document.createElement('div');
 			this.buttonsContainer.className = "project_buttons_container";
 			this.addSPB = new that.FSUxEl.button("add", "", "Survey");
@@ -50,6 +47,8 @@ FT_pb = function() {
 			this.addCPB = new that.FSUxEl.button("add", "", "Counters");
 			this.buttonsContainer.appendChild(this.addCPB.getView());
 			this.div.appendChild(this.buttonsContainer);
+			this.div.appendChild(this.tabsContainer);
+			this.div.appendChild(this.projectsContainer);
 			this.sPcontainer = document.createElement('div');
 			this.sPcontainer.className = "survey_project_container";
 			this.tPcontainer = document.createElement('div');

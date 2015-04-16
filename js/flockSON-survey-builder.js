@@ -282,7 +282,7 @@ FS_sb = function() {
 			this.jumpInput = document.createElement("input");
 			this.jumpInput.type = "text";
 			this.jumpInput.className = "form-control";
-			this.jumpInput.placeholder = "Junmp ID";
+			this.jumpInput.placeholder = "Jump ID";
 			this.jumpInput.style.display = "none";
 			this.jumpInput.oninput = function() {
 				thatAV.contentChanged();
