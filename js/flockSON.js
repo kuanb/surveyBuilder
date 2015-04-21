@@ -3,6 +3,7 @@ var FlockSON = function() {
 	this.answer = function() {
 		this.answerText = null; // String
 		this.jumpID = null; // String
+		this.answerValue = null; // String, no spaces please.
 		this.getAnswerText = function() {
 			return this.answerText;
 		};
@@ -15,6 +16,12 @@ var FlockSON = function() {
 		this.setjumpID = function(jumpID) {
 			this.jumpID = jumpID;
 		};
+		this.setValue = function(answerValue){
+			this.answerValue = answerValue;
+		}
+		this.getValue = function(){
+			return this.answerValue;
+		}
 		this.serializeJSON = function() {
 			var answerJSONObjectContents = {};
 			if (this.answerText != null) {
@@ -26,6 +33,11 @@ var FlockSON = function() {
 				answerJSONObjectContents["JumpID"] = this.jumpID;
 			} else {
 				console.log("No JumpID in Answer :-(")
+			}
+			if (this.answerValue != null) {
+				answerJSONObjectContents["Value"] = this.answerValue;
+			} else {
+				console.log("No Value in Answer :-(")
 			}
 			var answerJSONObject = {};
 			answerJSONObject["Answer"] = answerJSONObjectContents;
@@ -52,9 +64,14 @@ var FlockSON = function() {
 						console.log("No Text in Answer :-(");
 					}
 					if ("JumpID" in answerObjectContents) {
-						this.answerText = answerObjectContents["JumpID"];
+						this.jumpID = answerObjectContents["JumpID"];
 					} else {
 						console.log("No JumpID in Question :-(");
+					}
+					if ("Value" in answerObjectContents) {
+						this.answerValue = answerObjectContents["Value"];
+					} else {
+						console.log("No Value in Question :-(");
 					}
 				}
 			} else {
