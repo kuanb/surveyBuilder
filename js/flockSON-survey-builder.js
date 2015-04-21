@@ -279,6 +279,15 @@ FS_sb = function() {
 			this.answerInput.oninput = function() {
 				thatAV.contentChanged();
 			};
+			
+			this.valueInput = document.createElement("input");
+			this.valueInput.type = "text";
+			this.valueInput.className = "form-control";
+			this.valueInput.placeholder = "Value";
+			this.valueInput.oninput = function() {
+				thatAV.contentChanged();
+			};
+			
 			this.jumpInput = document.createElement("input");
 			this.jumpInput.type = "text";
 			this.jumpInput.className = "form-control";
@@ -296,6 +305,7 @@ FS_sb = function() {
 			};
 
 			this.div.appendChild(this.answerInput);
+			this.div.appendChild(this.valueInput);
 			if (canHaveJump) {
 				this.jumpCheckbox.addTo(this.div);
 				this.div.appendChild(this.jumpInput);
@@ -306,6 +316,9 @@ FS_sb = function() {
 			this.answer = answer;
 			if (this.answerInput.value != this.answer.getAnswerText()) {
 				this.answerInput.value = this.answer.getAnswerText();
+			}
+			if (this.valueInput.value != this.answer.getValue()) {
+				this.valueInput.value = this.answer.getValue();
 			}
 			if ((this.answer.getJumpID() != null) && (this.canHaveJump)) {
 				this.jumpCheckbox.setCheckedState(true);
@@ -320,6 +333,7 @@ FS_sb = function() {
 		};
 		this.contentChanged = function() {
 			this.answer.setAnswerText(this.answerInput.value);
+			this.answer.setValue(this.valueInput.value);
 			this.answer.setjumpID(this.jumpInput.value);
 			parentView.contentChanged();
 		};
