@@ -42,7 +42,7 @@ var FlockSON = function() {
 				if (this.answerValue != "") {
 					answerJSONObjectContents["Value"] = this.answerValue;
 				} else {
-					console.log("Answer in Question is empty");
+					console.log("Value in Question is empty");
 				}
 			} else {
 				console.log("No Value in Answer :-(")
@@ -183,7 +183,6 @@ var FlockSON = function() {
 					console.log("JumpID in Question is empty");
 				}
 			} else {
-				questionJSONObjectContents["JumpID"] = null;
 				console.log("JumpID in Question is null");
 			}
 			if (this.otherEnabled != null) {
