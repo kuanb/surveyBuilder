@@ -16,10 +16,10 @@ var FlockSON = function() {
 		this.setjumpID = function(jumpID) {
 			this.jumpID = jumpID;
 		};
-		this.setValue = function(answerValue){
+		this.setValue = function(answerValue) {
 			this.answerValue = answerValue;
 		}
-		this.getValue = function(){
+		this.getValue = function() {
 			return this.answerValue;
 		}
 		this.serializeJSON = function() {
@@ -30,12 +30,20 @@ var FlockSON = function() {
 				console.log("No Text in Answer :-(")
 			}
 			if (this.jumpID != null) {
-				answerJSONObjectContents["JumpID"] = this.jumpID;
+				if (this.jumpID != "") {
+					answerJSONObjectContents["JumpID"] = this.jumpID;
+				} else {
+					console.log("JumpID in Question is empty");
+				}
 			} else {
 				console.log("No JumpID in Answer :-(")
 			}
 			if (this.answerValue != null) {
-				answerJSONObjectContents["Value"] = this.answerValue;
+				if (this.answerValue != "") {
+					answerJSONObjectContents["Value"] = this.answerValue;
+				} else {
+					console.log("Answer in Question is empty");
+				}
 			} else {
 				console.log("No Value in Answer :-(")
 			}
@@ -52,7 +60,7 @@ var FlockSON = function() {
 				} else {
 					console.log("No Answer in Object :-(");
 				}
-				if(answerObjectContents != null){
+				if (answerObjectContents != null) {
 					if ("Answer" in answerObject) {
 						answerObjectContents = answerObject["Answer"];
 					} else {
@@ -76,7 +84,7 @@ var FlockSON = function() {
 				}
 			} else {
 				console
-				.log("JSON not parsed correctly, Answer is not correct JSON :-(");
+						.log("JSON not parsed correctly, Answer is not correct JSON :-(");
 			}
 		}
 		this.constructFromJSON = function(object) {
@@ -164,11 +172,11 @@ var FlockSON = function() {
 				console.log("Text in Question is null");
 			}
 			if (this.jumpID != null) {
-				if(this.jumpID != ""){
+				if (this.jumpID != "") {
 					questionJSONObjectContents["JumpID"] = this.jumpID;
 				} else {
 					questionJSONObjectContents["JumpID"] = null;
-					console.log("JumpID in Question is null");
+					console.log("JumpID in Question is empty");
 				}
 			} else {
 				questionJSONObjectContents["JumpID"] = null;
@@ -196,11 +204,13 @@ var FlockSON = function() {
 				}
 			}
 			if ((this.kind === qK.LOOP.jsonName) && (this.inLoop == false)) {
-				if ((this.loopQuestions !== null) && (this.loopQuestions.length > 0)) {
+				if ((this.loopQuestions !== null)
+						&& (this.loopQuestions.length > 0)) {
 					var length = this.loopQuestions.length;
 					var questionsArray = [];
 					for (var i = 0; i < length; i++) {
-						questionsArray.push(this.loopQuestions[i].serializeJSON());
+						questionsArray.push(this.loopQuestions[i]
+								.serializeJSON());
 					}
 					;
 					questionJSONObjectContents["Questions"] = questionsArray;
@@ -307,7 +317,7 @@ var FlockSON = function() {
 				}
 			} else {
 				console
-				.log("JSON not parsed correctly, Question is not correct JSON :-(");
+						.log("JSON not parsed correctly, Question is not correct JSON :-(");
 			}
 		}
 	};
@@ -401,7 +411,8 @@ var FlockSON = function() {
 			if (this.questions != null) {
 				var questionsJSONObject = [];
 				for ( var questionIndex in this.questions) {
-					questionsJSONObject.push(this.questions[questionIndex].serializeJSON());
+					questionsJSONObject.push(this.questions[questionIndex]
+							.serializeJSON());
 				}
 				chapterJSONObjectContents["Questions"] = questionsJSONObject;
 			} else {
@@ -430,9 +441,10 @@ var FlockSON = function() {
 						var questionsArray = chapterObjectContents["Questions"];
 						if (questionsArray.constructor === Array) {
 							this.questions = [];
-							for (var questionIndex in questionsArray) {
+							for ( var questionIndex in questionsArray) {
 								var questionObj = new that.question();
-								questionObj.deserializeJSON(questionsArray[questionIndex]);
+								questionObj
+										.deserializeJSON(questionsArray[questionIndex]);
 								this.questions.push(questionObj);
 							}
 						} else {
@@ -445,7 +457,7 @@ var FlockSON = function() {
 				}
 			} else {
 				console
-				.log("JSON not parsed correctly, Chapter is not correct JSON :-(");
+						.log("JSON not parsed correctly, Chapter is not correct JSON :-(");
 			}
 		}
 	};
@@ -491,7 +503,8 @@ var FlockSON = function() {
 				if (this.chapters != null) {
 					var chaptersJSONObject = [];
 					for ( var chapterIndex in this.chapters) {
-						chaptersJSONObject.push(this.chapters[chapterIndex].serializeJSON());
+						chaptersJSONObject.push(this.chapters[chapterIndex]
+								.serializeJSON());
 					}
 					surveyJSONObjectContents["Chapters"] = chaptersJSONObject;
 				} else {

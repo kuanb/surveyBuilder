@@ -35,7 +35,7 @@ FS_sb = function() {
 			this.survey = survey;
 			if (this.surveyNameInput.value != this.survey.getTitle()) {
 				this.surveyNameInput.value = this.survey.getTitle();
-			} 
+			}
 			if (this.chapters != this.survey.getChapters()) {
 				this.chapterViews = [];
 				while (this.chaptersArrayContainerDiV.firstChild) {
@@ -279,7 +279,7 @@ FS_sb = function() {
 			this.answerInput.oninput = function() {
 				thatAV.contentChanged();
 			};
-			
+
 			this.valueInput = document.createElement("input");
 			this.valueInput.type = "text";
 			this.valueInput.className = "form-control";
@@ -287,7 +287,7 @@ FS_sb = function() {
 			this.valueInput.oninput = function() {
 				thatAV.contentChanged();
 			};
-			
+
 			this.jumpInput = document.createElement("input");
 			this.jumpInput.type = "text";
 			this.jumpInput.className = "form-control";
@@ -521,7 +521,8 @@ FS_sb = function() {
 					this.questionKinds.getNames(), this.questionKinds
 							.getJsonNames());
 			this.questionKindDropDown.onchange = function() {
-				thatQV.updateQuestionKind(this.options[this.selectedIndex].value);
+				thatQV
+						.updateQuestionKind(this.options[this.selectedIndex].value);
 				thatQV.contentChanged();
 			};
 
