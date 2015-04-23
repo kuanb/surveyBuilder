@@ -72,12 +72,16 @@ var FlockSON = function() {
 						console.log("No Text in Answer :-(");
 					}
 					if ("JumpID" in answerObjectContents) {
-						this.jumpID = answerObjectContents["JumpID"];
+						if (this.jumpID = answerObjectContents["JumpID"] != ""){
+							this.jumpID = answerObjectContents["JumpID"];
+						}
 					} else {
 						console.log("No JumpID in Question :-(");
 					}
 					if ("Value" in answerObjectContents) {
-						this.answerValue = answerObjectContents["Value"];
+						if (answerObjectContents["Value"] != ""){
+							this.answerValue = answerObjectContents["Value"];
+						}
 					} else {
 						console.log("No Value in Question :-(");
 					}
@@ -257,12 +261,16 @@ var FlockSON = function() {
 						console.log("No Text in Question :-(");
 					}
 					if ("ID" in questionObjectContents) {
-						this.questionID = questionObjectContents["ID"];
+						if (questionObjectContents["ID"] != ""){
+							this.questionID = questionObjectContents["ID"];
+						}
 					} else {
 						console.log("No ID in Question :-(");
 					}
 					if ("JumpID" in questionObjectContents) {
-						this.jumpID = questionObjectContents["JumpID"];
+						if (questionObjectContents["JumpID"] != ""){
+							this.jumpID = questionObjectContents["JumpID"];
+						}
 					} else {
 						this.jumpID = null;
 						console.log("No JumpID in Question :-(");
