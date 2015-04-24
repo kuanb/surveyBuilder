@@ -606,6 +606,7 @@ FS_sb = function() {
 				break;
 			// We need an answers array
 			case this.questionKinds.ORDERED["jsonName"]:
+				this.removeAnswerArray();
 				this.removeQuestionArray();
 				this.removeOtherOption();
 				this.addAnswerArray();
@@ -613,6 +614,7 @@ FS_sb = function() {
 			case this.questionKinds.MULTIPLE_CHOICE["jsonName"]:
 			case this.questionKinds.CHECKBOX["jsonName"]:
 				this.addOtherOption();
+				this.removeAnswerArray();
 				this.removeQuestionArray();
 				this.addAnswerArray();
 				break;
