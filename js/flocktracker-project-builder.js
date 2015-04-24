@@ -13,6 +13,9 @@ FT_pb = function() {
 		this.addSPB = null;
 		this.addTPB = null;
 		this.addCPB = null;
+		this.sPTab = null;
+		this.tPTab = null;
+		this.cPTab = null;
 		this.surveyProjectView = null;
 		this.trackerProjectView = null;
 		this.countersProjectView = null;
@@ -23,7 +26,19 @@ FT_pb = function() {
 			this.tabsContainer = document.createElement("ul");
 			this.tabsContainer.className = "nav nav-tabs";
 			this.tabsContainer["data-tabs"] = "tabs";
-			this.tabsContainer.innerHTML = '<li class="active"><a href="#survey_project" data-toggle="tab">Survey</a></li><li><a href="#tracker_project" data-toggle="tab">Tracker</a></li><li><a href="#counters_project" data-toggle="tab">Counters</a></li>';
+			this.sPTab = document.createElement("li");
+			this.sPTab.className = "active";
+			this.sPTab.style.display = 'none';
+			this.sPTab.innerHTML = '<a href="#survey_project" data-toggle="tab">Survey</a>';
+			this.tPTab = document.createElement("li");
+			this.tPTab.style.display = 'none';
+			this.tPTab.innerHTML = '<a href="#tracker_project" data-toggle="tab">Tracker</a>';
+			this.cPTab = document.createElement("li");
+			this.cPTab.style.display = 'none';
+			this.cPTab.innerHTML = '<a href="#counters_project" data-toggle="tab">Counters</a>';
+			this.tabsContainer.appendChild(this.sPTab);
+			this.tabsContainer.appendChild(this.tPTab);
+			this.tabsContainer.appendChild(this.cPTab);
 			this.projectsContainer = document.createElement("div");
 			this.projectsContainer.className = "tab-content projects_container";
 			this.surveyProjecTabContents = document.createElement("div");
@@ -148,6 +163,7 @@ FT_pb = function() {
 			}
 		}
 		this.addSurveyProject = function(sP) {
+			this.sPTab.style.display = 'block';
 			if (this.surveyProjectView == null) {
 				this.surveyProjectView = new that.surveyProjectView(sP, thatP);
 				thatP.sPcontainer.appendChild(this.surveyProjectView.getView());
@@ -157,6 +173,7 @@ FT_pb = function() {
 			}
 		}
 		this.addTrackerProject = function(tP) {
+			this.tPTab.style.display = 'block';
 			if (this.trackerProjectView == null) {
 				this.trackerProjectView = new that.trackerProjectView(tP, thatP);
 				thatP.tPcontainer
@@ -167,6 +184,7 @@ FT_pb = function() {
 			}
 		}
 		this.addCountersProject = function(cP) {
+			this.cPTab.style.display = 'block';
 			if (this.countersProjectView == null) {
 				this.countersProjectView = new that.countersProjectView(cP,
 						thatP);
@@ -178,18 +196,21 @@ FT_pb = function() {
 			}
 		}
 		this.removeSurveyProject = function() {
+			this.sPTab.style.display = 'none';
 			this.surveyProjectView = null;
 			this.pr.setSurveyProject(null);
 			thatP.sPcontainer.innerHTML = "";
 			thatP.addSPB.changeLook("add", "", "Survey");
 		}
 		this.removeTrackerProject = function() {
+			this.tPTab.style.display = 'none';
 			this.trackerProjectView = null;
 			this.pr.setTrackerProject(null);
 			thatP.tPcontainer.innerHTML = "";
 			thatP.addTPB.changeLook("add", "", "Tracker");
 		}
 		this.removeCountersProject = function() {
+			this.cPTab.style.display = 'none';
 			this.countersProjectView = null;
 			this.pr.setCountersProject(null);
 			thatP.cPcontainer.innerHTML = "";
