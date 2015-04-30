@@ -474,10 +474,10 @@ var FlockSON = function() {
 		this.title = null; // String
 		this.flockSctipt = null;
 		this.getFlockScript = function(){
-			return this.flockScript;
+			return this.flockSctipt;
 		}
-		this.setFlockScript = function(){
-			return this.flockScript;
+		this.setFlockScript = function(flockSctipt){
+			this.flockSctipt = flockSctipt;
 		}
 		this.getTitle = function() {
 			return this.title;
@@ -552,7 +552,7 @@ var FlockSON = function() {
 							if ("FlockScript" in surveyObjectContents) {
 								this.flockSctipt = surveyObjectContents["FlockScript"];
 							} else {
-								console.log("No Title in Survey object :-(");
+								console.log("No FlockScript in Survey object :-(");
 							}							
 							if ("Chapters" in surveyObjectContents) {
 								var chaptersArray = surveyObjectContents["Chapters"];

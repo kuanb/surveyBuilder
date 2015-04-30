@@ -15,6 +15,16 @@ FS_sb = function() {
 				thatSV.contentChanged();
 			};
 			this.div.appendChild(this.surveyNameInput);
+			
+			this.scriptInput = document.createElement("input");
+			this.scriptInput.type = "text";
+			this.scriptInput.className = "form-control"
+			this.scriptInput.placeholder = "FlockScript"
+			this.scriptInput.oninput = function() {
+				thatSV.contentChanged();
+			};
+			this.div.appendChild(this.scriptInput);
+			
 			this.addChapterButton = new that.FSUxEl.button("add", "",
 					"Add chapter");
 			this.addChapterButton.getView().onclick = function() {
@@ -35,6 +45,9 @@ FS_sb = function() {
 			this.survey = survey;
 			if (this.surveyNameInput.value != this.survey.getTitle()) {
 				this.surveyNameInput.value = this.survey.getTitle();
+			}
+			if (this.scriptInput.value != this.survey.getFlockScript()) {
+				this.scriptInput.value = this.survey.getFlockScript();
 			}
 			if (this.chapters != this.survey.getChapters()) {
 				this.chapterViews = [];
@@ -80,9 +93,14 @@ FS_sb = function() {
 		}
 		this.contentChanged = function() {
 			if (this.surveyNameInput.value != "") {
-				this.survey.setTitle(this.surveyNameInput.value)
+				this.survey.setTitle(this.surveyNameInput.value);
 			} else {
 				this.survey.setTitle(null);
+			}
+			if (this.scriptInput.value != "") {
+				this.survey.setFlockScript(this.scriptInput.value);
+			} else {
+				this.survey.setFlockScript(null);
 			}
 			var changedChapters = [];
 			for (i = 0; i < this.chapterViews.length; i++) {
@@ -101,6 +119,7 @@ FS_sb = function() {
 		this.addChapterButton = null;
 		this.fusionTableIDInput = null;
 		this.surveyNameInput = null;
+		this.scriptInput = null;
 		this.chaptersContainerDIV = null;
 		this.chaptersArrayContainerDiV = null;
 		this.initializeView();
