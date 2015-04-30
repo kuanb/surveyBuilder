@@ -472,7 +472,13 @@ var FlockSON = function() {
 		this.chapters = []; // Instances of chapters
 		this.flockSONversion = null; // String
 		this.title = null; // String
-
+		this.flockSctipt = null;
+		this.getFlockScript = function(){
+			return this.flockScript;
+		}
+		this.setFlockScript = function(){
+			return this.flockScript;
+		}
 		this.getTitle = function() {
 			return this.title;
 		}
@@ -507,6 +513,7 @@ var FlockSON = function() {
 			if (this.flockSONversion == "0.1") {
 				surveyJSONObjectContents["flockSONversion"] = this.flockSONversion;
 				surveyJSONObjectContents["Title"] = this.title;
+				surveyJSONObjectContents["FlockScript"] = this.flockSctipt;
 				if (this.chapters != null) {
 					var chaptersJSONObject = [];
 					for ( var chapterIndex in this.chapters) {
@@ -542,6 +549,11 @@ var FlockSON = function() {
 							} else {
 								console.log("No Title in Survey object :-(");
 							}
+							if ("FlockScript" in surveyObjectContents) {
+								this.flockSctipt = surveyObjectContents["FlockScript"];
+							} else {
+								console.log("No Title in Survey object :-(");
+							}							
 							if ("Chapters" in surveyObjectContents) {
 								var chaptersArray = surveyObjectContents["Chapters"];
 								if (chaptersArray.constructor === Array) {
@@ -586,4 +598,4 @@ var FlockSON = function() {
 		}
 		return object;
 	}
-}
+};
