@@ -16,8 +16,8 @@ FS_sb = function() {
 			};
 			this.div.appendChild(this.surveyNameInput);
 			
-			this.scriptInput = document.createElement("input");
-			this.scriptInput.type = "text";
+			this.scriptInput = document.createElement("TEXTAREA");
+//			this.scriptInput.type = "text";
 			this.scriptInput.className = "form-control"
 			this.scriptInput.placeholder = "FlockScript"
 			this.scriptInput.oninput = function() {
