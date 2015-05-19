@@ -74,8 +74,12 @@ var FlockSON = function() {
 					if ("JumpID" in answerObjectContents) {
 						if (this.jumpID = answerObjectContents["JumpID"] != ""){
 							this.jumpID = answerObjectContents["JumpID"];
+						} else {
+							this.jumpID = null;
+							console.log("JumpID in Answer is empty");
 						}
 					} else {
+						this.jumpID = null;
 						console.log("No JumpID in Question :-(");
 					}
 					if ("Value" in answerObjectContents) {
@@ -183,6 +187,7 @@ var FlockSON = function() {
 					console.log("JumpID in Question is empty");
 				}
 			} else {
+				questionJSONObjectContents["JumpID"] = null;
 				console.log("JumpID in Question is null");
 			}
 			if (this.otherEnabled != null) {

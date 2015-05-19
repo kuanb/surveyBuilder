@@ -341,6 +341,7 @@ FS_sb = function() {
 				this.valueInput.value = this.answer.getValue();
 			}
 			if ((this.answer.getJumpID() != null) && (this.canHaveJump)) {
+				window.alert(this.answer.getJumpID());
 				this.jumpCheckbox.setCheckedState(true);
 				this.toggleJumpOption();
 				this.jumpInput.value = this.answer.getJumpID();
