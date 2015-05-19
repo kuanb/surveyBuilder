@@ -66,6 +66,13 @@ html, body {
 	height: 34px;
 }
 
+.jump_input.form-control {
+	width:inherit;
+}
+.jump_UI_Container {
+	height:34px;
+}
+
 #modification_data, #JSON_input_container{
 	padding: 20px;
 }

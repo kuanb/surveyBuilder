@@ -291,7 +291,6 @@ FS_sb = function() {
 			this.div = document.createElement('div');
 			this.div.className = "answer";
 			this.answerInput = document.createElement("textarea");
-			//this.answerInput.type = "text";
 			this.answerInput.className = "form-control answerTextInput";
 			this.answerInput.placeholder = "Answer text";
 			this.answerInput.oninput = function() {
@@ -308,7 +307,7 @@ FS_sb = function() {
 
 			this.jumpInput = document.createElement("input");
 			this.jumpInput.type = "text";
-			this.jumpInput.className = "form-control";
+			this.jumpInput.className = "form-control jump_input";
 			this.jumpInput.placeholder = "Jump ID";
 			this.jumpInput.style.display = "none";
 			this.jumpInput.oninput = function() {
@@ -325,8 +324,11 @@ FS_sb = function() {
 			this.div.appendChild(this.answerInput);
 			this.div.appendChild(this.valueInput);
 			if (canHaveJump) {
-				this.jumpCheckbox.addTo(this.div);
-				this.div.appendChild(this.jumpInput);
+				this.jumpUIcontainer = document.createElement("div");
+				this.jumpUIcontainer.className = "jump_UI_Container";
+				this.jumpCheckbox.addTo(this.jumpUIcontainer);
+				this.jumpUIcontainer.appendChild(this.jumpInput);
+				this.div.appendChild(this.jumpUIcontainer);
 			}
 			;
 		};
@@ -360,7 +362,7 @@ FS_sb = function() {
 		};
 		this.toggleJumpOption = function() {
 			if (this.jumpCheckbox.isChecked()) {
-				this.jumpInput.style.display = "inherit";
+				this.jumpInput.style.display = "inline-block";
 			} else {
 				this.jumpInput.style.display = "none";
 				if (this.jumpInput.value != "") {
@@ -546,7 +548,7 @@ FS_sb = function() {
 
 			this.jumpInput = document.createElement("input");
 			this.jumpInput.type = "text";
-			this.jumpInput.className = "form-control"
+			this.jumpInput.className = "form-control jump_input"
 			this.jumpInput.placeholder = "Jump ID";
 			this.jumpInput.style.display = "none";
 			this.jumpInput.oninput = function() {
@@ -561,10 +563,13 @@ FS_sb = function() {
 
 			this.div.appendChild(this.IDInput);
 			this.div.appendChild(this.questionInput);
+			this.jumpUIcontainer = document.createElement("div");
+			this.jumpUIcontainer.className = "jump_UI_Container";
 			if (!this.inLoop) {
-				this.jumpCheckbox.addTo(this.div);
+				this.jumpCheckbox.addTo(this.jumpUIcontainer);
+				this.jumpUIcontainer.appendChild(this.jumpInput);
+				this.div.appendChild(this.jumpUIcontainer);
 			}
-			this.div.appendChild(this.jumpInput);
 			this.div.appendChild(this.questionKindDropDown);
 		}
 		this.getView = function() {
@@ -603,7 +608,7 @@ FS_sb = function() {
 		}
 		this.toggleJumpOption = function() {
 			if (this.jumpCheckbox.isChecked()) {
-				this.jumpInput.style.display = "inherit";
+				this.jumpInput.style.display = "inline-block";
 			} else {
 				this.jumpInput.style.display = "none";
 				if (this.jumpInput.value != "") {
