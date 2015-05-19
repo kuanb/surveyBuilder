@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/bootstrap-switch.min.css" rel="stylesheet">
-<link rel="stylesheet" href="css/survey-style.css">
+<link href="css/survey-style.css" rel="stylesheet">
 <title>Flocktracker project builder</title>
 </head>
 <body>
@@ -22,23 +22,27 @@
 				class="glyphicon glyphicon-arrow-right"></span> Redo</a>
 		</div>
 		<div id="JSON_input_container">
-			Welcome! This is a tool to create projects for the Flocktracker Android app.
-			It is based on the FlockSON survey markup laguage. <br> We are
-			working on a seamless approach for creating and uploading new
-			projects for the platform, for now, please email
-			daniel.heriberto@smart.mit.edu with the JSON code of your project and
-			it's name so we upload it to the database to be used in
-			Flocktracker. Please contact if you found a bug in the Builder of if you have any doubt on the platform.<br> <br> You can load a previous project by
-			pasting it here: <input id="project_input" type="text"
-				class="form-control" placeholder="Paste your project here">
-			<a class="btn btn-success btn-md" id="parse_button"><span
+			<p>
+				Welcome! This is a tool to create projects for the Flocktracker
+				Android app. It is based on the FlockSON survey markup laguage. <br>
+				We are working on a seamless approach for creating and uploading new
+				projects for the platform, for now, please email
+				daniel.heriberto@smart.mit.edu with the JSON code of your project
+				and it's name so we upload it to the database to be used in
+				Flocktracker. Please contact if you found a bug in the Builder of if
+				you have any doubt on the platform.
+			</p>
+			<br> <br> You can load a previous project by pasting it
+			here: <textarea id="project_input" type="text" class="form-control"
+				placeholder="Paste your project here"></textarea> <a
+				class="btn btn-success btn-md" id="parse_button"><span
 				class="glyphicon glyphicon-ok"></span> Parse project</a>
 		</div>
 		<div id="modification_data">
 			<b>Input Modification Count:</b> <b id="modification_count">0</b> <br>
 			<br> <b>JSON Output:</b><br>
+			<textarea id="JsonGoesHere" disabled class="jsonFloat"></textarea>
 		</div>
-		<div id="JsonGoesHere" class="jsonFloat"></div>
 	</div>
 	<div id="survey_container"></div>
 </body>
