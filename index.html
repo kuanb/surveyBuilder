@@ -67,7 +67,7 @@
 				var newStackElement = new stackElement(projectView, projectSnapShot);
 				uStack.addToStack(newStackElement);
 				modCount.innerHTML = contentChanges;
-				jsonText.innerHTML = JSON.stringify(FTproject.serializeJSON());
+				jsonText.innerHTML = JSON.stringify(FTproject.serializeJSON(), null, '\t');
 				$(undo).attr('disabled', !uStack.isUndoPossible());
 				$(redo).attr('disabled', !uStack.isRedoPossible());  
 	    	};
