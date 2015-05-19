@@ -17,7 +17,7 @@ FS_sb = function() {
 			this.div.appendChild(this.surveyNameInput);
 			
 			this.scriptInput = document.createElement("textarea");
-			this.scriptInput.className = "form-control flock_Script_Input"
+			this.scriptInput.className = "form-control flockScript_Input"
 			this.scriptInput.placeholder = "FlockScript"
 			this.scriptInput.oninput = function() {
 				thatSV.contentChanged();
@@ -290,9 +290,9 @@ FS_sb = function() {
 		this.initializeView = function() {
 			this.div = document.createElement('div');
 			this.div.className = "answer";
-			this.answerInput = document.createElement("input");
-			this.answerInput.type = "text";
-			this.answerInput.className = "form-control";
+			this.answerInput = document.createElement("textarea");
+			//this.answerInput.type = "text";
+			this.answerInput.className = "form-control answerTextInput";
 			this.answerInput.placeholder = "Answer text";
 			this.answerInput.oninput = function() {
 				thatAV.contentChanged();

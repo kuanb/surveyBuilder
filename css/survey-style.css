@@ -62,7 +62,7 @@ html, body {
 	border-color: #F2F2F2;
 }
 
-.flock_Script_Input.form-control {
+.flockScript_Input.form-control, .answerTextInput.form-control {
 	height: 34px;
 }
 
