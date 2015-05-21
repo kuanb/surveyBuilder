@@ -1,9 +1,6 @@
 var FlockSON = function() {
 	var that = this;
 	this.answer = function() {
-		this.answerText = null; // String
-		this.jumpID = null; // String
-		this.answerValue = null; // String, no spaces please.
 		this.getAnswerText = function() {
 			return this.answerText;
 		};
@@ -21,6 +18,11 @@ var FlockSON = function() {
 		}
 		this.getValue = function() {
 			return this.answerValue;
+		}
+		this.initializeVariables = function(){
+			this.answerText = null; // String
+			this.jumpID = null; // String
+			this.answerValue = null; // String, no spaces please.
 		}
 		this.serializeJSON = function() {
 			var answerJSONObjectContents = {};
@@ -52,6 +54,7 @@ var FlockSON = function() {
 			return answerJSONObject;
 		}
 		this.deserializeJSON = function(answerObjorString) {
+			this.initializeVariables();
 			var answerObject = that.getJSON(answerObjorString);
 			if (answerObject != null) {
 				var answerObjectContents = null;
@@ -107,18 +110,13 @@ var FlockSON = function() {
 
 			}
 		}
+		this.answerText = null; // String
+		this.jumpID = null; // String
+		this.answerValue = null; // String, no spaces please.
+		this.initializeVariables();
 	};
 
 	this.question = function(inLoop) {
-		this.inLoop = inLoop; // Boolean to know if inside loop
-		this.kind = null;
-		this.loopQuestions = []; // Question instances inside this question.
-		this.questionText = null; // String
-		this.answers = []; // Answer instances
-		this.questionID = null; // String
-		this.otherEnabled = null; // Boolean
-		this.jumpID = null; // String
-
 		this.getKind = function() {
 			return this.kind;
 		};
@@ -161,7 +159,16 @@ var FlockSON = function() {
 		this.setLoopQuestions = function(loopQuestions) {
 			this.loopQuestions = loopQuestions;
 		};
-
+		this.initializeVariables = function(){
+			this.inLoop = inLoop; // Boolean to know if inside loop
+			this.kind = null;
+			this.loopQuestions = []; // Question instances inside this question.
+			this.questionText = null; // String
+			this.answers = []; // Answer instances
+			this.questionID = null; // String
+			this.otherEnabled = null; // Boolean
+			this.jumpID = null; // String
+		}
 		this.serializeJSON = function() {
 			var questionJSONObjectContents = {};
 			if (this.kind != null) {
@@ -232,6 +239,7 @@ var FlockSON = function() {
 			return questionJSONObject;
 		}
 		this.deserializeJSON = function(questionObjorString) {
+			this.initializeVariables();
 			var qK = new that.questionKind(this.inloop);
 			var questionObject = that.getJSON(questionObjorString);
 			if (questionObject != null) {
@@ -332,6 +340,15 @@ var FlockSON = function() {
 						.log("JSON not parsed correctly, Question is not correct JSON :-(");
 			}
 		}
+		this.inLoop = inLoop; // Boolean to know if inside loop
+		this.kind = null;
+		this.loopQuestions = []; // Question instances inside this question.
+		this.questionText = null; // String
+		this.answers = []; // Answer instances
+		this.questionID = null; // String
+		this.otherEnabled = null; // Boolean
+		this.jumpID = null; // String
+		this.initializeVariables();
 	};
 	this.questionKind = function(inLoop) {
 		// Object to list the question kinds possible to add to a question array
@@ -393,8 +410,6 @@ var FlockSON = function() {
 		};
 	};
 	this.chapter = function() {
-		this.title = null; // String
-		this.questions = []; // Array of question objects
 		this.getTitle = function() {
 			return this.title;
 		};
@@ -417,6 +432,10 @@ var FlockSON = function() {
 				return this.questions.length;
 			}
 		};
+		this.initializeVariables = function(){
+			this.title = null; // String
+			this.questions = []; // Array of question objects
+		};
 		this.serializeJSON = function() {
 			var chapterJSONObjectContents = {};
 			chapterJSONObjectContents["Title"] = this.title;
@@ -435,6 +454,7 @@ var FlockSON = function() {
 			return chapterJSONObject;
 		}
 		this.deserializeJSON = function(chapterObjorString) {
+			this.initializeVariables();
 			var chapterObject = that.getJSON(chapterObjorString);
 			if (chapterObject != null) {
 				var chapterObjectContents = null;
@@ -472,12 +492,11 @@ var FlockSON = function() {
 						.log("JSON not parsed correctly, Chapter is not correct JSON :-(");
 			}
 		}
+		this.title = null; // String
+		this.questions = []; // Array of question objects
+		this.initializeVariables();
 	};
 	this.survey = function() {
-		this.chapters = []; // Instances of chapters
-		this.flockSONversion = null; // String
-		this.title = null; // String
-		this.flockSctipt = null;
 		this.getFlockScript = function(){
 			return this.flockSctipt;
 		}
@@ -512,7 +531,12 @@ var FlockSON = function() {
 				return chapters.length;
 			}
 		}
-
+		this.initializeVariables = function(){
+			this.chapters = []; // Instances of chapters
+			this.flockSONversion = null; // String
+			this.title = null; // String
+			this.flockSctipt = null;
+		}
 		this.serializeJSON = function() {
 			var surveyJSONObjectContents = {};
 			if (this.flockSONversion == "0.1") {
@@ -537,6 +561,7 @@ var FlockSON = function() {
 			return surveyJSONObject;
 		}
 		this.deserializeJSON = function(surveyObjorString) {
+			this.initializeVariables();
 			var surveyObject = that.getJSON(surveyObjorString);
 			if (surveyObject != null) {
 				var surveyObjectContents = null;
@@ -590,6 +615,11 @@ var FlockSON = function() {
 				}
 			}
 		}
+		this.chapters = []; // Instances of chapters
+		this.flockSONversion = null; // String
+		this.title = null; // String
+		this.flockSctipt = null;
+		this.initializeVariables();
 	};
 	this.getJSON = function(JSONStringOrObject) {
 		var object = null;
