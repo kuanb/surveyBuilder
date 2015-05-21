@@ -16,6 +16,11 @@ FT_pb = function() {
 		this.sPTab = null;
 		this.tPTab = null;
 		this.cPTab = null;
+		this.surveyProjecTabContents = null;
+		this.trackerProjecTabContents = null;
+		this.countersProjecTabContents = null;
+		this.defaultProjectTabClass = "tab-pane";
+		this.activeProjectTabClass = "tab-pane active";
 		this.surveyProjectView = null;
 		this.trackerProjectView = null;
 		this.countersProjectView = null;
@@ -42,13 +47,13 @@ FT_pb = function() {
 			this.projectsContainer = document.createElement("div");
 			this.projectsContainer.className = "tab-content projects_container";
 			this.surveyProjecTabContents = document.createElement("div");
-			this.surveyProjecTabContents.className = "tab-pane active";
+			this.surveyProjecTabContents.className = this.activeProjectTabClass;
 			this.surveyProjecTabContents.id = "survey_project";
 			this.trackerProjecTabContents = document.createElement("div");
-			this.trackerProjecTabContents.className = "tab-pane";
+			this.trackerProjecTabContents.className = this.defaultProjectTabClass;
 			this.trackerProjecTabContents.id = "tracker_project";
 			this.countersProjecTabContents = document.createElement("div");
-			this.countersProjecTabContents.className = "tab-pane";
+			this.countersProjecTabContents.className = this.defaultProjectTabClass;
 			this.countersProjecTabContents.id = "counters_project";
 			this.projectsContainer.appendChild(this.surveyProjecTabContents);
 			this.projectsContainer.appendChild(this.trackerProjecTabContents);
@@ -171,6 +176,12 @@ FT_pb = function() {
 			} else {
 				this.surveyProjectView.updateContent(sP);
 			}
+			this.sPTab.className = "active";
+			this.tPTab.className = null;
+			this.cPTab.className = null;
+			this.surveyProjecTabContents.className = this.activeProjectTabClass;
+			this.trackerProjecTabContents.className = this.defaultProjectTabClass;
+			this.countersProjecTabContents.className = this.defaultProjectTabClass;
 		}
 		this.addTrackerProject = function(tP) {
 			this.tPTab.style.display = 'block';
@@ -182,6 +193,12 @@ FT_pb = function() {
 			} else {
 				this.trackerProjectView.updateContent(tP);
 			}
+			this.sPTab.className = null;
+			this.tPTab.className = "active";
+			this.cPTab.className = null;
+			this.surveyProjecTabContents.className = this.defaultProjectTabClass;
+			this.trackerProjecTabContents.className = this.activeProjectTabClass;
+			this.countersProjecTabContents.className = this.defaultProjectTabClass;
 		}
 		this.addCountersProject = function(cP) {
 			this.cPTab.style.display = 'block';
@@ -194,6 +211,12 @@ FT_pb = function() {
 			} else {
 				this.countersProjectView.updateContent(cP);
 			}
+			this.sPTab.className = null;
+			this.tPTab.className = null;
+			this.cPTab.className = "active";
+			this.surveyProjecTabContents.className = this.defaultProjectTabClass;
+			this.trackerProjecTabContents.className = this.defaultProjectTabClass;
+			this.countersProjecTabContents.className = this.activeProjectTabClass;
 		}
 		this.removeSurveyProject = function() {
 			this.sPTab.style.display = 'none';
