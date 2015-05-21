@@ -80,7 +80,7 @@ var FlockSON = function() {
 						}
 					} else {
 						this.jumpID = null;
-						console.log("No JumpID in Question :-(");
+						console.log("No JumpID in Answer :-(");
 					}
 					if ("Value" in answerObjectContents) {
 						if (answerObjectContents["Value"] != ""){
