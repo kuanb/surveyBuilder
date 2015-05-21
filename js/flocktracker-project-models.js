@@ -2,14 +2,17 @@ var FT_pr = function() {
 	var that = this;
 	this.fSON = new FlockSON();
 	this.tracker = function() {
-		this.tableID = null; // String
 		this.getTableID = function() {
 			return this.tableID;
 		};
 		this.setTableID = function(tableID) {
 			this.tableID = tableID;
 		};
+		this.initializeVariables = function(){
+			this.tableID = null; // String
+		}
 		this.deserializeJSON = function(trackerObjorString){
+			this.initializeVariables();
 			var trackerObject = that.fSON.getJSON(trackerObjorString);
 			if(trackerObject != null){
 				var trackerObjectContents = null;
@@ -41,13 +44,11 @@ var FT_pr = function() {
 			trackerJSONObject["Tracker"] = trackerJSONObjectContents;
 			return trackerJSONObject;
 		};
+		this.tableID = null; // String
+		this.initializeVariables();
 	}
 	;
 	this.project = function() {
-		this.sProject = null;
-		this.tProject = null;
-		this.cProject = null;
-		this.flocktrackerProjectVersion = null;
 		this.getSurveyProject = function() {
 			return this.sProject;
 		}
@@ -73,8 +74,14 @@ var FT_pr = function() {
 				flocktrackerProjectVersion) {
 			this.flocktrackerProjectVersion = flocktrackerProjectVersion;
 		}
-
+		this.initializeVariables = function(){
+			this.sProject = null;
+			this.tProject = null;
+			this.cProject = null;
+			this.flocktrackerProjectVersion = null;
+		}
 		this.deserializeJSON = function(projectObjorString) {
+			this.initializeVariables();
 			var projectObject = that.fSON.getJSON(projectObjorString);
 			if (projectObject != null) {
 				var projectObjectContents = null;
@@ -162,11 +169,13 @@ var FT_pr = function() {
 			projectJSONObject["FlocktrackerProject"] = projectJSONObjectContents;
 			return projectJSONObject;
 		}
+		this.sProject = null;
+		this.tProject = null;
+		this.cProject = null;
+		this.flocktrackerProjectVersion = null;
+		this.initializeVariables();
 	};
 	this.surveyProject = function(projectName) {
-		this.projectName = projectName;
-		this.tableID = null;
-		this.survey = null;
 		this.getTableID = function(){
 			return this.tableID;
 		}
@@ -185,7 +194,13 @@ var FT_pr = function() {
 		this.getSurvey = function(){
 			return this.survey;
 		}
+		this.initializeVariables = function(projectName){
+			this.projectName = projectName;
+			this.tableID = null;
+			this.survey = null;
+		}
 		this.deserializeJSON = function(surveyProjectObjorString) {
+			this.initializeVariables(this.projectName);
 			var surveyProjectObject = that.fSON.getJSON(surveyProjectObjorString);
 			if (surveyProjectObject != null) {
 				var surveyProjectObjectContents = null;
@@ -197,6 +212,7 @@ var FT_pr = function() {
 								+ " in Object :-(");
 					}
 				} else {
+					console.log(this.projectName);
 					console.log("ProjectName of SurveyProject is null :-(");
 				}
 				if (surveyProjectObjectContents != null) {
@@ -234,10 +250,12 @@ var FT_pr = function() {
 			surveyProjectJSONObject[this.projectName] = surveyProjectJSONObjectContents;
 			return surveyProjectJSONObject;
 		}
+		this.initializeVariables(projectName);
+		this.projectName = projectName;
+		this.tableID = null;
+		this.survey = null;
 	}
 	this.countersProject = function() {
-		this.counters = null;
-		this.tableID = null;
 		this.setCounters = function(counters){
 			this.counters = counters;
 		}
@@ -249,6 +267,10 @@ var FT_pr = function() {
 		}
 		this.getTableID = function(){
 			return this.tableID;
+		}
+		this.initializeVariables = function(){
+			this.counters = null;
+			this.tableID = null;
 		}
 		this.serializeJSON = function() {
 			var countersProjectJSONObjectContents = {};
@@ -267,6 +289,7 @@ var FT_pr = function() {
 			return countersProjectJSONObject;
 		}
 		this.deserializeJSON = function(countersProjectObjorString) {
+			this.initializeVariables();
 			var countersProjectObject = that.fSON.getJSON(countersProjectObjorString);
 			if (countersProjectObject != null) {
 				var countersProjectObjectContents = null;
@@ -305,11 +328,11 @@ var FT_pr = function() {
 				.log("JSON not parsed correctly, CountersProject is not correct JSON :-(");
 			}
 		}
+		this.counters = null;
+		this.tableID = null;
+		this.initializeVariables();
 	}
 	this.trackerProject = function() {
-		this.startSurveyProject = null;
-		this.endSurveyProject = null;
-		this.tr = new that.tracker();
 		this.setStartSurvey = function(startSurvey){
 			this.startSurveyProject = startSurvey;
 		}
@@ -327,6 +350,11 @@ var FT_pr = function() {
 		}
 		this.setTracker = function(tr){
 			this.tr = tr;
+		}
+		this.initializeVariables = function(){
+			this.startSurveyProject = null;
+			this.endSurveyProject = null;
+			this.tr = new that.tracker();
 		}
 		this.serializeJSON = function() {
 			var trackerProjectJSONObjectContents = {};
@@ -353,6 +381,7 @@ var FT_pr = function() {
 			return trackerProjectJSONObject;
 		}
 		this.deserializeJSON = function(trackerProjectObjorString) {
+			this.initializeVariables();
 			var trackerProjectObject = that.fSON.getJSON(trackerProjectObjorString);
 			if (trackerProjectObject != null) {
 				var trackerProjectObjectContents = null;
@@ -398,10 +427,12 @@ var FT_pr = function() {
 				.log("JSON not parsed correctly, TrackerProject is not correct JSON :-(");
 			}
 		}
+		this.startSurveyProject = null;
+		this.endSurveyProject = null;
+		this.tr = null;
+		this.initializeVariables();
 	}
 	this.counter = function(){
-		this.name = null;
-		this.id = null;
 		this.setName = function(name){
 			this.name = name;
 		}
@@ -414,7 +445,12 @@ var FT_pr = function() {
 		this.getID = function(){
 			return this.id;
 		}
+		this.initializeVariables = function(){
+			this.name = null;
+			this.id = null;
+		}
 		this.deserializeJSON = function(counterObjorString){
+			this.initializeVariables();
 			var counterObject = that.fSON.getJSON(counterObjorString);
 			if(counterObject != null){
 				var counterObjectContents = null;
@@ -450,11 +486,14 @@ var FT_pr = function() {
 			if (this.id != null) {
 				counterJSONObjectContents["ID"] = this.id;
 			} else {
-				counterJSONObjectContents["ID"] = null;
+				counterJSONObjectContents["ID"] = null;	
 			}
 			var counterJSONObject = {};
 			counterJSONObject["Counter"] = counterJSONObjectContents;
 			return counterJSONObject;
 		};
+		this.name = null;
+		this.id = null;
+		this.initializeVariables();
 	}
 }
