@@ -1,0 +1,115 @@
+<html>
+<head>
+<title>Dynamically build FT survey</title>
+
+<script language="javascript">
+
+
+var chapCount = 0;
+var chapterArray = {};
+
+var createChap = function(chapTextInput) {
+
+    document.getElementById('chapInput').value = ""
+
+    chapName = "chap" + chapCount;
+    chapterArray[chapName] = new chapterObj(chapCount)
+
+    var chapPlace = document.createElement("dt");
+    chapPlace.id = "chapID" + chapCount;
+
+    // adding a new question
+    var addQuesButton = "<input type='text' id='quesInput_frCh" + chapCount + "'><button type='button' style='width:100px' onclick='chapterArray[" + '"' + chapName + '"' + "].addQues(document.getElementById(" + '"quesInput_frCh' + chapCount + '"' + ").value," + '"quesInput_frCh' + chapCount + '"' + ")'>Add a Question</button>";
+
+    // adding a delete chapter button to each question that gets populated in the DOM
+    var addDelChapButton = "<button type='button' style='width:100px' onclick=delChap('" + chapName + "','" + chapPlace.id + "')>Delete Chapter</button>";
+
+    chapPlace.innerHTML = "Chapter: " + chapTextInput + "<br>" + addQuesButton + addDelChapButton;
+
+    var ssTemp = document.getElementById("starterSpan");
+    ssTemp.appendChild(chapPlace);
+
+    chapCount += 1;
+};
+
+var delChap = function(chapNameToDel, cPlaceID) {
+    delete chapterArray[chapNameToDel];
+    document.getElementById(cPlaceID).remove()
+};
+
+var chapterObj = function(cCount) {
+    
+    chapName = "chap" + cCount;
+    this.quesNum = 0;
+
+    this.addQues = function(quesTextInput, cPlaceID) {
+
+        // Reset question input text box
+        document.getElementById(cPlaceID).value = "";
+
+        // Establishing ques definiton
+        thisQues = "question" + this.quesNum;
+        this[thisQues] = {
+            ansNum: 0,
+            quesText: quesTextInput,
+            addAns: function(ansText) {
+                console.log(ansText);
+                this["ans" + this.ansNum] = ansText;
+
+                var toAnsPlace = document.createElement("dd");
+                toAnsPlace.id = "ansID" + this.ansNum;
+
+                var currentQuesBullet = document.getElementById("quesID" + this.quesNum);
+                currentQuesBullet.appendChild();
+
+                this.ansNum += 1;
+            }
+        };
+
+        var tqQuesPlace = document.createElement("dd");
+        tqQuesPlace.id = "quesID" + this.quesNum;
+
+        var ansBoxID = "ansBox" + this.quesNum; 
+
+        // vars to get around issue of truncation due to multiple quotation marks
+        var ansBoxIDClick = chapName + "." + thisQues + ".addAns(document.getElementById('" + ansBoxID + "').value)";
+        var ansBoxIDClick = function() {
+            
+        };
+        var thisQuesClick = this + ".deleteQues('" + thisQues + "'," + tqQuesPlace.id + ")";
+
+        var addAnsButton = "<input type='text' id='" + ansBoxID + "'> <button type='button' style='width:100px' onclick=" + ansBoxIDClick + ">Add an Answer</button>";
+        var addDelButton = "<button type='button' style='width:100px' onclick=" + thisQuesClick + ">Delete Ques.</button>";
+
+        tqQuesPlace.innerHTML = quesTextInput + '<br>' + addAnsButton + addDelButton + '<br><br>';
+        var ssTemp = document.getElementById("chapID" + cCount);
+        ssTemp.appendChild(tqQuesPlace);
+
+        this.quesNum += 1;
+    };
+    this.deleteQues = function(quesToDel, quesIDnum) {
+        console.log(this.quesNum);
+        // First remove from object
+        delete this[quesToDel];
+
+        // Next remove from dom
+        starterSpa.removeChild(quesIDnum);
+    }
+};
+
+var ansBoxIDClick = function() {
+    this.
+}
+
+</script>
+
+<body>
+
+<h2>Add Chapters</h2>
+<input type="text" id="chapInput"><button type="button" style="width:100px" onclick="createChap(document.getElementById('chapInput').value)">Add a Chapter</button><br>
+
+<h2>Survey Structure</h2>
+<dl id="starterSpan"></dl>
+
+</body>
+</html>

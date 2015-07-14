@@ -1,0 +1,143 @@
+<html>
+<head>
+<title>Dynamically build FT survey</title>
+
+<script language="javascript">
+
+function addChap(name) {
+
+    var element = document.createElement("li");
+	element.innerHTML = name;
+
+    var foo = document.getElementById("currentChapList");
+ 
+    //Append the element in page (in span).
+    foo.appendChild(element);
+
+    // Update drop down select lists
+    updateSelect();
+}
+
+function delChap() {
+
+    var foo = document.getElementById("currentChapList");
+	var allChildNodes = foo.childNodes;
+	var lastElem = allChildNodes.length - 1;
+
+    foo.removeChild(allChildNodes[lastElem]);
+
+    // Update drop down select lists
+    updateSelect();
+
+}
+
+function updateSelect() {
+
+    // First delete everything in the Chapter selection list
+    var currentChaps = document.getElementById("chapOptions");
+    var newFoo = document.getElementById("currentChapList");
+
+    for (i = 0; i < currentChaps.children.length; i++) { 
+        currentChaps.remove(currentChaps.children[i]);
+    }
+
+    // Then re-add the remaining components from Chapter list
+    for (i = 0; i < newFoo.children.length; i++) { 
+        nfCont = newFoo.children[i].innerHTML;
+        nfElem = document.createElement("option");
+        nfElem.innerHTML = nfCont;
+        currentChaps.appendChild(nfElem);
+    }
+}
+
+function addAns() { 
+
+    //Create an input type dynamically.
+    var element = document.createElement("input");
+    var foo = document.getElementById("lastAns");
+
+    foo.appendChild(element);
+ 
+}
+
+function addQues() {
+    var allQues = document.getElementById("questionSubSect");
+    var newQues = document.createElement("div");
+    newQues.innerHTML = allQues.innerHTML;
+ 
+    //Append the element in page (in span).
+    allQues.appendChild(newQues);
+}
+
+</script>
+</head>
+
+<body>
+
+<b>Current Chapter Index</b>
+<br>
+<ol id="currentChapList">
+</ol>
+<input type="text" style="width:400px" value="Enter Chapter Name" id="newChapName"/><br>
+<input type="button" value="Add Chapter" onclick="addChap(newChapName.value)"/>
+<input type="button" value="Delete Last Chapter" onclick="delChap()"/>
+<br>
+
+<br>
+<b>Dynamically add element in form.</b>
+<br>
+Select the element and hit Add to add it in form.
+<br>
+
+<br>
+<b>Chapter Builder</b>
+<br>
+
+<form>
+Chapter Select:
+<select id="chapOptions"></select>
+<br>
+
+<div id="questionSubSect">
+<br>
+Question ID:
+<input type="text" style="width:400px" value="Enter Question"/>
+<br>
+
+Question:
+<input type="text" style="width:400px" value="Enter Question"/>
+<br>
+
+Question Type:
+<select name="element">
+    <option value="text">Checkbox</option>
+    <option value="text">Multiple Choice</option>
+    <option value="text">Open Text</option>
+    <option value="number">Open Number</option>
+    <option value="text">Ordered List</option>
+    <option value="image">Picture</option>
+    <option value="text">True or False</option>
+</select>
+<br>
+
+Other open answer option:
+<select name="element">
+    <option value="text">False</option>
+    <option value="text">True</option>
+</select>
+<br>
+
+<ol id="lastAns"></ol>
+<input type="button" value="Add Answer Option" onclick="addAns()"/>
+<br>
+
+<br>
+</div>
+<span id="lastQues"></span> 
+
+<input type="button" value="Add New Question" onclick="addQues()"/>
+
+</form>
+
+</body>
+</html>
