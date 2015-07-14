@@ -1,0 +1,137 @@
+
+var flockSON = {
+	version: "0.1",
+
+	survey: {
+		tableID: "1d20ftB8iDjL29_rhxjNDEgy31bnFA2m99SFDOMCL",
+		title: "Walkability audit tool",
+		chapters: [
+			{
+				title: "Walkability audit tool",
+				questions: [
+					{
+						kind: "MC",
+						id: "UPLOAD_KIND",
+						text: "What are you surveying?",
+						jumpID: null,
+						other: true,
+						answers: [
+							{text: "Bench",     jumpID: ""},
+							{text: "Tree",      jumpID: ""},
+							{text: "Staircase", jumpID: ""},
+						]
+					}, {
+						kind: "MC",
+						id: "UPLOAD_KIND",
+						text: "How is the weather?",
+						jumpID: null,
+						other: true,
+						answers: [
+							{text: "Hot",  jumpID: ""},
+							{text: "Cold", jumpID: ""},
+						]
+					}
+				]
+			}, {
+				title: "Notes and picture",
+				questions: [
+					{
+						kind: "IM",
+						id: "PICTURE",
+						text: "Take a picture of the surveyed element",
+						jumpID: null
+					}, {
+						kind: "OT",
+						id: "NOTES",
+						text: "Please input any notes on the issue",
+						jumpID: null,
+						other: true,
+						answers: [
+							{text: "Hot",  jumpID: ""},
+							{text: "Cold", jumpID: ""},
+						]
+					}
+				]
+			}
+		],
+	},
+
+	counters: {
+		tableID: "17R92EpKxVHizlNLec1IWYwkVX3t4IFHlltIOEHUw",
+		counters: [
+			{
+				name: "Benches",
+				id: "BENCH"
+			}, {
+				name: "Trees",
+				id: "TREE"
+			}, {
+				name: "Crack",
+				id: "CRACK"
+			}
+		]
+	},
+
+	trackerSurveys: {
+		start: {
+			tableID: "1tbElaK8BjzKh58l94wrLXfHhET_Zz74rfnVcg0iq",
+			title: 'Foo',
+			chapters: [
+				{
+					title: "Walkability audit tool",
+					questions: [
+						{
+							kind: "IM",
+							id: "STREET_PICTURE",
+							text: "Take a picture of the path",
+							jumpID: null
+						}
+					]
+				}
+			]
+		},
+
+		end: {
+			tableID: "1mjHtMatDR-sJdR32nypzNssXkz1ltFpRd8IX_GnI",
+			title: 'Foo',
+			chapters: [
+				{
+					title: "Walkability audit tool",
+					questions: [
+						{
+							kind: "MC",
+							id: "PEDESTRIAN_FACILITIES",
+							text: "Pedestrian Facilities: presence of a suitable walking surface, such as a sidewalk or path.",
+							jumpID: null,
+							other: false,
+							answers: [
+								{text: "1 No permanent facilities; pedestrians walk in roadway or on dirt path",  jumpID: ""},
+								{text: "2 Continuous sidewalk on both sides of road, or completely away from roads", jumpID: ""},
+							]
+						}
+					]
+				}
+			]
+		}
+	},
+
+	tracker: {
+		tableID: "1Nx-Rv0cmIN-N1-A7HltnC6AfSIsVV-ePJL_o8gd4",
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
