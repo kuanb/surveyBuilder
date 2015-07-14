@@ -54,17 +54,24 @@
 	<div class="container">
 		<tabset>
 			<tab heading="Survey">
-				<div ng-repeat="chapter in flockSON.survey.chapters">
-					{{ chapter.Title }}
-					<div ng-repeat="question in chapter.questions">
-						{{ question.text }}
-						<div ui-sortable ng-model="question.answers">
-							<div ng-repeat="answer in question.answers">
-								{{ answer.text }}
-							</div	>
-						</div>
+				<div ui-sortable ng-model="flockSON.survey.chapters">
+					<div ng-repeat="(chapIndex, chapter) in flockSON.survey.chapters">
+						<div class="panel panel-default trips">
+		          <div class="panel-heading">
+		            <h4 class="panel-title">Chapter {{ chapIndex+1 }}: {{ chapter.title }}</h4>
+		          </div>
+		          <div class="panel-body">
+								<div ng-repeat="question in chapter.questions">
+									<h5>{{ question.text }}</h5>
+									<ol ui-sortable ng-model="question.answers">
+										<li ng-repeat="answer in question.answers">
+											{{ answer.text }}
+										</li	>
+									</div>
+								</ol>
+		          </div>
+		        </div>
 					</div>
-					<br>
 				</div>
 			</tab>
 			<tab heading="Tracker">
