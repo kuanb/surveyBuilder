@@ -3,18 +3,34 @@ var surveyBuilder = angular.module('surveyBuilderApp', ['ui.bootstrap', 'ui.sort
 
 surveyBuilder.controller('surveyBuilder', function ($scope, $location, $http) {
 
-  console.log(flockSON);
+  var fs  = new FT_pr(),
+      res = fs.fSON.getJSON(inputString);
+  $scope.flockSON = res;
 
-  $scope.flockSON = flockSON;
-  $scope.sort = {};
 
-$scope.test = function () {
-  $scope.flockSON.survey.chapters[0].questions[0].answers.forEach(function (each) {
-    console.log(each.text);  
-  })
-  
-}
-  
+  $scope.addNewChapter = function () {
+    var title = document.getElementById('newChapter').value;
+    document.getElementById('newChapter').value = '';
+
+  }
+
+  $scope.test = function () {
+    $scope.flockSON.survey.chapters[0].questions[0].answers.forEach(function (each) {
+      console.log(each.text);  
+    })
+  }
+
+});
+
+
+surveyBuilder.controller('surveyController', function ($scope, $location, $http) {
+
+
+  $scope.addNewChapter = function () {
+    var title = document.getElementById('newChapter').value;
+    document.getElementById('newChapter').value = ''; console.log('ff')
+
+  }
 
 });
 
