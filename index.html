@@ -60,10 +60,10 @@
 		          <div class="panel-heading">
 		            <h4 class="panel-title">
 		            	Chapter {{ chapIndex+1 }}: {{ chapter.title }}
-		            	<span class="badge pull-right" ng-click="sort[chapIndex] = !sort[chapIndex]">-</span>
+		            	<span class="badge pull-right" ng-click="sort[chapter.title] = !sort[chapter.title]">-</span>
 		            </h4>
 		          </div>
-		          <div class="panel-body" ng-show="sort[chapIndex]">
+		          <div class="panel-body" ng-show="sort[chapter.title]">
 		          	<div ui-sortable ng-model="chapter.questions">
 				          <div class="panel panel-default" ng-repeat="(questionIndex, question) in chapter.questions">
 										<div class="panel-heading">
@@ -71,8 +71,9 @@
 				          		<span class="label label-info">ID: {{ question.id }}</span> 
 				          		<span class="label label-info" ng-show="question.jumpID">Jump ID: {{ question.jumpID }}</span> 
 				          		<span class="label label-info">Kind: {{ question.kind }}</span> 
+				          		<span class="badge pull-right" ng-click="sort[question.text] = !sort[question.text]">-</span>
 										</div>
-										<ol class="list-group" ui-sortable ng-model="question.answers">
+										<ol class="list-group" ui-sortable ng-model="question.answers" ng-show="sort[question.text]">
 											<li class="list-group-item" ng-repeat="(answerIndex, answer) in question.answers">
 												{{ answerIndex+1 }}. {{ answer.text }}
 											</li>
