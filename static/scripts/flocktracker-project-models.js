@@ -45,8 +45,7 @@ var FT_pr = function() {
 		};
 		this.tableID = null; // String
 		this.initializeVariables();
-	}
-	;
+	};
 	this.project = function() {
 		this.getSurveyProject = function() {
 			return this.sProject;

@@ -62,19 +62,23 @@
 						<div ng-repeat="(chapIndex, chapter) in flockSON.FlocktrackerProject.SurveyProject.Survey.Chapters" class="panel panel-default trips">
 		          <div class="panel-heading">
 		            <h4 class="panel-title">
-		            	Chapter {{ chapIndex+1 }}: {{ chapter.Chapter.Title }}
-		            	<span class="badge pull-right" ng-click="sort[chapter.Chapter.Title] = !sort[chapter.Chapter.Title]">-</span>
+		            	<span ng-click="sort[chapter.Chapter.Title] = !sort[chapter.Chapter.Title]">
+		            		Chapter {{ chapIndex+1 }}: {{ chapter.Chapter.Title }}
+		            	</span>
+		            	<i class="fa fa-times-circle-o pull-right" ng-click="removeChapter(chapIndex)"></i>
 		            </h4>
 		          </div>
 		          <div class="panel-body" ng-show="sort[chapter.Chapter.Title]">
-		          	<div ui-sortable ng-model="chapter.Chapter.questions">
+		          	<div ui-sortable ng-model="chapter.Chapter.Questions">
 				          <div class="panel panel-default" ng-repeat="(questionIndex, question) in chapter.Chapter.Questions">
 										<div class="panel-heading">
-											{{ questionIndex+1 }}. {{ question.Question.Text }}
+											<span ng-click="sort[question.Question.Text] = !sort[question.Question.Text]">
+												{{ questionIndex+1 }}. {{ question.Question.Text }}
+											</span>
 				          		<span class="label label-info">ID: {{ question.Question.ID }}</span> 
 				          		<span class="label label-info" ng-show="question.Question.JumpID">Jump ID: {{ question.Question.JumpID }}</span> 
 				          		<span class="label label-info">Kind: {{ question.Question.Kind }}</span> 
-				          		<span class="badge pull-right" ng-click="sort[question.Question.Text] = !sort[question.Question.Text]">-</span>
+											<i class="fa fa-times-circle-o pull-right" ng-click="removeQuestion(chapIndex, questionIndex)"></i>
 										</div>
 										<ol class="list-group" ui-sortable ng-model="question.Question.Answers" ng-show="sort[question.Question.Text]">
 											<li class="list-group-item" ng-repeat="(answerIndex, answer) in question.Question.Answers">
