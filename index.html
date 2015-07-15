@@ -58,27 +58,27 @@
 		<tabset >
 			<tab heading="Survey">
 				<div ng-controller="surveyController">
-					<div ui-sortable ng-model="flockSON.survey.chapters">
-						<div ng-repeat="(chapIndex, chapter) in flockSON.survey.chapters" class="panel panel-default trips">
+					<div ui-sortable ng-model="flockSON.FlocktrackerProject.SurveyProject.Survey.Chapters">
+						<div ng-repeat="(chapIndex, chapter) in flockSON.FlocktrackerProject.SurveyProject.Survey.Chapters" class="panel panel-default trips">
 		          <div class="panel-heading">
 		            <h4 class="panel-title">
-		            	Chapter {{ chapIndex+1 }}: {{ chapter.title }}
-		            	<span class="badge pull-right" ng-click="sort[chapter.title] = !sort[chapter.title]">-</span>
+		            	Chapter {{ chapIndex+1 }}: {{ chapter.Chapter.Title }}
+		            	<span class="badge pull-right" ng-click="sort[chapter.Chapter.Title] = !sort[chapter.Chapter.Title]">-</span>
 		            </h4>
 		          </div>
-		          <div class="panel-body" ng-show="sort[chapter.title]">
-		          	<div ui-sortable ng-model="chapter.questions">
-				          <div class="panel panel-default" ng-repeat="(questionIndex, question) in chapter.questions">
+		          <div class="panel-body" ng-show="sort[chapter.Chapter.Title]">
+		          	<div ui-sortable ng-model="chapter.Chapter.questions">
+				          <div class="panel panel-default" ng-repeat="(questionIndex, question) in chapter.Chapter.Questions">
 										<div class="panel-heading">
-											{{ questionIndex+1 }}. {{ question.text }}
-				          		<span class="label label-info">ID: {{ question.id }}</span> 
-				          		<span class="label label-info" ng-show="question.jumpID">Jump ID: {{ question.jumpID }}</span> 
-				          		<span class="label label-info">Kind: {{ question.kind }}</span> 
-				          		<span class="badge pull-right" ng-click="sort[question.text] = !sort[question.text]">-</span>
+											{{ questionIndex+1 }}. {{ question.Question.Text }}
+				          		<span class="label label-info">ID: {{ question.Question.ID }}</span> 
+				          		<span class="label label-info" ng-show="question.Question.JumpID">Jump ID: {{ question.Question.JumpID }}</span> 
+				          		<span class="label label-info">Kind: {{ question.Question.Kind }}</span> 
+				          		<span class="badge pull-right" ng-click="sort[question.Question.Text] = !sort[question.Question.Text]">-</span>
 										</div>
-										<ol class="list-group" ui-sortable ng-model="question.answers" ng-show="sort[question.text]">
-											<li class="list-group-item" ng-repeat="(answerIndex, answer) in question.answers">
-												{{ answerIndex+1 }}. {{ answer.text }}
+										<ol class="list-group" ui-sortable ng-model="question.Question.Answers" ng-show="sort[question.Question.Text]">
+											<li class="list-group-item" ng-repeat="(answerIndex, answer) in question.Question.Answers">
+												{{ answerIndex+1 }}. {{ answer.Answer.Text }}
 											</li>
 										</ol>
 			          	</div>

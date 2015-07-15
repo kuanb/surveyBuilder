@@ -6,7 +6,7 @@ surveyBuilder.controller('surveyBuilder', function ($scope, $location, $http) {
   var fs  = new FT_pr(),
       res = fs.fSON.getJSON(inputString);
   $scope.flockSON = res;
-
+console.log($scope.flockSON);
 
   $scope.addNewChapter = function () {
     var title = document.getElementById('newChapter').value;
