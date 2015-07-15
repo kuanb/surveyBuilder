@@ -6,6 +6,7 @@ surveyBuilder.controller('surveyBuilder', function ($scope, $location, $http) {
   console.log(flockSON);
 
   $scope.flockSON = flockSON;
+  $scope.sort = {};
 
 $scope.test = function () {
   $scope.flockSON.survey.chapters[0].questions[0].answers.forEach(function (each) {

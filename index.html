@@ -58,18 +58,28 @@
 					<div ng-repeat="(chapIndex, chapter) in flockSON.survey.chapters">
 						<div class="panel panel-default trips">
 		          <div class="panel-heading">
-		            <h4 class="panel-title">Chapter {{ chapIndex+1 }}: {{ chapter.title }}</h4>
+		            <h4 class="panel-title">
+		            	Chapter {{ chapIndex+1 }}: {{ chapter.title }}
+		            	<span class="badge pull-right" ng-click="sort[chapIndex] = !sort[chapIndex]">-</span>
+		            </h4>
 		          </div>
-		          <div class="panel-body">
-								<div ng-repeat="question in chapter.questions">
-									<h5>{{ question.text }}</h5>
-									<ol ui-sortable ng-model="question.answers">
-										<li ng-repeat="answer in question.answers">
-											{{ answer.text }}
-										</li	>
-									</div>
-								</ol>
-		          </div>
+		          <div class="panel-body" ng-show="sort[chapIndex]">
+		          	<div ui-sortable ng-model="chapter.questions">
+				          <div class="panel panel-default" ng-repeat="(questionIndex, question) in chapter.questions">
+										<div class="panel-heading">
+											{{ questionIndex+1 }}. {{ question.text }}
+				          		<span class="label label-info">ID: {{ question.id }}</span> 
+				          		<span class="label label-info" ng-show="question.jumpID">Jump ID: {{ question.jumpID }}</span> 
+				          		<span class="label label-info">Kind: {{ question.kind }}</span> 
+										</div>
+										<ol class="list-group" ui-sortable ng-model="question.answers">
+											<li class="list-group-item" ng-repeat="(answerIndex, answer) in question.answers">
+												{{ answerIndex+1 }}. {{ answer.text }}
+											</li>
+										</ol>
+			          	</div>
+			          </div>
+			         </div>
 		        </div>
 					</div>
 				</div>
