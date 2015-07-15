@@ -25,6 +25,9 @@
   <script src="example.json"></script>
   <script src="/static/scripts/main.js"></script>
 
+  <!-- supporting libraries -->
+  <script src="/static/scripts/flockSON.js"></script>
+  <script src="/static/scripts/flocktracker-project-models.js"></script>
 
 
 
@@ -52,11 +55,11 @@
 
 
 	<div class="container">
-		<tabset>
+		<tabset >
 			<tab heading="Survey">
-				<div ui-sortable ng-model="flockSON.survey.chapters">
-					<div ng-repeat="(chapIndex, chapter) in flockSON.survey.chapters">
-						<div class="panel panel-default trips">
+				<div ng-controller="surveyController">
+					<div ui-sortable ng-model="flockSON.survey.chapters">
+						<div ng-repeat="(chapIndex, chapter) in flockSON.survey.chapters" class="panel panel-default trips">
 		          <div class="panel-heading">
 		            <h4 class="panel-title">
 		            	Chapter {{ chapIndex+1 }}: {{ chapter.title }}
@@ -80,10 +83,29 @@
 										</ol>
 			          	</div>
 			          </div>
-			         </div>
+			        </div>
 		        </div>
 					</div>
+
+					<div class="panel panel-default trips">
+	          <div class="panel-heading">
+	            <h4 class="panel-title">
+	            	Create a new chapter
+	            </h4>
+	          </div>
+	          <div class="panel-body">
+
+					    <div class="col-xs-10">
+					      <input class="form-control" id="newChapter" placeholder="New chapter title">
+					    </div>
+					    <div class="col-xs-2 text-right">
+					      <button type="submit" class="btn btn-default" ng-click="addNewChapter()">Add Chapter</button>
+					    </div>
+
+						</div>
+					</div>
 				</div>
+				
 			</tab>
 			<tab heading="Tracker">
 				{{ flockSON.TrackerProject }}
