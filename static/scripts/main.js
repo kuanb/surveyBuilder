@@ -48,7 +48,7 @@ surveyBuilder.controller('surveyController', function ($scope, $location, $http)
         $scope.flockSON.FlocktrackerProject.SurveyProject.Survey.Chapters[chapter].Chapter.newQuestion = questionBase;
       }
     }
-    }
+  }
 
   $scope.removeQuestion = function (chapter, question) {
     $scope.flockSON.FlocktrackerProject.SurveyProject.Survey.Chapters[chapter].Chapter.Questions.splice(question, 1);
