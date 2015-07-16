@@ -3,9 +3,20 @@ var surveyBuilder = angular.module('surveyBuilderApp', ['ui.bootstrap', 'ui.sort
 
 
 surveyBuilder.controller('surveyBuilder', function ($scope, $location, $http) {
+  var addSupportObjects = function (fs) {
+    var answerBase = {Text: '', ID: ''};
+    var questionBase = { ID: '', Text: '', Kind: '', JumpID: '', Other: null, Answers: [], newAnswer: answerBase };
+    fs.FlocktrackerProject.SurveyProject.Survey.Chapters = fs.FlocktrackerProject.SurveyProject.Survey.Chapters.map(function (chapter) {
+      chapter.Chapter.newQuestion = questionBase;
+      return chapter;
+    });
+    return fs
+  };
+
   var fs  = new FT_pr(),
       res = fs.fSON.getJSON(inputString);
-  $scope.flockSON = res; 
+
+  $scope.flockSON = addSupportObjects(res);
   console.log($scope.flockSON);
 
   $scope.test = function () {
@@ -27,7 +38,8 @@ surveyBuilder.controller('surveyController', function ($scope, $location, $http)
     OL: { verbose: 'Ordered List',    other: false, answers: true },
     LP: { verbose: 'Loop',            other: false, answers: true },
   };
-  var questionBase = { ID: '', Text: '', Kind: '', JumpID: '', Other: null, Answers: [] };
+  var answerBase = {Text: '', ID: ''};
+  var questionBase = { ID: '', Text: '', Kind: '', JumpID: '', Other: null, Answers: [], newAnswer: answerBase };
 
   $scope.addChapter = function () {
     var title = document.getElementById('newChapter').value;
@@ -41,7 +53,7 @@ surveyBuilder.controller('surveyController', function ($scope, $location, $http)
     var newQuestion = $scope.flockSON.FlocktrackerProject.SurveyProject.Survey.Chapters[chapter].Chapter.newQuestion;
     var ok = true;
     if (newQuestion) {
-      if (!newQuestion.ID) { ok = false; }
+      if (!vetQuesID(newQuestion.ID)) { ok = false; }
       if (!newQuestion.Text) { ok = false; }
       if (!newQuestion.Kind) { ok = false; }
       if (!newQuestion.JumpID) { newQuestion.JumpID = null; }
@@ -50,6 +62,19 @@ surveyBuilder.controller('surveyController', function ($scope, $location, $http)
         $scope.flockSON.FlocktrackerProject.SurveyProject.Survey.Chapters[chapter].Chapter.newQuestion = questionBase;
       }
     }
+  }
+  var vetQuesID = function (id) {
+    if (id) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  $scope.addAnswer = function (chapter) {
+    var newAnswer = $scope.flockSON.FlocktrackerProject.SurveyProject.Survey.Chapters[chapter].Chapter.newQuestion.newAnswer;
+    $scope.flockSON.FlocktrackerProject.SurveyProject.Survey.Chapters[chapter].Chapter.newQuestion.Answers.push({Answer:newAnswer});
+    $scope.flockSON.FlocktrackerProject.SurveyProject.Survey.Chapters[chapter].Chapter.newQuestion.newAnswer = answerBase;
   }
 
   $scope.removeQuestion = function (chapter, question) {

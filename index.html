@@ -102,7 +102,7 @@
 				        </div>
 
 			          <div class="row">
-							    <div class="col-xs-3" ng-init="chapter.Chapter.newQuestion.ID = ''">
+							    <div class="col-xs-3">
 							    	<label>Question ID <small>(no spaces)</small></label>
 							      <input class="form-control" 
 							      				ng-model="chapter.Chapter.newQuestion.ID"
@@ -130,16 +130,61 @@
 							    </div>
 							    <div class="col-xs-4">
 							    	<label>Jump to Question</label><br>
-							    	<select class="form-control" ng-model="chapter.Chapter.newQuestion.JumpID">
-							    		<option value="">None</option>
-								    	<option ng-repeat="question in chapter.Chapter.Questions" value="question.Question.ID.verbose">{{ question.Question.ID }}</option>
-								    </select>
+										<select class="form-control" ng-model="chapter.Chapter.newQuestion.JumpID">
+											<option value="">None</option>
+											<option ng-repeat="question in chapter.Chapter.Questions" value="question.Question.ID.verbose">{{ question.Question.ID }}</option>
+										</select>
 							    </div>
 								</div>
 
+								<br>
+								<div class="row" ng-show="questionKinds[chapter.Chapter.newQuestion.Kind].answers">
+									<div class="col-xs-12">
+										
+										<div class="row" ng-show="questionKinds[chapter.Chapter.newQuestion.Kind].answers">
+											<div ui-sortable ng-model="chapter.Chapter.newQuestion.Answers">
+												<div class="col-xs-12" ng-repeat="answer in chapter.Chapter.newQuestion.Answers">
+													<span class="label label-default">
+														{{ answer.Answer.Text }} w/ JumpID: {{ answer.Answer.JumpID }}
+													</span>
+												</div>
+											</div>
+
+											<div class="col-xs-8">
+												<label>Create a New Answer</label>
+												<input class="form-control" ng-model="chapter.Chapter.newQuestion.newAnswer.Text" placeholder="New answer text" />
+											</div>
+
+											<div class="col-xs-3">
+									    	<label>Jump to Question on Select</label>
+												<select class="form-control" ng-model="chapter.Chapter.newQuestion.newAnswer.JumpID">
+													<option value="">None</option>
+													<option ng-repeat="question in chapter.Chapter.Questions" value="{{question.Question.ID}}">{{ question.Question.ID }}</option>
+												</select>
+											</div>
+
+											<div class="col-xs-1">
+									    	<label>Add</label>
+									    	<div class="btn-group btn-group-justified">
+									    		<label class="btn btn-success" ng-click="addAnswer(chapIndex)">
+									    			<i class="fa fa-plus-circle"></i>
+									    		</label>
+									    	</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<br>
 								<div class="row">
-									<div class="col-xs-2 text-right">
-										<label>Submit</label><br>
+									<div class="col-xs-6">
+									  <div class="checkbox" ng-show="questionKinds[chapter.Chapter.newQuestion.Kind].other">
+									    <label>
+									      <input type="checkbox" ng-model="chapter.Chapter.newQuestion.Other"> Allow an "Other" Input
+									    </label>
+									  </div>
+									</div>
+									<div class="col-xs-6 text-right">
 										<button class="btn btn-default" ng-click="addQuestion(chapIndex)">Add Question</button>
 									</div>
 								</div>
