@@ -18,25 +18,46 @@ surveyBuilder.controller('surveyBuilder', function ($scope, $location, $http) {
 
 
 surveyBuilder.controller('surveyController', function ($scope, $location, $http) {
-  $scope.questionKinds = ['IM', 'MC', 'CB', 'OL', ];
-  var questionBase = { ID: '', Text: 'SS', Kind: '', JumpID: '' };
+  $scope.questionKinds = {
+    IM: { verbose: 'Photo',           other: false, answers: false },
+    MC: { verbose: 'Multiple Choice', other: true,  answers: true },
+    CB: { verbose: 'Checkbox',        other: true,  answers: true },
+    OT: { verbose: 'Open Text',       other: false, answers: false },
+    ON: { verbose: 'Open Number',     other: false, answers: false },
+    OL: { verbose: 'Ordered List',    other: false, answers: true },
+    LP: { verbose: 'Loop',            other: false, answers: true },
+  };
+  var questionBase = { ID: '', Text: '', Kind: '', JumpID: '', Other: null, Answers: [] };
 
-  $scope.addNewChapter = function () {
+  $scope.addChapter = function () {
     var title = document.getElementById('newChapter').value;
     document.getElementById('newChapter').value = '';
-    $scope.flockSON.FlocktrackerProject.SurveyProject.Survey.Chapters.push({ Chapter: { Questions: [], Title: title,  } }); //newQuestion: questionBase
+    $scope.flockSON.FlocktrackerProject.SurveyProject.Survey.Chapters.push({ Chapter: { Questions: [], Title: title, newQuestion: questionBase} });
   };
   $scope.removeChapter = function (chapter) {
     $scope.flockSON.FlocktrackerProject.SurveyProject.Survey.Chapters.splice(chapter,1);
   }
+  $scope.addQuestion = function (chapter) {
+    var newQuestion = $scope.flockSON.FlocktrackerProject.SurveyProject.Survey.Chapters[chapter].Chapter.newQuestion;
+    var ok = true;
+    if (newQuestion) {
+      if (!newQuestion.ID) { ok = false; }
+      if (!newQuestion.Text) { ok = false; }
+      if (!newQuestion.Kind) { ok = false; }
+      if (!newQuestion.JumpID) { newQuestion.JumpID = null; }
+      if (ok) { 
+        $scope.flockSON.FlocktrackerProject.SurveyProject.Survey.Chapters[chapter].Chapter.Questions.push({Question: newQuestion}); 
+        $scope.flockSON.FlocktrackerProject.SurveyProject.Survey.Chapters[chapter].Chapter.newQuestion = questionBase;
+      }
+    }
+  }
+
   $scope.removeQuestion = function (chapter, question) {
     $scope.flockSON.FlocktrackerProject.SurveyProject.Survey.Chapters[chapter].Chapter.Questions.splice(question, 1);
   }
 
-
-
-  $scope.cleanQuestionID = function (chapter) {
-    if (chapter && chapter.newQuestion) { chapter.newQuestion.ID = chapter.newQuestion.ID.split(' ').join('_'); }
+  $scope.cleanQuestionID = function (stringID) {
+    return stringID.split(' ').join('_').split('.').join(''); 
   }
 });
 
