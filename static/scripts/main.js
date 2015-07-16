@@ -19,13 +19,15 @@ surveyBuilder.controller('surveyBuilder', function ($scope, $location, $http) {
 
 surveyBuilder.controller('surveyController', function ($scope, $location, $http) {
   $scope.questionKinds = {
-    IM: 'Photo',
-    MC: 'Multiple Choice',
-    CB: 'Checkbox',
-    OT: 'Open Text',
-    OL: 'Ordered List',
+    IM: { verbose: 'Photo',           other: false, answers: false },
+    MC: { verbose: 'Multiple Choice', other: true,  answers: true },
+    CB: { verbose: 'Checkbox',        other: true,  answers: true },
+    OT: { verbose: 'Open Text',       other: false, answers: false },
+    ON: { verbose: 'Open Number',     other: false, answers: false },
+    OL: { verbose: 'Ordered List',    other: false, answers: true },
+    LP: { verbose: 'Loop',            other: false, answers: true },
   };
-  var questionBase = { ID: '', Text: '', Kind: '', JumpID: '' };
+  var questionBase = { ID: '', Text: '', Kind: '', JumpID: '', Other: null, Answers: [] };
 
   $scope.addChapter = function () {
     var title = document.getElementById('newChapter').value;
