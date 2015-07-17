@@ -1,0 +1,29 @@
+{
+  "name": "surveyBuilder",
+  "version": "0.1",
+  "homepage": "https://github.com/urbanlaunchpad/surveyBuilder",
+  "authors": [
+    "Kuan Butts <kuanbutts@gmail.com>"
+  ],
+  "description": "Dynamic survey building tool using Flocktracker JSON",
+  "keywords": [
+    "survey",
+    "json",
+    "flocktracker"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-bootstrap": "~0.13.0",
+    "angular-ui-sortable": "~0.13.4",
+    "angular-ui": "~0.4.0",
+    "bootstrap": "~3.3.5",
+    "font-awesome": "~4.3.0"
+  }
+}
