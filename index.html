@@ -114,7 +114,7 @@
 								  	</span>
 							      <input  type="text" class="form-control" 
 							      				ng-model="chapter.Chapter.newQuestion.ID"
-							      				ng-keypress="chapter.Chapter.newQuestion.ID = cleanQuestionID(chapter.Chapter.newQuestion.ID)"
+							      				ng-keypress="chapter.Chapter.newQuestion.ID = cleanQuestionID(chapter.Chapter.newQuestion.ID); test(chapter)"
 							      				placeholder="New question id">
 							    </div>
 							    <div class="col-xs-9">

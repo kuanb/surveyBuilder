@@ -5,9 +5,9 @@ var surveyBuilder = angular.module('surveyBuilderApp', ['ui.bootstrap', 'ui.sort
 surveyBuilder.controller('surveyBuilder', function ($scope, $location, $http) {
   var addSupportObjects = function (fs) {
     var answerBase = {Text: '', ID: ''};
-    var questionBase = { ID: '', Text: '', Kind: '', JumpID: '', Other: null, Answers: [], newAnswer: answerBase };
+    var questionBase = { ID: '', Text: '', Kind: '', JumpID: '', Other: null, Answers: [], newAnswer: clone(answerBase) };
     fs.FlocktrackerProject.SurveyProject.Survey.Chapters = fs.FlocktrackerProject.SurveyProject.Survey.Chapters.map(function (chapter) {
-      chapter.Chapter.newQuestion = questionBase;
+      chapter.Chapter.newQuestion = clone(questionBase);
       return chapter;
     });
     return fs
@@ -44,7 +44,7 @@ surveyBuilder.controller('surveyController', function ($scope, $location, $http)
   $scope.addChapter = function () {
     var title = document.getElementById('newChapter').value;
     document.getElementById('newChapter').value = '';
-    $scope.flockSON.FlocktrackerProject.SurveyProject.Survey.Chapters.push({ Chapter: { Questions: [], Title: title, newQuestion: questionBase} });
+    $scope.flockSON.FlocktrackerProject.SurveyProject.Survey.Chapters.push({ Chapter: { Questions: [], Title: title, newQuestion: clone(questionBase)} });
   };
   $scope.removeChapter = function (chapter) {
     $scope.flockSON.FlocktrackerProject.SurveyProject.Survey.Chapters.splice(chapter,1);
@@ -80,7 +80,7 @@ surveyBuilder.controller('surveyController', function ($scope, $location, $http)
 
   $scope.addAnswer = function (chapter) {
     var newAnswer = $scope.flockSON.FlocktrackerProject.SurveyProject.Survey.Chapters[chapter].Chapter.newQuestion.newAnswer;
-    $scope.flockSON.FlocktrackerProject.SurveyProject.Survey.Chapters[chapter].Chapter.newQuestion.Answers.push({Answer:newAnswer});
+    $scope.flockSON.FlocktrackerProject.SurveyProject.Survey.Chapters[chapter].Chapter.newQuestion.Answers.push({Answer: newAnswer});
     $scope.flockSON.FlocktrackerProject.SurveyProject.Survey.Chapters[chapter].Chapter.newQuestion.newAnswer = clone(answerBase);
   }
 
@@ -91,6 +91,8 @@ surveyBuilder.controller('surveyController', function ($scope, $location, $http)
   $scope.cleanQuestionID = function (stringID) {
     return stringID.split(' ').join('_').split('.').join(''); 
   }
+
+  $scope.test = function (chap) { console.log(chap)};
 });
 
 
@@ -106,19 +108,15 @@ function clone(obj) {
   }
   // Handle Array
   if (obj instanceof Array) {
-      copy = [];
-      for (var i = 0, len = obj.length; i < len; i++) {
-          copy[i] = clone(obj[i]);
-      }
-      return copy;
+    copy = [];
+    for (var i = 0, len = obj.length; i < len; i++) { copy[i] = clone(obj[i]); }
+    return copy;
   }
   // Handle Object
   if (obj instanceof Object) {
-      copy = {};
-      for (var attr in obj) {
-          if (obj.hasOwnProperty(attr)) copy[attr] = clone(obj[attr]);
-      }
-      return copy;
+    copy = {};
+    for (var attr in obj) { if (obj.hasOwnProperty(attr)) copy[attr] = clone(obj[attr]); }
+    return copy;
   }
   throw new Error("Unable to copy obj! Its type isn't supported.");
 }
