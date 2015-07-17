@@ -189,7 +189,10 @@
 									  </div>
 									</div>
 									<div class="col-xs-6 text-right">
-										<button class="btn btn-default" ng-click="addQuestion(chapIndex)">Add Question</button>
+										<button class="btn btn-default" ng-click="addQuestion(chapIndex)" 
+														ng-class="!questionReady(chapter.Chapter.newQuestion) ? 'disabled' : ''">
+											Add Question
+										</button>
 									</div>
 								</div>
 			        </div>

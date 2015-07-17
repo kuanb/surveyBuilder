@@ -65,7 +65,7 @@ surveyBuilder.controller('surveyController', function ($scope, $location, $http)
   }
 
   var vetQuesID = function (id) {
-    if (id && id.length > 0) { console.log('this', typeof id.length, 'passed');
+    if (id && id.length > 0) {
       var chapters = $scope.flockSON.FlocktrackerProject.SurveyProject.Survey.Chapters;
       var allIds = [];
       chapters.forEach(function (chapter) {
