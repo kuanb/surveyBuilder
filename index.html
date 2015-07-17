@@ -132,7 +132,9 @@
 							    	<label>Jump to Question</label><br>
 										<select class="form-control" ng-model="chapter.Chapter.newQuestion.JumpID">
 											<option value="">None</option>
-											<option ng-repeat="question in chapter.Chapter.Questions" value="question.Question.ID.verbose">{{ question.Question.ID }}</option>
+											<option ng-repeat="question in chapter.Chapter.Questions" value="{{ question.Question.ID }}">
+												{{ question.Question.ID }}
+											</option>
 										</select>
 							    </div>
 								</div>

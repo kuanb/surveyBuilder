@@ -49,26 +49,33 @@ surveyBuilder.controller('surveyController', function ($scope, $location, $http)
   $scope.removeChapter = function (chapter) {
     $scope.flockSON.FlocktrackerProject.SurveyProject.Survey.Chapters.splice(chapter,1);
   }
+  $scope.questionReady = function (question) {
+    return  vetQuesID(question.ID) && 
+            question.Text.length > 0 && 
+            question.Kind.length > 0 ? true : false;
+  }
   $scope.addQuestion = function (chapter) {
     var newQuestion = $scope.flockSON.FlocktrackerProject.SurveyProject.Survey.Chapters[chapter].Chapter.newQuestion;
-    var ok = true;
-    if (newQuestion) {
-      if (!vetQuesID(newQuestion.ID)) { ok = false; }
-      if (!newQuestion.Text) { ok = false; }
-      if (!newQuestion.Kind) { ok = false; }
-      if (!newQuestion.JumpID) { newQuestion.JumpID = null; }
-      if (ok) { 
-        $scope.flockSON.FlocktrackerProject.SurveyProject.Survey.Chapters[chapter].Chapter.Questions.push({Question: newQuestion}); 
-        $scope.flockSON.FlocktrackerProject.SurveyProject.Survey.Chapters[chapter].Chapter.newQuestion = clone(questionBase);
-      }
+    var ok = $scope.questionReady(newQuestion);
+    newQuestion.JumpID = newQuestion.JumpID ? newQuestion.JumpID : null;
+    if (ok) {
+      $scope.flockSON.FlocktrackerProject.SurveyProject.Survey.Chapters[chapter].Chapter.Questions.push({Question: newQuestion}); 
+      $scope.flockSON.FlocktrackerProject.SurveyProject.Survey.Chapters[chapter].Chapter.newQuestion = clone(questionBase);
     }
   }
+
   var vetQuesID = function (id) {
-    if (id) {
-      return true;
-    } else {
-      return false;
-    }
+    if (id && id.length > 0) { console.log('this', typeof id.length, 'passed');
+      var chapters = $scope.flockSON.FlocktrackerProject.SurveyProject.Survey.Chapters;
+      var allIds = [];
+      chapters.forEach(function (chapter) {
+        chapter.Chapter.Questions.forEach(function (question) {
+          allIds.push(question.Question.ID);
+        })
+      });
+      if (allIds.indexOf(id) > -1) { return false } 
+      else { return true }
+    } else { return false; }
   }
 
   $scope.addAnswer = function (chapter) {
