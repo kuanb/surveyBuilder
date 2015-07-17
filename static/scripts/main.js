@@ -59,7 +59,7 @@ surveyBuilder.controller('surveyController', function ($scope, $location, $http)
       if (!newQuestion.JumpID) { newQuestion.JumpID = null; }
       if (ok) { 
         $scope.flockSON.FlocktrackerProject.SurveyProject.Survey.Chapters[chapter].Chapter.Questions.push({Question: newQuestion}); 
-        $scope.flockSON.FlocktrackerProject.SurveyProject.Survey.Chapters[chapter].Chapter.newQuestion = questionBase;
+        $scope.flockSON.FlocktrackerProject.SurveyProject.Survey.Chapters[chapter].Chapter.newQuestion = clone(questionBase);
       }
     }
   }
@@ -74,7 +74,7 @@ surveyBuilder.controller('surveyController', function ($scope, $location, $http)
   $scope.addAnswer = function (chapter) {
     var newAnswer = $scope.flockSON.FlocktrackerProject.SurveyProject.Survey.Chapters[chapter].Chapter.newQuestion.newAnswer;
     $scope.flockSON.FlocktrackerProject.SurveyProject.Survey.Chapters[chapter].Chapter.newQuestion.Answers.push({Answer:newAnswer});
-    $scope.flockSON.FlocktrackerProject.SurveyProject.Survey.Chapters[chapter].Chapter.newQuestion.newAnswer = answerBase;
+    $scope.flockSON.FlocktrackerProject.SurveyProject.Survey.Chapters[chapter].Chapter.newQuestion.newAnswer = clone(answerBase);
   }
 
   $scope.removeQuestion = function (chapter, question) {
@@ -87,7 +87,34 @@ surveyBuilder.controller('surveyController', function ($scope, $location, $http)
 });
 
 
-
+function clone(obj) {
+  var copy;
+  // Handle the 3 simple types, and null or undefined
+  if (null == obj || "object" != typeof obj) return obj;
+  // Handle Date
+  if (obj instanceof Date) {
+      copy = new Date();
+      copy.setTime(obj.getTime());
+      return copy;
+  }
+  // Handle Array
+  if (obj instanceof Array) {
+      copy = [];
+      for (var i = 0, len = obj.length; i < len; i++) {
+          copy[i] = clone(obj[i]);
+      }
+      return copy;
+  }
+  // Handle Object
+  if (obj instanceof Object) {
+      copy = {};
+      for (var attr in obj) {
+          if (obj.hasOwnProperty(attr)) copy[attr] = clone(obj[attr]);
+      }
+      return copy;
+  }
+  throw new Error("Unable to copy obj! Its type isn't supported.");
+}
 
 
 

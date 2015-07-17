@@ -90,13 +90,13 @@
 			        </div>
 			        <div class="panel-footer" ng-show="sort[chapter.Chapter.Title]">
 				        <div class="text-right">
-				        	<span class="label label-info">
+				        	<span class="label label-info" style="margin-left:5px">
 				        		ID: {{ chapter.Chapter.newQuestion.ID ? chapter.Chapter.newQuestion.ID : 'None Selected' }} 
 				        	</span> 
-				        	<span class="label label-info">
+				        	<span class="label label-info" style="margin-left:5px">
 				        		Kind: {{ chapter.Chapter.newQuestion.Kind ? questionKinds[chapter.Chapter.newQuestion.Kind].verbose : 'None Selected' }} 
 				        	</span> 
-				        	<span class="label label-info">
+				        	<span class="label label-info" style="margin-left:5px">
 				        		JumpID: {{ chapter.Chapter.newQuestion.JumpID ? chapter.Chapter.newQuestion.JumpID : 'None Selected' }} 
 				        	</span> 
 				        </div>
@@ -142,13 +142,6 @@
 									<div class="col-xs-12">
 										
 										<div class="row" ng-show="questionKinds[chapter.Chapter.newQuestion.Kind].answers">
-											<div ui-sortable ng-model="chapter.Chapter.newQuestion.Answers">
-												<div class="col-xs-12" ng-repeat="answer in chapter.Chapter.newQuestion.Answers">
-													<span class="label label-default">
-														{{ answer.Answer.Text }} with JumpID: {{ answer.Answer.JumpID }}
-													</span>
-												</div>
-											</div>
 
 											<div class="col-xs-8">
 												<label>Create a New Answer</label>
@@ -170,6 +163,15 @@
 									    			<i class="fa fa-plus-circle"></i>
 									    		</label>
 									    	</div>
+											</div>
+
+											<div ui-sortable ng-model="chapter.Chapter.newQuestion.Answers" class="col-xs-12">
+												<span ng-repeat="(answerIndex, answer) in chapter.Chapter.newQuestion.Answers"><div class="label label-warning">
+													{{ answerIndex+1 }}. {{ answer.Answer.Text }} 
+													<span ng-if="answer.Answer.JumpID">
+														(with jump to Question {{ answer.Answer.JumpID }})
+													</span>
+												</div><br></span>
 											</div>
 										</div>
 									</div>
