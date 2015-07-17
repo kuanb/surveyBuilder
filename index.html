@@ -102,9 +102,17 @@
 				        </div>
 
 			          <div class="row">
-							    <div class="col-xs-3">
-							    	<label>Question ID <small>(no spaces)</small></label>
-							      <input class="form-control" 
+							    <div class="col-xs-3 form-group" ng-class="vetQuesID(chapter.Chapter.newQuestion.ID) ? 'has-success' : 'has-error'">
+							    	<label class="control-label">Question ID</label>
+								  	<span class="label label-success" 
+								  				ng-show="vetQuesID(chapter.Chapter.newQuestion.ID)">
+								  		<span class="glyphicon glyphicon-ok"></span> Unique ID is okay.
+								  	</span>
+								  	<span class="label label-danger" 
+								  				ng-show="!vetQuesID(chapter.Chapter.newQuestion.ID)">
+								  		<span class="glyphicon glyphicon-remove"></span> Not a unique ID.
+								  	</span>
+							      <input  type="text" class="form-control" 
 							      				ng-model="chapter.Chapter.newQuestion.ID"
 							      				ng-keypress="chapter.Chapter.newQuestion.ID = cleanQuestionID(chapter.Chapter.newQuestion.ID)"
 							      				placeholder="New question id">
@@ -141,41 +149,37 @@
 
 								<br>
 								<div class="row" ng-show="questionKinds[chapter.Chapter.newQuestion.Kind].answers">
-									<div class="col-xs-12">
-										
-										<div class="row" ng-show="questionKinds[chapter.Chapter.newQuestion.Kind].answers">
+									<div class="col-xs-8 form-group">
+									  <label class="control-label">Create a New Answer</label>
+									  <input type="text" class="form-control" 
+									  				ng-model="chapter.Chapter.newQuestion.newAnswer.Text" 
+									  				placeholder="New answer text"/>
+									</div>
 
-											<div class="col-xs-8">
-												<label>Create a New Answer</label>
-												<input class="form-control" ng-model="chapter.Chapter.newQuestion.newAnswer.Text" placeholder="New answer text" />
-											</div>
+									<div class="col-xs-3">
+							    	<label>Jump to Question on Select</label>
+										<select class="form-control" ng-model="chapter.Chapter.newQuestion.newAnswer.JumpID">
+											<option value="">None</option>
+											<option ng-repeat="question in chapter.Chapter.Questions" value="{{question.Question.ID}}">{{ question.Question.ID }}</option>
+										</select>
+									</div>
 
-											<div class="col-xs-3">
-									    	<label>Jump to Question on Select</label>
-												<select class="form-control" ng-model="chapter.Chapter.newQuestion.newAnswer.JumpID">
-													<option value="">None</option>
-													<option ng-repeat="question in chapter.Chapter.Questions" value="{{question.Question.ID}}">{{ question.Question.ID }}</option>
-												</select>
-											</div>
+									<div class="col-xs-1">
+							    	<label>Add</label>
+							    	<div class="btn-group btn-group-justified">
+							    		<label class="btn btn-success" ng-click="addAnswer(chapIndex)">
+							    			<i class="fa fa-plus-circle"></i>
+							    		</label>
+							    	</div>
+									</div>
 
-											<div class="col-xs-1">
-									    	<label>Add</label>
-									    	<div class="btn-group btn-group-justified">
-									    		<label class="btn btn-success" ng-click="addAnswer(chapIndex)">
-									    			<i class="fa fa-plus-circle"></i>
-									    		</label>
-									    	</div>
-											</div>
-
-											<div ui-sortable ng-model="chapter.Chapter.newQuestion.Answers" class="col-xs-12">
-												<span ng-repeat="(answerIndex, answer) in chapter.Chapter.newQuestion.Answers"><div class="label label-warning">
-													{{ answerIndex+1 }}. {{ answer.Answer.Text }} 
-													<span ng-if="answer.Answer.JumpID">
-														(with jump to Question {{ answer.Answer.JumpID }})
-													</span>
-												</div><br></span>
-											</div>
-										</div>
+									<div ui-sortable ng-model="chapter.Chapter.newQuestion.Answers" class="col-xs-12">
+										<span ng-repeat="(answerIndex, answer) in chapter.Chapter.newQuestion.Answers"><div class="label label-warning">
+											{{ answerIndex+1 }}. {{ answer.Answer.Text }} 
+											<span ng-if="answer.Answer.JumpID">
+												(with jump to Question {{ answer.Answer.JumpID }})
+											</span>
+										</div><br></span>
 									</div>
 								</div>
 

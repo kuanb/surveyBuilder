@@ -50,7 +50,7 @@ surveyBuilder.controller('surveyController', function ($scope, $location, $http)
     $scope.flockSON.FlocktrackerProject.SurveyProject.Survey.Chapters.splice(chapter,1);
   }
   $scope.questionReady = function (question) {
-    return  vetQuesID(question.ID) && 
+    return  $scope.vetQuesID(question.ID) && 
             question.Text.length > 0 && 
             question.Kind.length > 0 ? true : false;
   }
@@ -64,7 +64,7 @@ surveyBuilder.controller('surveyController', function ($scope, $location, $http)
     }
   }
 
-  var vetQuesID = function (id) {
+  $scope.vetQuesID = function (id) {
     if (id && id.length > 0) {
       var chapters = $scope.flockSON.FlocktrackerProject.SurveyProject.Survey.Chapters;
       var allIds = [];
