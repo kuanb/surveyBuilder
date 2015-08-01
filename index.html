@@ -54,24 +54,27 @@
   </nav>
 
 
+
 	<div class="container">
 		<tabset >
 			<tab heading="Survey">
 				<div ng-controller="surveyController">
 					<div ui-sortable ng-model="flockSON.FlocktrackerProject.SurveyProject.Survey.Chapters">
 						<div ng-repeat="(chapIndex, chapter) in flockSON.FlocktrackerProject.SurveyProject.Survey.Chapters" class="panel panel-default">
+		          
 		          <div class="panel-heading">
-		            <h4 class="panel-title">
+		            <h4 class="panel-title point">
 		            	<span ng-click="sort[chapter.Chapter.Title] = !sort[chapter.Chapter.Title]">
 		            		Chapter {{ chapIndex+1 }}: {{ chapter.Chapter.Title }}
 		            	</span>
 		            	<i class="fa fa-times-circle-o pull-right" ng-click="removeChapter(chapIndex)"></i>
 		            </h4>
 		          </div>
+
 		          <div class="panel-body" ng-show="sort[chapter.Chapter.Title]">
 		          	<div ui-sortable ng-model="chapter.Chapter.Questions">
 				          <div class="panel panel-default" ng-repeat="(questionIndex, question) in chapter.Chapter.Questions">
-										<div class="panel-heading">
+										<div class="panel-heading point">
 											<span ng-click="sort[question.Question.Text] = !sort[question.Question.Text]">
 												{{ questionIndex+1 }}. {{ question.Question.Text }}
 											</span>
@@ -88,6 +91,7 @@
 			          	</div>
 			          </div>
 			        </div>
+
 			        <div class="panel-footer" ng-show="sort[chapter.Chapter.Title]">
 				        <div class="text-right">
 				        	<span class="label label-info" style="margin-left:5px">
@@ -136,10 +140,10 @@
 							    </div>
 							    <div class="col-xs-4">
 							    	<label>Chapter Select for Jump</label><br>
-										<select class="form-control" ng-model="chapter.Chapter.newQuestion.JumpID">
+										<select class="form-control" ng-model="jumpChapSelect">
 											<option value="">None</option>
 											<option ng-repeat="(chapIndex, chapter) in flockSON.FlocktrackerProject.SurveyProject.Survey.Chapters" 
-															value="{{ chapter.Chapter.Title }}">
+															value="{{ chapIndex }}">
 												{{ chapter.Chapter.Title }}
 											</option>
 										</select>
@@ -148,7 +152,8 @@
 							    	<label>Jump to Question</label><br>
 										<select class="form-control" ng-model="chapter.Chapter.newQuestion.JumpID">
 											<option value="">None</option>
-											<option ng-repeat="question in chapter.Chapter.Questions" value="{{ question.Question.ID }}">
+											<option ng-repeat="question in flockSON.FlocktrackerProject.SurveyProject.Survey.Chapters[jumpChapSelect].Chapter.Questions" 
+															value="{{ question.Question.ID }}">
 												{{ question.Question.ID }}
 											</option>
 										</select>
