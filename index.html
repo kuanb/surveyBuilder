@@ -194,7 +194,9 @@
 									<div class="col-xs-1">
 							    	<label>Add</label>
 							    	<div class="btn-group btn-group-justified">
-							    		<label class="btn btn-success" ng-click="addAnswer(chapIndex)">
+							    		<label class="btn btn-success" 
+							    						ng-class="chapter.Chapter.newQuestion.newAnswer.Text.length > 0 ? '' : 'disabled'" 
+							    						ng-click="addAnswer(chapIndex)">
 							    			<i class="fa fa-plus-circle"></i>
 							    		</label>
 							    	</div>

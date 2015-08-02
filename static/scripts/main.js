@@ -4,7 +4,7 @@ var surveyBuilder = angular.module('surveyBuilderApp', ['ui.bootstrap', 'ui.sort
 
 surveyBuilder.controller('surveyBuilder', function ($scope, $location, $http) {
   var addSupportObjects = function (fs) {
-    var answerBase = {Text: '', ID: ''};
+    var answerBase = {Text: ''};
     var questionBase = { ID: '', Text: '', Kind: '', JumpID: '', Other: null, Answers: [], newAnswer: angular.copy(answerBase) };
     fs.FlocktrackerProject.SurveyProject.Survey.Chapters = fs.FlocktrackerProject.SurveyProject.Survey.Chapters.map(function (chapter) {
       chapter.Chapter.newQuestion = angular.copy(questionBase);
@@ -32,7 +32,7 @@ surveyBuilder.controller('surveyController', function ($scope, $location, $http)
     OL: { verbose: 'Ordered List',    other: false, answers: true },
     LP: { verbose: 'Loop',            other: false, answers: true },
   };
-  var answerBase = {Text: '', ID: ''};
+  var answerBase = {Text: ''};
   var questionBase = { ID: '', Text: '', Kind: '', JumpID: '', Other: null, Answers: [], newAnswer: answerBase };
 
   $scope.addChapter = function () {
@@ -74,8 +74,11 @@ surveyBuilder.controller('surveyController', function ($scope, $location, $http)
 
   $scope.addAnswer = function (chapter) {
     var newAnswer = $scope.flockSON.FlocktrackerProject.SurveyProject.Survey.Chapters[chapter].Chapter.newQuestion.newAnswer;
-    $scope.flockSON.FlocktrackerProject.SurveyProject.Survey.Chapters[chapter].Chapter.newQuestion.Answers.push({Answer: newAnswer});
-    $scope.flockSON.FlocktrackerProject.SurveyProject.Survey.Chapters[chapter].Chapter.newQuestion.newAnswer = angular.copy(answerBase);
+    console.log(newAnswer);
+    if (newAnswer.length > 0) {
+      $scope.flockSON.FlocktrackerProject.SurveyProject.Survey.Chapters[chapter].Chapter.newQuestion.Answers.push({Answer: newAnswer});
+      $scope.flockSON.FlocktrackerProject.SurveyProject.Survey.Chapters[chapter].Chapter.newQuestion.newAnswer = angular.copy(answerBase);
+    }
   }
 
   $scope.removeQuestion = function (chapter, question) {
