@@ -17,7 +17,10 @@ surveyBuilder.controller('surveyBuilder', function ($scope, $location, $http) {
       res = fs.fSON.getJSON(inputString);
 
   $scope.flockSON = addSupportObjects(res);
-  console.log($scope.flockSON);
+
+  $scope.submit = function () {
+    console.log($scope.flockSON);
+  }
 });
 
 
