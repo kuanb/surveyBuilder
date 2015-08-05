@@ -58,7 +58,7 @@
 
 	<div class="container">
 		<tabset >
-			<tab heading="Survey">
+			<tab heading="Survey" ng-click="currentTab='SurveyProject'">
 				<div ng-controller="surveyController">
 					<div ui-sortable ng-model="flockSON.FlocktrackerProject.SurveyProject.Survey.Chapters">
 						<div ng-repeat="(chapIndex, chapter) in flockSON.FlocktrackerProject.SurveyProject.Survey.Chapters" class="panel panel-default">
@@ -242,7 +242,7 @@
 	          </div>
 	          <div class="panel-body row">
 					    <div class="col-xs-10">
-					      <input class="form-control" id="newChapter" placeholder="New chapter title">
+					      <input class="form-control" id="newChapter_SurveyProject" placeholder="New chapter title">
 					    </div>
 					    <div class="col-xs-2 text-right">
 					      <button type="submit" class="btn btn-default" ng-click="addChapter()">Add Chapter</button>
@@ -252,8 +252,8 @@
 				</div>
 			</tab>
 
-			<tab heading="Tracker">
-				<div ng-controller="trackerController">
+			<tab heading="Tracker" ng-click="currentTab='TrackerProject'">
+				<div ng-controller="surveyController">
 
 					<div class="row">
 						<div class="col-xs-12">
@@ -354,7 +354,7 @@
 							    	<label>Chapter Select for Jump</label><br>
 										<select class="form-control" ng-model="jumpChapSelect">
 											<option value="">None</option>
-											<option ng-repeat="(chapIndex, chapter) in flockSON.FlocktrackerProject.SurveyProject.Survey.Chapters" 
+											<option ng-repeat="(chapIndex, chapter) in flockSON.FlocktrackerProject.TrackerProject[trackerPortion].Survey.Chapters" 
 															value="{{ chapIndex }}">
 												{{ chapter.Chapter.Title }}
 											</option>
@@ -364,7 +364,7 @@
 							    	<label>Jump to Question</label><br>
 										<select class="form-control" ng-model="chapter.Chapter.newQuestion.JumpID">
 											<option value="">None</option>
-											<option ng-repeat="question in flockSON.FlocktrackerProject.SurveyProject.Survey.Chapters[jumpChapSelect].Chapter.Questions" 
+											<option ng-repeat="question in flockSON.FlocktrackerProject.TrackerProject[trackerPortion].Survey.Chapters[jumpChapSelect].Chapter.Questions" 
 															value="{{ question.Question.ID }}">
 												{{ question.Question.ID }}
 											</option>
@@ -385,7 +385,7 @@
 							    	<label>Jump to Question on Select</label>
 										<select class="form-control" ng-model="jumpChapSelect_answer">
 											<option value="">None</option>
-											<option ng-repeat="(chapIndex, chapter) in flockSON.FlocktrackerProject.SurveyProject.Survey.Chapters" 
+											<option ng-repeat="(chapIndex, chapter) in flockSON.FlocktrackerProject.TrackerProject[trackerPortion].Survey.Chapters" 
 															value="{{ chapIndex }}">
 												{{ chapter.Chapter.Title }}
 											</option>
@@ -396,7 +396,7 @@
 							    	<label>Jump to Question on Select</label>
 										<select class="form-control" ng-model="chapter.Chapter.newQuestion.newAnswer.JumpID">
 											<option value="">None</option>
-											<option ng-repeat="question in flockSON.FlocktrackerProject.SurveyProject.Survey.Chapters[jumpChapSelect_answer].Chapter.Questions" 
+											<option ng-repeat="question in flockSON.FlocktrackerProject.TrackerProject[trackerPortion].Survey.Chapters[jumpChapSelect_answer].Chapter.Questions" 
 															value="{{ question.Question.ID }}">
 												{{ question.Question.ID }}
 											</option>
@@ -453,7 +453,7 @@
 	          </div>
 	          <div class="panel-body row">
 					    <div class="col-xs-10">
-					      <input class="form-control" id="newChapter" placeholder="New chapter title">
+					      <input class="form-control" id="newChapter_TrackerProject" placeholder="New chapter title">
 					    </div>
 					    <div class="col-xs-2 text-right">
 					      <button type="submit" class="btn btn-default" ng-click="addChapter()">Add Chapter</button>
