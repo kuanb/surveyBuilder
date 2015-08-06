@@ -119,7 +119,7 @@
 								  	</span>
 							      <input  type="text" class="form-control" 
 							      				ng-model="chapter.Chapter.newQuestion.ID"
-							      				ng-keypress="chapter.Chapter.newQuestion.ID = cleanQuestionID(chapter.Chapter.newQuestion.ID)"
+							      				ng-keypress="chapter.Chapter.newQuestion.ID = cleanText(chapter.Chapter.newQuestion.ID)"
 							      				placeholder="New question id">
 							    </div>
 							    <div class="col-xs-8">
@@ -321,16 +321,18 @@
 							    <div class="col-xs-4 form-group" ng-class="vetQuesID(chapter.Chapter.newQuestion.ID) ? 'has-success' : 'has-error'">
 							    	<label class="control-label">Question ID</label>
 								  	<span class="label label-success" 
-								  				ng-show="vetQuesID(chapter.Chapter.newQuestion.ID)">
+								  				ng-show="vetQuesID(chapter.Chapter.newQuestion.ID) && 
+								  								chapter.Chapter.newQuestion.ID == cleanText(chapter.Chapter.newQuestion.ID)">
 								  		<span class="glyphicon glyphicon-ok"></span> Unique ID is okay.
 								  	</span>
 								  	<span class="label label-danger" 
-								  				ng-show="!vetQuesID(chapter.Chapter.newQuestion.ID)">
+								  				ng-show="!vetQuesID(chapter.Chapter.newQuestion.ID) ||
+								  								chapter.Chapter.newQuestion.ID !== cleanText(chapter.Chapter.newQuestion.ID)">
 								  		<span class="glyphicon glyphicon-remove"></span> Not a unique ID.
 								  	</span>
 							      <input  type="text" class="form-control" 
 							      				ng-model="chapter.Chapter.newQuestion.ID"
-							      				ng-keypress="chapter.Chapter.newQuestion.ID = cleanQuestionID(chapter.Chapter.newQuestion.ID)"
+							      				ng-keypress="chapter.Chapter.newQuestion.ID = cleanText(chapter.Chapter.newQuestion.ID)"
 							      				placeholder="New question id">
 							    </div>
 							    <div class="col-xs-8">
@@ -464,7 +466,68 @@
 			</tab>
 
 			<tab heading="Counters">
-				{{ flockSON.FlocktrackerProject.CountersProject }}
+				<div ng-controller="counterController">
+					<div ui-sortable ng-model="flockSON.FlocktrackerProject.CountersProject.Counters">
+						<div ng-repeat="counter in flockSON.FlocktrackerProject.CountersProject.Counters" 
+									class="panel panel-default">
+		          <div class="panel-body point">
+	            	<span>{{ counter.Counter.Name }}</span>
+	            	<span class="label label-info">ID: {{ counter.Counter.ID }}</span> 
+	            	<i class="fa fa-times-circle-o pull-right" ng-click="removeCounter($index)"></i>
+		          </div>
+		        </div>
+		      </div>
+
+					<div class="panel panel-default">
+	          <div class="panel-heading">
+	            <h4 class="panel-title">
+	            	Create a new counter
+	            </h4>
+	          </div>
+	          <div class="panel-body row">
+
+					    <div class="col-xs-5 form-group" ng-class="vetCounter('name', newCounter.Name) ? 'has-success' : 'has-error'">
+					    	<label class="control-label">Counter Name</label>
+						  	<span class="label label-success" 
+						  				ng-show="vetCounter('name', newCounter.Name)">
+						  		<span class="glyphicon glyphicon-ok"></span> Unique name is okay.
+						  	</span>
+						  	<span class="label label-danger" 
+						  				ng-show="!vetCounter('name', newCounter.Name)">
+						  		<span class="glyphicon glyphicon-remove"></span> Not a unique name.
+						  	</span>
+					      <input  type="text" class="form-control" 
+					      				ng-model="newCounter.Name"
+					      				placeholder="New counter name">
+					    </div>
+
+					    <div class="col-xs-5 form-group" ng-class="vetCounter('name', newCounter.ID) ? 'has-success' : 'has-error'">
+					    	<label class="control-label">Counter ID</label>
+						  	<span class="label label-success" 
+						  				ng-show="vetCounter('id', newCounter.ID)">
+						  		<span class="glyphicon glyphicon-ok"></span> Unique ID is okay.
+						  	</span>
+						  	<span class="label label-danger" 
+						  				ng-show="!vetCounter('id', newCounter.ID)">
+						  		<span class="glyphicon glyphicon-remove"></span> Not a unique ID.
+						  	</span>
+					      <input  type="text" class="form-control" 
+					      				ng-model="newCounter.ID"
+					      				ng-keypress="newCounter.ID = cleanText(newCounter.ID)"
+					      				placeholder="New counter id">
+					    </div>
+					    <div class="col-xs-2 text-right">
+					    	<label class="control-label">Submit</label>
+					      <button type="submit" class="btn btn-default" 
+					      				ng-class="newCounter.Name.length > 0 && newCounter.ID.length > 0 &&
+					      									vetCounter('name', newCounter.Name) && vetCounter('id', newCounter.ID) ? '' : 'disabled'"
+					      				ng-click="addCounter(newCounter); newCounter={id:'',name:''}">
+					      	Add Counter
+					      </button>
+					    </div>
+						</div>
+					</div>
+				</div>
 			</tab>
 			<div class="btn btn-warning pull-right" ng-click="submit()">Submit</div>
 		</tabset>
