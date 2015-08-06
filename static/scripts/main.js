@@ -42,10 +42,19 @@ surveyBuilder.controller('surveyBuilder', function ($scope, $location, $http) {
       else { return true }
     } else { return false; }
   }
+
   $scope.questionReady = function (question) {
     return  $scope.vetQuesID(question.ID) && 
             question.Text.length > 0 && 
             question.Kind.length > 0 ? true : false;
+  }
+
+  $scope.cleanText = function (string) { 
+    if (string) {
+      return string.split(' ').join('_').split('.').join(''); 
+    } else {
+      return string;
+    }
   }
 
   $scope.submit = function () {
@@ -69,6 +78,36 @@ surveyBuilder.controller('surveyBuilder', function ($scope, $location, $http) {
   }
 });
 
+
+surveyBuilder.controller('counterController', function ($scope) {
+  $scope.vetCounter = function (part, text) {
+    var tempArray = [];
+    if (part == 'name') {
+      $scope.flockSON.FlocktrackerProject.CountersProject.Counters.forEach(function (counter) {
+        tempArray.push(counter.Counter.Name);
+      });
+    } else if (part == 'id') {
+      $scope.flockSON.FlocktrackerProject.CountersProject.Counters.forEach(function (counter) {
+        tempArray.push(counter.Counter.ID);
+      });
+    } else {
+      throw new Error('$scope.vetCounter received invalid input.');
+    }
+    if (tempArray.indexOf(text) > -1) {
+      return false;
+    } else {
+      return true;
+    }
+  };
+
+  $scope.addCounter = function (newCounter) {
+    $scope.flockSON.FlocktrackerProject.CountersProject.Counters.push({Counter: newCounter});
+  }
+
+  $scope.removeCounter = function (index) {
+    $scope.flockSON.FlocktrackerProject.CountersProject.Counters.splice(index, 1);
+  }
+});
 
 
 surveyBuilder.controller('surveyController', function ($scope, $location, $http) {
@@ -94,7 +133,7 @@ surveyBuilder.controller('surveyController', function ($scope, $location, $http)
     } else if ($scope.currentTab=='TrackerProject') {
       str = 'TrackerProject.' + $scope.trackerPortion;
     } else {
-      throw new Error('$scope not tracker or survey...')
+      throw new Error('$scope not tracker or survey...');
     }
     return str.split('.').reduce(function(o, x) { return o[x] }, obj);
   };
@@ -127,10 +166,6 @@ surveyBuilder.controller('surveyController', function ($scope, $location, $http)
 
   $scope.removeQuestion = function (chapter, question) {
     ref().Survey.Chapters[chapter].Chapter.Questions.splice(question, 1);
-  }
-
-  $scope.cleanQuestionID = function (stringID) {
-    return stringID.split(' ').join('_').split('.').join(''); 
   }
 
 });
