@@ -145,7 +145,7 @@ surveyBuilder.controller('surveyController', function ($scope, $location, $http)
     ref().Survey.Chapters.push({ Chapter: { Questions: [], Title: title, newQuestion: angular.copy(questionBase)} });
   };
   $scope.removeChapter = function (chapter) {
-    $scope.flockSON.FlocktrackerProject.TrackerProject[$scope.trackerPortion].Survey.Chapters.splice(chapter,1);
+    ref().Survey.Chapters.splice(chapter,1);
   }
   $scope.addQuestion = function (chapter) {
     var newQuestion = $scope.flockSON.FlocktrackerProject.TrackerProject[$scope.trackerPortion].Survey.Chapters[chapter].Chapter.newQuestion;
