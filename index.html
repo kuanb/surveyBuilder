@@ -204,12 +204,14 @@
 									</div>
 
 									<div ui-sortable ng-model="chapter.Chapter.newQuestion.Answers" class="col-xs-12">
-										<span ng-repeat="(answerIndex, answer) in chapter.Chapter.newQuestion.Answers"><div class="label label-warning">
-											{{ answerIndex+1 }}. {{ answer.Answer.Text }} 
-											<span ng-if="answer.Answer.JumpID">
-												(with jump to Question {{ answer.Answer.JumpID }})
-											</span>
-										</div><br></span>
+										<span ng-repeat="(answerIndex, answer) in chapter.Chapter.newQuestion.Answers">
+											<div class="label label-warning point">
+												{{ answerIndex+1 }}. {{ answer.Answer.Text }} 
+												<span ng-if="answer.Answer.JumpID">
+													(with jump to Question {{ answer.Answer.JumpID }})
+												</span>
+											</div>
+										<br></span>
 									</div>
 								</div>
 
