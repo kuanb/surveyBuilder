@@ -13,7 +13,7 @@ surveyBuilder.controller('surveyBuilder', function ($scope, $location, $http) {
     });
     var trackerPortions = ['StartSurvey', 'EndSurvey'];
     trackerPortions.forEach(function (trackerPortion) {
-      fs.FlocktrackerProject.TrackerProject[trackerPortion].Survey.Chapters = fs.FlocktrackerProject.SurveyProject.Survey.Chapters.map(function (chapter) {
+      fs.FlocktrackerProject.TrackerProject[trackerPortion].Survey.Chapters = fs.FlocktrackerProject.TrackerProject[trackerPortion].Survey.Chapters.map(function (chapter) {
         chapter.Chapter.newQuestion = angular.copy(questionBase);
         return chapter;
       });
@@ -21,7 +21,7 @@ surveyBuilder.controller('surveyBuilder', function ($scope, $location, $http) {
     return fs
   };
   var fs  = new FT_pr(),
-      res = fs.fSON.getJSON(inputString);
+      res = fs.fSON.getJSON(inputString); console.log(res);
   $scope.flockSON = addSupportObjects(res);
   $scope.currentTab = 'SurveyProject';
 
@@ -38,7 +38,9 @@ surveyBuilder.controller('surveyBuilder', function ($scope, $location, $http) {
           allIds.push(question.Question.ID);
         })
       });
-      if (allIds.indexOf(id) > -1) { return false } 
+      if (allIds.indexOf(id) > -1 && isNaN(Number(id[0]))) { 
+        return false 
+      } 
       else { return true }
     } else { return false; }
   }
@@ -51,6 +53,9 @@ surveyBuilder.controller('surveyBuilder', function ($scope, $location, $http) {
 
   $scope.cleanText = function (string) { 
     if (string) {
+      while (!isNaN(Number(string[0])) || string[0] == ' ') {
+        string = string.substr(1);
+      }
       return string.split(' ').join('_').split('.').join(''); 
     } else {
       return string;
@@ -145,10 +150,10 @@ surveyBuilder.controller('surveyController', function ($scope, $location, $http)
     ref().Survey.Chapters.push({ Chapter: { Questions: [], Title: title, newQuestion: angular.copy(questionBase)} });
   };
   $scope.removeChapter = function (chapter) {
-    $scope.flockSON.FlocktrackerProject.TrackerProject[$scope.trackerPortion].Survey.Chapters.splice(chapter,1);
+    ref().Survey.Chapters.splice(chapter,1);
   }
   $scope.addQuestion = function (chapter) {
-    var newQuestion = $scope.flockSON.FlocktrackerProject.TrackerProject[$scope.trackerPortion].Survey.Chapters[chapter].Chapter.newQuestion;
+    var newQuestion = ref().Survey.Chapters[chapter].Chapter.newQuestion;
     var ok = $scope.questionReady(newQuestion);
     newQuestion.JumpID = newQuestion.JumpID ? newQuestion.JumpID : null;
     if (ok) {
@@ -158,7 +163,7 @@ surveyBuilder.controller('surveyController', function ($scope, $location, $http)
   }
   $scope.addAnswer = function (chapter) {
     var newAnswer = ref().Survey.Chapters[chapter].Chapter.newQuestion.newAnswer;
-    if (newAnswer.length > 0) {
+    if (newAnswer.Text.length > 0) {
       ref().Survey.Chapters[chapter].Chapter.newQuestion.Answers.push({Answer: newAnswer});
       ref().Survey.Chapters[chapter].Chapter.newQuestion.newAnswer = angular.copy(answerBase);
     }
