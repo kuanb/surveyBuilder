@@ -5,19 +5,32 @@ var surveyBuilder = angular.module('surveyBuilderApp', ['ui.bootstrap', 'ui.sort
 surveyBuilder.controller('surveyBuilder', function ($scope, $location, $http) {
   // initialization
   var addSupportObjects = function (fs) {
+    var surveyBase = {Survey: {Title: ''}};
     var answerBase = {Text: ''};
     var questionBase = { ID: '', Text: '', Kind: '', JumpID: '', Other: null, Answers: [], newAnswer: angular.copy(answerBase) };
+
+    if (!fs.FlocktrackerProject.SurveyProject) {
+      fs.FlocktrackerProject.SurveyProject = angular.copy(surveyBase);
+    }
     fs.FlocktrackerProject.SurveyProject.Survey.Chapters = fs.FlocktrackerProject.SurveyProject.Survey.Chapters.map(function (chapter) {
       chapter.Chapter.newQuestion = angular.copy(questionBase);
       return chapter;
     });
-    var trackerPortions = ['StartSurvey', 'EndSurvey'];
-    trackerPortions.forEach(function (trackerPortion) {
+    
+    if (!fs.FlocktrackerProject.TrackerProject) {
+      fs.FlocktrackerProject.TrackerProject = {StartSurvey: angular.copy(surveyBase), EndSurvey: angular.copy(surveyBase)};
+    }
+    ['StartSurvey', 'EndSurvey'].forEach(function (trackerPortion) {
       fs.FlocktrackerProject.TrackerProject[trackerPortion].Survey.Chapters = fs.FlocktrackerProject.TrackerProject[trackerPortion].Survey.Chapters.map(function (chapter) {
         chapter.Chapter.newQuestion = angular.copy(questionBase);
         return chapter;
       });
     });
+    
+    if (!fs.FlocktrackerProject.CountersProject) {
+      fs.FlocktrackerProject.CountersProject = {Counters: []};
+    }
+
     return fs
   };
   var fs  = new FT_pr(),
@@ -31,8 +44,7 @@ surveyBuilder.controller('surveyBuilder', function ($scope, $location, $http) {
       delete chapter.Chapter.newQuestion;
       return chapter;
     });
-    var trackerPortions = ['StartSurvey', 'EndSurvey'];
-    trackerPortions.forEach(function (trackerPortion) {
+    ['StartSurvey', 'EndSurvey'].forEach(function (trackerPortion) {
       submit.FlocktrackerProject.TrackerProject[trackerPortion].Survey.Chapters = submit.FlocktrackerProject.SurveyProject.Survey.Chapters.map(function (chapter) {
         delete chapter.Chapter.newQuestion;
         return chapter;
@@ -88,10 +100,11 @@ surveyBuilder.controller('surveyController', function ($scope, $location, $http)
     OT: { verbose: 'Open Text',       other: false, answers: false },
     ON: { verbose: 'Open Number',     other: false, answers: false },
     OL: { verbose: 'Ordered List',    other: false, answers: true },
-    LP: { verbose: 'Loop',            other: false, answers: true },
+    LP: { verbose: 'Loop',            other: false, answers: false },
   };
   var answerBase = {Text: ''};
   var questionBase = { ID: '', Text: '', Kind: '', JumpID: '', Other: null, Answers: [], newAnswer: answerBase };
+  var loopbase = '';
 
   var ref = function () {
     var obj = $scope.flockSON.FlocktrackerProject;
