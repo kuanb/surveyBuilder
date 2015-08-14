@@ -196,10 +196,9 @@ surveyBuilder.controller('surveyController', function ($scope, $location, $http)
   }
 
   $scope.addChapter = function () {
-    var id = 'newChapter_' + $scope.currentTab;
-    var title = document.getElementById(id).value;
-    document.getElementById(id).value = '';
+    var title = angular.copy($scope.ref().Survey.newChapter);
     $scope.ref().Survey.Chapters.push({ Chapter: { Questions: [], Title: title, newQuestion: angular.copy(questionBase)} });
+    $scope.ref().Survey.newChapter = '';
   };
 
   $scope.removeChapter = function (chapter) {
