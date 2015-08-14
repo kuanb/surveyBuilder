@@ -1,4 +1,20 @@
 <div ng-controller="surveyController">
+
+	<div class="row" ng-show="currentTab=='TrackerProject'">
+		<div class="col-xs-12">
+	    <div class="btn-group btn-group-xs pull-right">
+        <label class="btn btn-default" ng-model="trackerPortion" btn-radio="'StartSurvey'">Start Survey</label>
+        <label class="btn btn-default" ng-model="trackerPortion" btn-radio="'EndSurvey'">End Survey</label>
+	    </div>
+			<p>
+				This portion supports building surveys initiated when a tracked session is
+				<span ng-if="trackerPortion=='StartSurvey'">started.</span>
+				<span ng-if="trackerPortion=='EndSurvey'">terminated.</span>
+				Click the right toggle to switch tracker compoenents.
+			</p>
+	  </div>
+  </div>
+
 	<div ui-sortable ng-model="ref().Survey.Chapters">
 		<div ng-repeat="(chapIndex, chapter) in ref().Survey.Chapters" class="panel panel-default">
       <div class="panel-heading">

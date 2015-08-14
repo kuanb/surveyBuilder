@@ -40,11 +40,13 @@ surveyBuilder.controller('surveyBuilder', function ($scope, $location, $http) {
 
   $scope.submit = function () {
     var submit = angular.copy($scope.flockSON);
+    delete submit.FlocktrackerProject.SurveyProject.Survey.newChapter;
     submit.FlocktrackerProject.SurveyProject.Survey.Chapters = submit.FlocktrackerProject.SurveyProject.Survey.Chapters.map(function (chapter) {
       delete chapter.Chapter.newQuestion;
       return chapter;
     });
     ['StartSurvey', 'EndSurvey'].forEach(function (trackerPortion) {
+      delete submit.FlocktrackerProject.TrackerProject[trackerPortion].Survey.newChapter;
       submit.FlocktrackerProject.TrackerProject[trackerPortion].Survey.Chapters = submit.FlocktrackerProject.SurveyProject.Survey.Chapters.map(function (chapter) {
         delete chapter.Chapter.newQuestion;
         return chapter;
