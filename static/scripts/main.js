@@ -103,10 +103,10 @@ surveyBuilder.controller('surveyController', function ($scope, $location, $http)
     LP: { verbose: 'Loop',            other: false, answers: false },
   };
   var answerBase = {Text: ''};
-  var questionBase = { ID: '', Text: '', Kind: '', JumpID: '', Other: null, Answers: [], newAnswer: answerBase };
-  var loopbase = '';
+  var questionBase = { ID: '', Text: '', Kind: '', JumpID: '', Other: null, Answers: [], newAnswer: angular.copy(answerBase) };
+  var loopbase = angular.copy(questionBase);
 
-  var ref = function () {
+  $scope.ref = function () {
     var obj = $scope.flockSON.FlocktrackerProject;
     var str;
     if ($scope.currentTab=='SurveyProject') {
@@ -196,13 +196,13 @@ surveyBuilder.controller('surveyController', function ($scope, $location, $http)
     var id = 'newChapter_' + $scope.currentTab;
     var title = document.getElementById(id).value;
     document.getElementById(id).value = '';
-    ref().Survey.Chapters.push({ Chapter: { Questions: [], Title: title, newQuestion: angular.copy(questionBase)} });
+    $scope.ref().Survey.Chapters.push({ Chapter: { Questions: [], Title: title, newQuestion: angular.copy(questionBase)} });
   };
 
   $scope.removeChapter = function (chapter) {
     if (confirm('Are you sure you want to delete chapter?')) {
       var errors = 0;
-      var chapToRem = ref().Survey.Chapters[chapter].Chapter.Questions;
+      var chapToRem = $scope.ref().Survey.Chapters[chapter].Chapter.Questions;
       chapToRem.forEach(function (question) {
         question.Question.JumpID = null;
       });
@@ -213,33 +213,33 @@ surveyBuilder.controller('surveyController', function ($scope, $location, $http)
         }
       });
       if (errors == 0) {
-        ref().Survey.Chapters.splice(chapter,1);
+        $scope.ref().Survey.Chapters.splice(chapter,1);
       }
     }
   };
 
   $scope.addQuestion = function (chapter) {
-    var newQuestion = ref().Survey.Chapters[chapter].Chapter.newQuestion;
+    var newQuestion = $scope.ref().Survey.Chapters[chapter].Chapter.newQuestion;
     var ok = $scope.questionReady(newQuestion);
     newQuestion.JumpID = newQuestion.JumpID ? newQuestion.JumpID : null;
     if (ok) {
-      ref().Survey.Chapters[chapter].Chapter.Questions.push({Question: newQuestion}); 
-      ref().Survey.Chapters[chapter].Chapter.newQuestion = angular.copy(questionBase);
+      $scope.ref().Survey.Chapters[chapter].Chapter.Questions.push({Question: newQuestion}); 
+      $scope.ref().Survey.Chapters[chapter].Chapter.newQuestion = angular.copy(questionBase);
     }
   };
 
   $scope.addAnswer = function (chapter) {
-    var newAnswer = ref().Survey.Chapters[chapter].Chapter.newQuestion.newAnswer;
+    var newAnswer = $scope.ref().Survey.Chapters[chapter].Chapter.newQuestion.newAnswer;
     if (newAnswer.Text.length > 0) {
-      ref().Survey.Chapters[chapter].Chapter.newQuestion.Answers.push({Answer: newAnswer});
-      ref().Survey.Chapters[chapter].Chapter.newQuestion.newAnswer = angular.copy(answerBase);
+      $scope.ref().Survey.Chapters[chapter].Chapter.newQuestion.Answers.push({Answer: newAnswer});
+      $scope.ref().Survey.Chapters[chapter].Chapter.newQuestion.newAnswer = angular.copy(answerBase);
     }
   };
 
   $scope.removeQuestion = function (chapter, question) {
-    var quesID = ref().Survey.Chapters[chapter].Chapter.Questions[question].Question.ID;
+    var quesID = $scope.ref().Survey.Chapters[chapter].Chapter.Questions[question].Question.ID;
     if ($scope.checkJump(quesID)) {
-      ref().Survey.Chapters[chapter].Chapter.Questions.splice(question, 1);
+      $scope.ref().Survey.Chapters[chapter].Chapter.Questions.splice(question, 1);
     }
   };
 
