@@ -234,6 +234,7 @@ surveyBuilder.controller('surveyController', function ($scope, $location, $http)
   $scope.addAnswer = function (chapter) {
     var newAnswer = $scope.ref().Survey.Chapters[chapter].Chapter.newQuestion.newAnswer;
     if (newAnswer.Text.length > 0) {
+      newAnswer.Value = $scope.cleanText(newAnswer.Text);
       $scope.ref().Survey.Chapters[chapter].Chapter.newQuestion.Answers.push({Answer: newAnswer});
       $scope.ref().Survey.Chapters[chapter].Chapter.newQuestion.newAnswer = angular.copy(answerBase);
     }
