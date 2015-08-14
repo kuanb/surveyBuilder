@@ -6,7 +6,7 @@ surveyBuilder.controller('surveyBuilder', function ($scope, $location, $http) {
   // initialization
   var addSupportObjects = function (fs) {
     var surveyBase = {Survey: {Title: ''}};
-    var answerBase = {Text: ''};
+    var answerBase = {JumpID: null, Text: '', Value: ''};
     var questionBase = { ID: '', Text: '', Kind: '', JumpID: '', Other: null, Answers: [], newAnswer: angular.copy(answerBase) };
 
     if (!fs.FlocktrackerProject.SurveyProject) {
@@ -102,7 +102,7 @@ surveyBuilder.controller('surveyController', function ($scope, $location, $http)
     OL: { verbose: 'Ordered List',    other: false, answers: true },
     LP: { verbose: 'Loop',            other: false, answers: false },
   };
-  var answerBase = {Text: ''};
+  var answerBase = {JumpID: null, Text: '', Value: ''};
   var questionBase = { ID: '', Text: '', Kind: '', JumpID: '', Other: null, Answers: [], newAnswer: angular.copy(answerBase) };
   var loopbase = angular.copy(questionBase);
 
@@ -120,10 +120,11 @@ surveyBuilder.controller('surveyController', function ($scope, $location, $http)
   };
 
   var getAllQuestions = function () {
-      var surveyChaps = $scope.flockSON.FlocktrackerProject.SurveyProject.Survey.Chapters;
-      var trackerChaps1 = $scope.flockSON.FlocktrackerProject.TrackerProject.StartSurvey.Survey.Chapters;
-      var trackerChaps2 = $scope.flockSON.FlocktrackerProject.TrackerProject.EndSurvey.Survey.Chapters;
-      return surveyChaps.concat(trackerChaps1).concat(trackerChaps1);
+    var proj = $scope.flockSON.FlocktrackerProject;
+    var surveyChaps   = proj.SurveyProject.Survey.Chapters;
+    var trackerChaps1 = proj.TrackerProject.StartSurvey.Survey.Chapters;
+    var trackerChaps2 = proj.TrackerProject.EndSurvey.Survey.Chapters;
+    return surveyChaps.concat(trackerChaps1).concat(trackerChaps1);
   }
   $scope.vetQuesID = function (id) {
     if (id && id.length > 0) {
@@ -153,7 +154,9 @@ surveyBuilder.controller('surveyController', function ($scope, $location, $http)
           if (question.Question.Answers) {
             question.Question.Answers.forEach(function (answer) {
               if (id == answer.Answer.JumpID) { 
-                allIds.answers.push(answer) 
+                var issue = angular.copy(answer);
+                issue.question = question.Question.ID;
+                allIds.answers.push(issue) 
               }
             });
           }
@@ -165,7 +168,7 @@ surveyBuilder.controller('surveyController', function ($scope, $location, $http)
           string.push(' Question ' + question.Question.ID + ' (' + question.Question.Kind + ')');
         });
         allIds.answers.forEach(function (answer) {
-          string.push(' Answer ' + answer.Question.ID);
+          string.push(' Answer ' + answer.Answer.Text + ' in Question ' + answer.question);
         });
         alert('The JumpIDs need to be changed before this can be removed: ' + string);
         return false;
