@@ -135,7 +135,7 @@
 						    <div class="col-xs-2">
 						    	<label>Kind of Question</label><br>
 									<select class="form-control" ng-model="question.Question.newQuestion.Kind">
-										<option ng-repeat="(kind, kindValue) in noLoopFilter(questionKinds)" 
+										<option ng-repeat="(kind, kindValue) in questionKinds" ng-if="kind !== 'LP'" 
 														value="{{ kind }}">
 											{{ kindValue.verbose }}
 										</option>

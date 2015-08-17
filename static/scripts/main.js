@@ -184,11 +184,6 @@ surveyBuilder.controller('surveyController', function ($scope, $location, $http)
     } else { return false; }
   };
 
-  $scope.noLoopFilter = function (questionKinds) {
-    if (questionKinds.hasOwnProperty('LP')) { delete questionKinds.LP; }
-    return questionKinds;
-  }
-
   $scope.questionReady = function (question) {
     return  $scope.vetQuesID(question.ID) && 
             question.Text.length > 0 && 
