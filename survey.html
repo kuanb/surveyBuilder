@@ -58,14 +58,15 @@
 						    </div>
 						    <div class="col-xs-2 text-right">
 						      <button type="submit" class="btn btn-default" 
-						      				ng-click="question.Question.Answers.push({Answer:{Text:question.Question.newAnswer}});
-						      									question.Question.newAnswer=null;">
+						      				ng-click="question.Question.Answers.push({Answer: {Text: question.Question.newAnswer, Value: cleanText(newAnswer)}});
+						      									question.Question.newAnswer={};">
 						      	Add another answer
 						      </button>
 						    </div>
 							</div>
 						</div>
 
+						<!-- LOOP QUESTIONS -->
 						<div class="panel-body" ui-sortable ng-model="question.Question.Questions"
 								ng-show="sort[question.Question.Text] && question.Question.Kind == 'LP'">
 
@@ -77,7 +78,7 @@
 										</span>
 			          		<span class="label label-info">ID: {{ loopQues.Question.ID }}</span> 
 			          		<span class="label label-info" ng-show="loopQues.Question.JumpID">Jump ID: {{ loopQues.Question.JumpID }}</span> 
-			          		<span class="label label-info">Kind: {{ loopQuesKinds[loopQues.Question.Kind].verbose }}</span> 
+			          		<span class="label label-info">Kind: {{ questionKinds[loopQues.Question.Kind].verbose }}</span> 
 										<i class="fa fa-times-circle-o pull-right" ng-click="removeQuestion(chapIndex, questionIndex, loopQuesIndex)"></i>
 									</div>
 
@@ -98,17 +99,68 @@
 									    </div>
 									    <div class="col-xs-2 text-right">
 									      <button type="submit" class="btn btn-default" 
-									      				ng-click="loopQues.Question.Answers.push({Answer:{Text:loopQues.Question.newAnswer}});
+									      				ng-click="loopQues.Question.Answers.push({Answer: {
+									      										Text: loopQues.Question.newAnswer, 
+									      										Value: cleanText(loopQues.Question.newAnswer)
+									      									}});
 									      									loopQues.Question.newAnswer=null;">
 									      	Add another answer
 									      </button>
 									    </div>
 										</div>
 									</div>
-
 								</div>
 							</div>
 						</div>
+
+						<div class="panel-footer" ng-show="sort[question.Question.Text] && question.Question.Kind == 'LP'">
+			        <div class="row">
+						    <div class="col-xs-4 form-group" ng-class="vetQuesID(question.Question.newQuestion.ID) ? 'has-success' : 'has-error'">
+						    	<label class="control-label">Question ID</label>
+							  	<span class="label label-success" ng-show="vetQuesID(question.Question.newQuestion.ID)">
+							  		<span class="glyphicon glyphicon-ok"></span> Unique ID is okay.
+							  	</span>
+							  	<span class="label label-danger" ng-show="!vetQuesID(question.Question.newQuestion.ID)">
+							  		<span class="glyphicon glyphicon-remove"></span> Not a unique ID.
+							  	</span>
+						      <input  type="text" class="form-control" 
+						      				ng-model="question.Question.newQuestion.ID"
+						      				ng-keyup="question.Question.newQuestion.ID = cleanText(question.Question.newQuestion.ID)"
+						      				placeholder="New question id">
+						    </div>
+						    <div class="col-xs-6">
+						    	<label>Question Text</label>
+						      <input class="form-control" ng-model="question.Question.newQuestion.Text" placeholder="New question text">
+						    </div>
+						    <div class="col-xs-2">
+						    	<label>Kind of Question</label><br>
+									<select class="form-control" ng-model="question.Question.newQuestion.Kind">
+										<option ng-repeat="(kind, kindValue) in noLoopFilter(questionKinds)" 
+														value="{{ kind }}">
+											{{ kindValue.verbose }}
+										</option>
+									</select>
+						    </div>
+							</div>
+							<div class="row">
+								<div class="col-xs-6">
+								  <div class="checkbox" ng-show="questionKinds[question.Question.newQuestion.Kind].other">
+								    <label>
+								      <input type="checkbox" ng-model="question.Question.newQuestion.Other"> Allow an "Other" Input
+								    </label>
+								  </div>
+								</div>
+						    <div class="col-xs-2 pull-right">
+						      <button type="submit" class="btn btn-default form-control" 
+						      				ng-click="question.Question.newQuestion.Answers = [];
+						      									question.Question.Questions.push({Question:question.Question.newQuestion});
+						      									question.Question.newQuestion={};">
+						      	Add Question
+						      </button>
+						    </div>
+							</div>
+						</div>
+						<!-- END LOOP QUESTIONS -->
 
         	</div>
         </div>
@@ -131,12 +183,10 @@
         <div class="row">
 			    <div class="col-xs-4 form-group" ng-class="vetQuesID(chapter.Chapter.newQuestion.ID) ? 'has-success' : 'has-error'">
 			    	<label class="control-label">Question ID</label>
-				  	<span class="label label-success" 
-				  				ng-show="vetQuesID(chapter.Chapter.newQuestion.ID)">
+				  	<span class="label label-success" ng-show="vetQuesID(chapter.Chapter.newQuestion.ID)">
 				  		<span class="glyphicon glyphicon-ok"></span> Unique ID is okay.
 				  	</span>
-				  	<span class="label label-danger" 
-				  				ng-show="!vetQuesID(chapter.Chapter.newQuestion.ID)">
+				  	<span class="label label-danger" ng-show="!vetQuesID(chapter.Chapter.newQuestion.ID)">
 				  		<span class="glyphicon glyphicon-remove"></span> Not a unique ID.
 				  	</span>
 			      <input  type="text" class="form-control" 
@@ -163,7 +213,7 @@
 			    </div>
 			    <div class="col-xs-4">
 			    	<label>Chapter Select for Jump</label><br>
-						<select class="form-control" ng-model="jumpChapSelect">
+						<select class="form-control" ng-model="jumpChapSelect" ng-disabled="chapter.Chapter.newQuestion.Kind == 'LP'">
 							<option value="">None</option>
 							<option ng-repeat="(chapIndex, chapter) in ref().Survey.Chapters" 
 											value="{{ chapIndex }}">
@@ -173,7 +223,7 @@
 			    </div>
 			    <div class="col-xs-4">
 			    	<label>Jump to Question</label><br>
-						<select class="form-control" ng-model="chapter.Chapter.newQuestion.JumpID">
+						<select class="form-control" ng-model="chapter.Chapter.newQuestion.JumpID" ng-disabled="chapter.Chapter.newQuestion.Kind == 'LP'">
 							<option value="">None</option>
 							<option ng-repeat="question in ref().Survey.Chapters[jumpChapSelect].Chapter.Questions" 
 											value="{{ question.Question.ID }}">
@@ -245,22 +295,18 @@
 
 				<br>
 				<div class="row">
-					<div class="col-xs-12" ng-show="chapter.Chapter.newQuestion.Kind == 'LP'">
-						Fuck the world
-					</div>
-				</div>
-
-				<br>
-				<div class="row">
-					<div class="col-xs-6">
+					<div class="col-xs-10">
 					  <div class="checkbox" ng-show="questionKinds[chapter.Chapter.newQuestion.Kind].other">
 					    <label>
 					      <input type="checkbox" ng-model="chapter.Chapter.newQuestion.Other"> Allow an "Other" Input
 					    </label>
 					  </div>
+					  <span ng-show="chapter.Chapter.newQuestion.Kind == 'LP'">
+							Add loop question first to create and edit loop questions and answers.
+						</span>
 					</div>
-					<div class="col-xs-6 text-right">
-						<button class="btn btn-default" ng-click="addQuestion(chapIndex)" 
+					<div class="col-xs-2">
+						<button class="btn btn-default form-control" ng-click="addQuestion(chapIndex)" 
 										ng-class="!questionReady(chapter.Chapter.newQuestion) ? 'disabled' : ''">
 							Add Question
 						</button>

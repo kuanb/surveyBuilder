@@ -130,7 +130,8 @@ surveyBuilder.controller('surveyController', function ($scope, $location, $http)
     var trackerChaps1 = proj.TrackerProject.StartSurvey.Survey.Chapters;
     var trackerChaps2 = proj.TrackerProject.EndSurvey.Survey.Chapters;
     return surveyChaps.concat(trackerChaps1).concat(trackerChaps1);
-  }
+  };
+
   $scope.vetQuesID = function (id) {
     if (id && id.length > 0) {
       var chapters = getAllQuestions();
@@ -145,7 +146,7 @@ surveyBuilder.controller('surveyController', function ($scope, $location, $http)
       } 
       else { return true }
     } else { return false; }
-  }
+  };
 
   $scope.checkJump = function (id) {
     if (id && id.length > 0) {
@@ -181,13 +182,18 @@ surveyBuilder.controller('surveyController', function ($scope, $location, $http)
         return true;
       }
     } else { return false; }
+  };
+
+  $scope.noLoopFilter = function (questionKinds) {
+    if (questionKinds.hasOwnProperty('LP')) { delete questionKinds.LP; }
+    return questionKinds;
   }
 
   $scope.questionReady = function (question) {
     return  $scope.vetQuesID(question.ID) && 
             question.Text.length > 0 && 
             question.Kind.length > 0 ? true : false;
-  }
+  };
 
   $scope.cleanText = function (string) { 
     if (string) {
@@ -198,7 +204,7 @@ surveyBuilder.controller('surveyController', function ($scope, $location, $http)
     } else {
       return string;
     }
-  }
+  };
 
   $scope.addChapter = function () {
     var title = angular.copy($scope.ref().Survey.newChapter);
