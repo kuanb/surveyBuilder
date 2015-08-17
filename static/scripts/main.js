@@ -21,6 +21,9 @@ surveyBuilder.controller('surveyBuilder', function ($scope, $location, $http) {
       fs.FlocktrackerProject.TrackerProject = {StartSurvey: angular.copy(surveyBase), EndSurvey: angular.copy(surveyBase)};
     }
     ['StartSurvey', 'EndSurvey'].forEach(function (trackerPortion) {
+      if (!fs.FlocktrackerProject.TrackerProject[trackerPortion].Survey.Chapter) {
+        fs.FlocktrackerProject.TrackerProject[trackerPortion].Survey.Chapters = [];
+      }
       fs.FlocktrackerProject.TrackerProject[trackerPortion].Survey.Chapters = fs.FlocktrackerProject.TrackerProject[trackerPortion].Survey.Chapters.map(function (chapter) {
         chapter.Chapter.newQuestion = angular.copy(questionBase);
         return chapter;
