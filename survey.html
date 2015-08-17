@@ -41,7 +41,8 @@
 							<i class="fa fa-times-circle-o pull-right" ng-click="removeQuestion(chapIndex, questionIndex)"></i>
 						</div>
 
-						<ol class="list-group" ui-sortable ng-model="question.Question.Answers" ng-show="sort[question.Question.Text]">
+						<ol class="list-group" ui-sortable ng-model="question.Question.Answers"
+								ng-show="sort[question.Question.Text] && questionKinds[question.Question.Kind].answers">
 							<li class="list-group-item" ng-repeat="(answerIndex, answer) in question.Question.Answers">
 								{{ answerIndex+1 }}. {{ answer.Answer.Text }}
 								<i class="fa fa-times-circle-o pull-right" 
@@ -64,6 +65,51 @@
 						    </div>
 							</div>
 						</div>
+
+						<div class="panel-body" ui-sortable ng-model="question.Question.Questions"
+								ng-show="sort[question.Question.Text] && question.Question.Kind == 'LP'">
+
+							<div ng-repeat="(loopQuesIndex, loopQues) in question.Question.Questions">
+			          <div class="panel panel-default">
+									<div class="panel-heading point">
+										<span ng-click="sort[loopQues.Question.Text] = !sort[loopQues.Question.Text]">
+											{{ loopQuesIndex+1 }}. {{ loopQues.Question.Text }}
+										</span>
+			          		<span class="label label-info">ID: {{ loopQues.Question.ID }}</span> 
+			          		<span class="label label-info" ng-show="loopQues.Question.JumpID">Jump ID: {{ loopQues.Question.JumpID }}</span> 
+			          		<span class="label label-info">Kind: {{ loopQuesKinds[loopQues.Question.Kind].verbose }}</span> 
+										<i class="fa fa-times-circle-o pull-right" ng-click="removeQuestion(chapIndex, questionIndex, loopQuesIndex)"></i>
+									</div>
+
+									<ol class="list-group" ui-sortable ng-model="loopQues.Question.Answers"
+											ng-show="sort[loopQues.Question.Text] && questionKinds[loopQues.Question.Kind].answers">
+										<li class="list-group-item" ng-repeat="(loopAnswerIndex, loopAnswer) in loopQues.Question.Answers">
+											{{ loopAnswerIndex+1 }}. {{ loopAnswer.Answer.Text }}
+											<i class="fa fa-times-circle-o pull-right" 
+													ng-click="loopQues.Question.Answers.splice(loopAnswerIndex, 1);">
+											</i>
+										</li>
+									</ol>
+
+									<div class="panel-footer" ng-show="sort[loopQues.Question.Text] && questionKinds[loopQues.Question.Kind].answers">
+										<div class="row">
+									    <div class="col-xs-10">
+									      <input class="form-control" ng-model="loopQues.Question.newAnswer" placeholder="New answer text">
+									    </div>
+									    <div class="col-xs-2 text-right">
+									      <button type="submit" class="btn btn-default" 
+									      				ng-click="loopQues.Question.Answers.push({Answer:{Text:loopQues.Question.newAnswer}});
+									      									loopQues.Question.newAnswer=null;">
+									      	Add another answer
+									      </button>
+									    </div>
+										</div>
+									</div>
+
+								</div>
+							</div>
+						</div>
+
         	</div>
         </div>
 
@@ -224,6 +270,8 @@
     </div>
 
 	</div>
+
+	<hr>
 
 	<div class="panel panel-default">
     <div class="panel-heading">

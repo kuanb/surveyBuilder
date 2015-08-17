@@ -244,10 +244,19 @@ surveyBuilder.controller('surveyController', function ($scope, $location, $http)
     }
   };
 
-  $scope.removeQuestion = function (chapter, question) {
-    var quesID = $scope.ref().Survey.Chapters[chapter].Chapter.Questions[question].Question.ID;
+  $scope.removeQuestion = function (chapter, question, loopQuestion) {
+    var quesID;
+    if (loopQuestion !== undefined) {
+      quesID = $scope.ref().Survey.Chapters[chapter].Chapter.Questions[question].Question.Questions[loopQuestion].Question.ID;
+    } else {
+      quesID = $scope.ref().Survey.Chapters[chapter].Chapter.Questions[question].Question.ID;
+    }
     if ($scope.checkJump(quesID)) {
-      $scope.ref().Survey.Chapters[chapter].Chapter.Questions.splice(question, 1);
+      if (loopQuestion !== undefined) {
+        $scope.ref().Survey.Chapters[chapter].Chapter.Questions[question].Question.Questions.splice(loopQuestion, 1);
+      } else {
+        $scope.ref().Survey.Chapters[chapter].Chapter.Questions.splice(question, 1);
+      }
     }
   };
 
