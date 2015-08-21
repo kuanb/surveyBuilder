@@ -45,6 +45,7 @@
 								ng-show="sort[question.Question.Text] && questionKinds[question.Question.Kind].answers">
 							<li class="list-group-item" ng-repeat="(answerIndex, answer) in question.Question.Answers">
 								{{ answerIndex+1 }}. {{ answer.Answer.Text }}
+								<span class="label label-info" ng-if="answer.Answer.Value">Value: {{ answer.Answer.Value }}</span> 
 								<i class="fa fa-times-circle-o pull-right" 
 										ng-click="question.Question.Answers.splice(answerIndex, 1);">
 								</i>
@@ -53,12 +54,16 @@
 
 						<div class="panel-footer" ng-show="sort[question.Question.Text] && questionKinds[question.Question.Kind].answers">
 							<div class="row">
-						    <div class="col-xs-10">
-						      <input class="form-control" ng-model="question.Question.newAnswer" placeholder="New answer text">
+						    <div class="col-xs-5">
+						      <input class="form-control" ng-model="question.Question.newAnswer.Text" placeholder="New answer text">
+						    </div>
+						    <div class="col-xs-5">
+						      <input class="form-control" ng-model="question.Question.newAnswer.Value" placeholder="New answer value (optional)">
 						    </div>
 						    <div class="col-xs-2 text-right">
 						      <button type="submit" class="btn btn-default" 
-						      				ng-click="question.Question.Answers.push({Answer: {Text: question.Question.newAnswer, Value: cleanText(newAnswer)}});
+						      				ng-class="question.Question.newAnswer.Text=='' || question.Question.newAnswer.Text==undefined ? 'disabled' : ''"
+						      				ng-click="question.Question.Answers.push({Answer: question.Question.newAnswer});
 						      									question.Question.newAnswer={};">
 						      	Add another answer
 						      </button>
@@ -86,6 +91,7 @@
 											ng-show="sort[loopQues.Question.Text] && questionKinds[loopQues.Question.Kind].answers">
 										<li class="list-group-item" ng-repeat="(loopAnswerIndex, loopAnswer) in loopQues.Question.Answers">
 											{{ loopAnswerIndex+1 }}. {{ loopAnswer.Answer.Text }}
+											<span class="label label-info" ng-if="loopAnswer.Answer.Value">Value: {{ loopAnswer.Answer.Value }}</span> 
 											<i class="fa fa-times-circle-o pull-right" 
 													ng-click="loopQues.Question.Answers.splice(loopAnswerIndex, 1);">
 											</i>
@@ -94,15 +100,16 @@
 
 									<div class="panel-footer" ng-show="sort[loopQues.Question.Text] && questionKinds[loopQues.Question.Kind].answers">
 										<div class="row">
-									    <div class="col-xs-10">
-									      <input class="form-control" ng-model="loopQues.Question.newAnswer" placeholder="New answer text">
+									    <div class="col-xs-5">
+									      <input class="form-control" ng-model="loopQues.Question.newAnswer.Text" placeholder="New answer text">
+									    </div>
+									    <div class="col-xs-5">
+									      <input class="form-control" ng-model="loopQues.Question.newAnswer.Value" placeholder="New answer value (optional)">
 									    </div>
 									    <div class="col-xs-2 text-right">
 									      <button type="submit" class="btn btn-default" 
-									      				ng-click="loopQues.Question.Answers.push({Answer: {
-									      										Text: loopQues.Question.newAnswer, 
-									      										Value: cleanText(loopQues.Question.newAnswer)
-									      									}});
+									      				ng-class="loopQues.Question.newAnswer.Text=='' || loopQues.Question.newAnswer.Text==undefined ? 'disabled' : ''"
+									      				ng-click="loopQues.Question.Answers.push({Answer: loopQues.Question.newAnswer});
 									      									loopQues.Question.newAnswer=null;">
 									      	Add another answer
 									      </button>
@@ -242,8 +249,8 @@
 					  				placeholder="New answer text"/>
 					</div>
 
-					<div class="col-xs-4">
-			    	<label>Jump to Question on Select</label>
+					<div class="col-xs-2">
+			    	<label>Jump: Chapter</label>
 						<select class="form-control" ng-model="jumpChapSelect_answer">
 							<option value="">None</option>
 							<option ng-repeat="(chapIndex, chapter) in ref().Survey.Chapters" 
@@ -253,8 +260,8 @@
 						</select>
 					</div>
 
-					<div class="col-xs-3">
-			    	<label>Jump to Question on Select</label>
+					<div class="col-xs-2">
+			    	<label>Jump: Question</label>
 						<select class="form-control" ng-model="chapter.Chapter.newQuestion.newAnswer.JumpID">
 							<option value="">None</option>
 							<option ng-repeat="question in ref().Survey.Chapters[jumpChapSelect_answer].Chapter.Questions" 
@@ -264,13 +271,20 @@
 						</select>
 					</div>
 
-					<div class="col-xs-1">
-			    	<label>Add</label>
+					<div class="col-xs-2 form-group">
+					  <label class="control-label">Value (Optional)</label>
+					  <input type="text" class="form-control" 
+					  				ng-model="chapter.Chapter.newQuestion.newAnswer.Value" 
+					  				placeholder="New value (optional)"/>
+					</div>
+
+					<div class="col-xs-2">
+			    	<label>Submit</label>
 			    	<div class="btn-group btn-group-justified">
 			    		<label class="btn btn-success" 
 			    						ng-class="chapter.Chapter.newQuestion.newAnswer.Text.length > 0 ? '' : 'disabled'" 
 			    						ng-click="addAnswer(chapIndex)">
-			    			<i class="fa fa-plus-circle"></i>
+			    			<i class="fa fa-plus-circle"></i> Add
 			    		</label>
 			    	</div>
 					</div>
